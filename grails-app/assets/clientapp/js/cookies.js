@@ -70,10 +70,9 @@ var Cookies = (function() {
 
     function removeAllByPrefix(prefix) {
         var cookies = document.cookie.split(";");
-        debugger
         for (var i = 0; i < cookies.length; i++) {
             const name = cookies[i].split("=")[0]
-            if(!stringStartsWith(name, prefix)) continue
+            if(!stringStartsWith(name.replace(" ",""), prefix)) continue
             removeCookie(name);
         }
     }

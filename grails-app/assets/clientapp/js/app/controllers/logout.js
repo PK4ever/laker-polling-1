@@ -3,7 +3,7 @@ angularApp
     .controller("LogoutController", function($scope, $location, $window) {
         User.logoutCurrent(function() {
             window.auth2.signOut().then(function () {
-                $window.location.href = "/"
+                $window.location.href = "/login"
             });
 
         });        
