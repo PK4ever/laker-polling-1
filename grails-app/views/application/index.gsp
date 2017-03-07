@@ -48,6 +48,7 @@
     <!-- ============== START CSS Resources ============== -->
     <link rel="stylesheet" href="${resource(dir: 'clientapp', file: 'css/main.css')}"/>
 
+    <link rel="stylesheet" href="${resource(dir: 'clientapp', file: 'css/login.css')}">
 
 
     <!-- Latest compiled Bootstrap and minified CSS -->
@@ -92,7 +93,7 @@
     }
 
     navbar-nav > li > a:hover {
-    "imag/png" background: white !important;
+    "img/png" background: white !important;
         background-color: white !important;
     }
 
@@ -125,49 +126,49 @@
 <div class="site-main surface-container">
     <nav class="navbar navbar-fixed-top cb-l-white" style="background-color: white;">
         <div class="container">
-            <div class="navbar-header" style="min-height: 60px">
-                <div class="navbar-brand">
-                    <a class="nav-link" ng-click="navigateToPublicLists()">
-                        <img class="nav-link" src="${resource(dir: 'clientapp', file: 'img/logo.png')}"
-                             style="width:32px; height:32px; position: fixed">
-                        <span class="bold-title text-m" style="margin-left: 36px; font-size: 28px">Laker Polling</span>
-                    </a>
-                </div>
-                <a id="nav-mobile-toggle" class="clean-text"
-                   style="float: right;margin: 20px 30px 20px 20px;">&#9776;</a>
-            </div>
+            %{--<div class="navbar-header" style="min-height: 60px">--}%
+                %{--<div class="navbar-brand">--}%
+                    %{--<a class="nav-link" ng-click="navigateToPublicLists()">--}%
+                        %{--<img class="nav-link" src="${resource(dir: 'clientapp', file: 'img/logo.png')}"--}%
+                             %{--style="width:32px; height:32px; position: fixed">--}%
+                        %{--<span class="bold-title text-m" style="margin-left: 36px; font-size: 28px">Laker Polling</span>--}%
+                    %{--</a>--}%
+                %{--</div>--}%
+                %{--<a id="nav-mobile-toggle" class="clean-text"--}%
+                   %{--style="float: right;margin: 20px 30px 20px 20px;">&#9776;</a>--}%
+            %{--</div>--}%
 
-            <div id="navbar" class="navbar-collapse collapse" style="min-height: 60px">
-                <ul class="nav navbar-nav" style="padding-top: 10px; max-width:80%; max-height: 60px">
-                    <li id="nav-link-user-dropdown-menu">
-                        <div id="nav-current-user-container" style="display:none; top: -10px; position: relative;">
-                            <div class="dropdown" style="position: relative; display: block; padding: 10px 15px;">
-                                <button id="nav-current-user-dropdown" class="dropdown-toggle" type="button" id="menu1"
-                                        data-toggle="dropdown"
-                                        style="background:white; color: rgba(0,0,0,.44); border:none; border-radius: 100%">
-                                    <img id="nav-current-user-image"
-                                         style="width:32px; height:32px; border-radius: 100; position:relative; bottom:5px; display:none"
-                                         src=""/>
-                                </button>
-                                <ul class="dropdown-menu clean-container" style="padding:15px 0 15px 0; left: -200px;"
-                                    role="menu" aria-labelledby="menu1">
-                                    <li role="presentation" style="padding-right: 20px; padding-left:20px"
-                                        onclick="document.getElementById('nav-current-user-username').click()">
-                                        <a id="nav-current-user-username" role="menuitem" tabindex="-1"
-                                           ng-click="navigateToCurrentUserLists()" class="nav-link"
-                                           style="padding-left: 0px;">Username</a>
-                                    </li>
-                                    <li role="presentation">
-                                        <a id="nav-current-user-email" role="menuitem" tabindex="-1"
-                                           ng-click="navigateToCurrentUserLists()" class="nav-link">Email</a>
-                                    </li>
-                                    <li role="presentation" class="divider"></li>
-                                    <li role="presentation"><a id="nav-current-user-email" role="menuitem" tabindex="-1"
-                                                               href="/logout" class="clean-text">Logout</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </li>
+            %{--<div id="navbar" class="navbar-collapse collapse" style="min-height: 60px">--}%
+                %{--<ul class="nav navbar-nav" style="padding-top: 10px; max-width:80%; max-height: 60px">--}%
+                    %{--<li id="nav-link-user-dropdown-menu">--}%
+                        %{--<div id="nav-current-user-container" style="display:none; top: -10px; position: relative;">--}%
+                            %{--<div class="dropdown" style="position: relative; display: block; padding: 10px 15px;">--}%
+                                %{--<button id="nav-current-user-dropdown" class="dropdown-toggle" type="button" id="menu1"--}%
+                                        %{--data-toggle="dropdown"--}%
+                                        %{--style="background:white; color: rgba(0,0,0,.44); border:none; border-radius: 100%">--}%
+                                    %{--<img id="nav-current-user-image"--}%
+                                         %{--style="width:32px; height:32px; border-radius: 100; position:relative; bottom:5px; display:none"--}%
+                                         %{--src=""/>--}%
+                                %{--</button>--}%
+                                %{--<ul class="dropdown-menu clean-container" style="padding:15px 0 15px 0; left: -200px;"--}%
+                                    %{--role="menu" aria-labelledby="menu1">--}%
+                                    %{--<li role="presentation" style="padding-right: 20px; padding-left:20px"--}%
+                                        %{--onclick="document.getElementById('nav-current-user-username').click()">--}%
+                                        %{--<a id="nav-current-user-username" role="menuitem" tabindex="-1"--}%
+                                           %{--ng-click="navigateToCurrentUserLists()" class="nav-link"--}%
+                                           %{--style="padding-left: 0px;">Username</a>--}%
+                                    %{--</li>--}%
+                                    %{--<li role="presentation">--}%
+                                        %{--<a id="nav-current-user-email" role="menuitem" tabindex="-1"--}%
+                                           %{--ng-click="navigateToCurrentUserLists()" class="nav-link">Email</a>--}%
+                                    %{--</li>--}%
+                                    %{--<li role="presentation" class="divider"></li>--}%
+                                    %{--<li role="presentation"><a id="nav-current-user-email" role="menuitem" tabindex="-1"--}%
+                                                               %{--href="/logout" class="clean-text">Logout</a></li>--}%
+                                %{--</ul>--}%
+                            %{--</div>--}%
+                        %{--</div>--}%
+                    %{--</li>--}%
                     <!-- <li class="active">
                 <a class="nav-link"
                   ng-click="navigateToPublicLists($event)"
@@ -195,26 +196,26 @@
     <div id="ng-controller-view" class="container" style="margin-top:10px" ng-view></div>
 
     <!--START FOOTER-->
-    <div id="footer" class="container" style="margin-bottom:20px">
-        <div class="row clean-text"
-             style="padding-top:15px;padding-right:0;padding-bottom:0;padding-left:0;margin-top:50px;color:#b3b3b1;font-size:12px;text-align:center;">
-            <div class="col-md-1"></div>
+    %{--<div id="footer" class="container" style="margin-bottom:20px">--}%
+        %{--<div class="row clean-text"--}%
+             %{--style="padding-top:15px;padding-right:0;padding-bottom:0;padding-left:0;margin-top:50px;color:#b3b3b1;font-size:12px;text-align:center;">--}%
+            %{--<div class="col-md-1"></div>--}%
 
-            <div>
-                <div class="container" style="max-width:850px;border-top:1px solid #e5e5e5; padding-top:10px">
-                    <span ng-bind="numActiveClients"></span>
+            %{--<div>--}%
+                %{--<div class="container" style="max-width:850px;border-top:1px solid #e5e5e5; padding-top:10px">--}%
+                    %{--<span ng-bind="numActiveClients"></span>--}%
 
-                    <p>
-                        <span style="display:none">
-                            Developed by CSC 480
-                        </span>
-                    </p>
-                </div>
-            </div>
+                    %{--<p>--}%
+                        %{--<span style="display:none">--}%
+                            %{--Developed by CSC 480--}%
+                        %{--</span>--}%
+                    %{--</p>--}%
+                %{--</div>--}%
+            %{--</div>--}%
 
-            <div class="col-md-1"></div>
-        </div>
-    </div>
+            %{--<div class="col-md-1"></div>--}%
+        %{--</div>--}%
+    %{--</div>--}%
     <!--END FOOTER-->
 
     <!-- =================== START BELOW FOLD SCRIPTS =================== -->
