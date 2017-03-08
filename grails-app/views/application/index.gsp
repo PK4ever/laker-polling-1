@@ -50,6 +50,9 @@
 
     <link rel="stylesheet" href="${resource(dir: 'clientapp', file: 'css/login.css')}">
 
+    <link rel="stylesheet" href="${resource(dir: 'clientapp', file: 'css/studentDashboard.css')}">
+
+
 
     <!-- Latest compiled Bootstrap and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
