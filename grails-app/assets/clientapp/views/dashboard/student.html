@@ -55,6 +55,7 @@
     </div>
 </div>
 <div class="container-fluid">
+    <!----
     <table class="table table-bordered" border="1" align="center" bordercolor="#AAAAAA">
         <tr>
             <th style="text-align:center">Active</th>
@@ -76,6 +77,13 @@
         <tr>
             <td align="center"><a ng-href="#"></a></td>
             <td align="center"><a ng-href="#">XXX-666 Placeholder</a></td>
+        </tr>
+    </table> --->
+    <!---Student's Courses--->
+    <table border="1">
+        <tr ng-repeat="x in courses">
+            <td>{{x.name}}</td>
+            <td>{{x.crn}}</td>
         </tr>
     </table>
 </div>
