@@ -8,6 +8,7 @@ angularApp
            auth2 = gapi.auth2.init({
                client_id: '896100416043-v0cvdf52tteag7ha8939fog24sr7bm2g.apps.googleusercontent.com',
                scope: 'profile email'
+//               cookie_policy: 'single_host-origin'
            });
            window.auth2 = auth2;
         });

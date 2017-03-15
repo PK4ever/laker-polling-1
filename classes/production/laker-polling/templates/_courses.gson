@@ -1,0 +1,6 @@
+import edu.oswego.cs.lakerpolling.domains.Course
+
+model {
+    Collection<Course> courses = []
+}
+json tmpl.'../templates/course'(courses)

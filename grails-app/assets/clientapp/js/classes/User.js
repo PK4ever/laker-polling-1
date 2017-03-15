@@ -81,6 +81,11 @@ var User = (function() {
         setCookie(COOKIE_KEYS.EMAIL, email, 50);
     }
 
+    User.prototype.setToken = function(token) {
+            this.accessToken = token;
+            setCookie(COOKIE_KEYS.ACCESS_TOKEN, token, 50);
+    }
+
     /**
      * @return true if saved and false if not.
      */
