@@ -4,9 +4,9 @@ angularApp
     .controller("DashboardRedirectController", function($scope, $window, $location, $routeParams, $timeout, currentUser) {
         if(!currentUser) {
             $window.location.href = '/logout'
-        } else if(currentUser.type == 'student') {
+        } else if(currentUser.type == 'STUDENT') {
             $location.path('/student')
-        } else if (currentUser.type == 'teacher') {
+        } else if (currentUser.type == 'INSTRUCTOR') {
             $location.path('/teacher')
         } else {
             $window.location.href = '/logout'

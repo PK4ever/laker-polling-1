@@ -1,0 +1,11 @@
+import edu.oswego.cs.lakerpolling.domains.Course
+
+model {
+    Course course
+}
+
+json {
+    name course.name
+    crn course.crn
+    students ((course.students != null) ? course.students.size() : 0)
+}

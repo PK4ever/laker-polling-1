@@ -12,6 +12,7 @@ angularApp
             return $http.post("/api/user/auth?idToken=" + idToken, { idToken: idToken })
                 //wait for response and then do something
                 .then(function(response) {
+
                     return response.data;
                 }, function(response) {
                     debugger

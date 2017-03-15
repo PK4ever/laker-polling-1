@@ -5,7 +5,7 @@ angularApp
         $scope.currentUser = currentUser
 
         //get courses
-        function($http){
+         $scope.courses = function($http){
           $http({
             method: 'GET',
             url: 'http://localhost:8080/api/course?accessToken=' + currentUser.getAccessToken()
@@ -29,7 +29,7 @@ angularApp
         //delete course
         $scope.deleteCourse = function(id){
           $http({
-            method: 'DELETE'
+            method: 'DELETE',
             url: 'http://localhost:8080/api/course?accessToken=' + currentUser.getAccessToken()+ '&courseId='+ id
           })
           .then(function(response){

@@ -3,14 +3,21 @@ package edu.oswego.cs.lakerpolling.controllers
 class UrlMappings {
 
     static mappings = {
-        delete "/$controller/$id(.$format)?"(action:"delete")
-        get "/$controller(.$format)?"(action:"index")
-        get "/$controller/$id(.$format)?"(action:"show")
-        post "/$controller(.$format)?"(action:"save")
-        put "/$controller/$id(.$format)?"(action:"update")
-        patch "/$controller/$id(.$format)?"(action:"patch")
 
-        "/api/user/auth"(controller: 'application', action: 'auth')
+        group "/api/user", {
+            "/auth"(controller: 'user', action: 'auth')
+        }
+
+        group "/api/course", {
+            "/"(controller: 'course', action: 'courseGet', method : 'get')
+            "/"(controller: 'course', action: 'postCourse', method : 'post')
+            "/"(controller: 'course', action: 'deleteCourse', method : 'delete')
+
+            "/student"(controller: 'course', action: 'getCourseStudent', method: 'get')
+            "/student"(controller: 'course', action: 'postCourseStudent', method: 'post')
+            "/student"(controller: 'course', action: 'deleteCourseStudent', method: 'delete')
+        }
+
         "/**"(controller: 'application', action: 'index')
     }
 }
