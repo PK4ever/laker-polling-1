@@ -1,4 +1,7 @@
-[![Stories in Ready](https://badge.waffle.io/CSC480/laker-polling.png?label=ready&title=Ready)](https://waffle.io/CSC480/laker-polling)  [![Build Status](https://travis-ci.org/CSC480/laker-polling.svg?branch=master)](https://travis-ci.org/CSC480/laker-polling)
+Waffle: [![Stories in Ready](https://badge.waffle.io/CSC480/laker-polling.png?label=ready&title=Ready)](https://waffle.io/CSC480/laker-polling)
+| Master Branch:   [![Build Status](https://travis-ci.org/CSC480/laker-polling.svg?branch=master)](https://travis-ci.org/CSC480/laker-polling)
+| Develop Branch:   [![Build Status](https://travis-ci.org/CSC480/laker-polling.svg?branch=develop)](https://travis-ci.org/CSC480/laker-polling)
+
 # Laker Polling
 Open source implementation of clicker software
 

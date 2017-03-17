@@ -1,0 +1,8 @@
+language: groovy
+
+jdk:
+- oraclejdk8
+
+branches:
+- master
+- develop
