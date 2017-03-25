@@ -4,9 +4,20 @@ class UrlMappings {
 
     static mappings = {
 
-        group "/api/user", {
-            "/auth"(controller: 'user', action: 'auth')
-        }
+        /* Page url mapping */
+        "/"(controller: 'application', action: 'landing')
+        "/dashboard"(controller: 'application', action: 'dashboard')
+
+        /* end Page url mapping */
+
+        "/user/auth"(controller: 'auth', action: 'auth', method:'post')
+        "/user/logout"(controller: 'auth', action: 'logout', method: 'post')
+
+        /* API endpoints mapping */
+
+//        group "/api/user", {
+//            "/auth"(controller: 'user', action: 'auth')
+//        }
 
         group "/api/course", {
             "/"(controller: 'course', action: 'courseGet', method : 'get')
@@ -17,7 +28,5 @@ class UrlMappings {
             "/student"(controller: 'course', action: 'postCourseStudent', method: 'post')
             "/student"(controller: 'course', action: 'deleteCourseStudent', method: 'delete')
         }
-
-        "/**"(controller: 'application', action: 'index')
     }
 }

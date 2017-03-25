@@ -104,6 +104,7 @@ class UserService {
 
             if (user == null) {// didn't find it, so this is a new user.
                 user = new User(firstName: first, lastName: last, imageUrl: imageUrl, email: email)
+                user.setRole(new Role(type: RoleType.STUDENT))
             } else {//found the user by email, this must be a pre-loaded account
                 if (user.imageUrl == null) {
                     user.imageUrl = imageUrl
@@ -120,7 +121,6 @@ class UserService {
                 user.save(flush: true, failOnError: true)
             }
 
-            user.setRole(new Role(type: RoleType.STUDENT))
             user.setAuthToken(new AuthToken(subject: subj, accessToken: accessTokenHash))
             user.save(flush: true, failOnError: true)
             token = user.authToken

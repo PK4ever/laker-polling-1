@@ -1,0 +1,10 @@
+
+
+response.status OK.value()
+
+model {
+}
+
+json {
+    status "success"
+}

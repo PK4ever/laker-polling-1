@@ -4,4 +4,4 @@ model {
     Collection<User> students = []
 }
 
-json tmpl.'../templates/student'(students)
+json tmpl.'/templates/student'(students)
