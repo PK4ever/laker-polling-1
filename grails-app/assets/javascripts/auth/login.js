@@ -7,7 +7,6 @@ $(document).ready(function () {
 
     function authSuccess(data) {
         console.log(data);
-        debugger;
         if (data.status) {
             document.location.href = "/dashboard";
         } else {
