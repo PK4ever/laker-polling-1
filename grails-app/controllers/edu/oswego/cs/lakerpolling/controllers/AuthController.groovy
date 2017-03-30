@@ -25,11 +25,10 @@ class AuthController {
             String first = payload.get("given_name").toString()
             String last = payload.get("family_name").toString()
             String imageUrl = payload.get("picture").toString()
-            String accessTokenHash = payload.getAccessTokenHash()
             String email = payload.getEmail()
 
             Optional<Pair<User, AuthToken>> optionalInfo = userService.getMakeOrUpdate(
-                    subj, first, last, imageUrl, accessTokenHash, email
+                    subj, first, last, imageUrl, email
             )
 
             if (optionalInfo.isPresent()) {
@@ -41,6 +40,20 @@ class AuthController {
             }
         } else {
             render(view: '../failure', model: [errorCode: data.errorCode, message: data.message])
+        }
+    }
+
+    def current() {
+        String token = session.getAttribute("access").toString()
+        if (token != null) {
+            QueryResult<User> result = userService.getUser(token)
+            if (result.success) {
+                render(view: 'user', model: [user: result.data])
+            } else {
+                render(view: '/failure', model: [errorCode: result.errorCode, message: result.message])
+            }
+        } else {
+            render(view: '/unauthorized')
         }
     }
 

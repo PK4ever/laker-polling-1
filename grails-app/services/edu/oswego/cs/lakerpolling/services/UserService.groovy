@@ -38,7 +38,8 @@ class UserService {
             queryResult.errorCode = HttpStatus.BAD_REQUEST.value()
             return queryResult
         }
-        User user = User.findByAuthToken(authToken)
+
+        User user = authToken.user
 
         if (user == null) {
             queryResult.message = UserErrors.USER_NOT_FOUND
@@ -74,57 +75,44 @@ class UserService {
      * @param payload - The payload to grab data from.
      * @return A pair containing a User and their associated AuthToken should all operations go successfully.
      */
-    Optional<Pair<User, AuthToken>> getMakeOrUpdate(String subj, String first, String last, String imageUrl,
-                                                    String accessTokenHash, String email) {
+    Optional<Pair<User, AuthToken>> getMakeOrUpdate(String subj, String first, String last,
+                                                    String imageUrl, String email) {
         User user
         AuthToken token
 
         token = AuthToken.findBySubject(subj)
 
-        // We have a token for this user.
+        // we have found an auth object. Therefore we have this user and they've signed in before.
         if (token != null) {
-
             user = token.user
             if (user.email != email) {
                 user.email = email
             }
-
-            if (token.accessToken != accessTokenHash) {
-                token.accessToken = accessTokenHash
-            }
-
-            user.save(flush: true, failOnError: true)
+            token.accessToken = UUID.randomUUID()
             token.save(flush: true, failOnError: true)
-
         } else {
-            // this may be a pre-loaded account or this is a new user.
+            // two possible situations here. This is a new user or it's a pre-loaded user
+            //signing in for the first time.
 
-            //attempt to find them in the db by email
             user = User.findByEmail(email)
-
-            if (user == null) {// didn't find it, so this is a new user.
+            if (user == null) { //it's a new user
                 user = new User(firstName: first, lastName: last, imageUrl: imageUrl, email: email)
                 user.setRole(new Role(type: RoleType.STUDENT))
-            } else {//found the user by email, this must be a pre-loaded account
-                if (user.imageUrl == null) {
-                    user.imageUrl = imageUrl
-                }
-
-                if (user.firstName == null) {
-                    user.firstName = first
-                }
-
-                if (user.lastName == null) {
-                    user.lastName = last
-                }
-
-                user.save(flush: true, failOnError: true)
+            } else {
+                //we've found the pre-loaded user, set their values to the ones on the g profile
+                user.firstName = first
+                user.lastName = last
+                user.imageUrl = imageUrl
             }
-
-            user.setAuthToken(new AuthToken(subject: subj, accessToken: accessTokenHash))
-            user.save(flush: true, failOnError: true)
-            token = user.authToken
         }
+
+        user = user.save(flush: true, failOnError: true)
+        if(user.authToken == null) {
+            user.setAuthToken(new AuthToken(subject: subj, accessToken: UUID.randomUUID()))
+            user = user.save(flush: true, failOnError: true)
+        }
+
+        token = user.authToken
 
         user != null ? Optional.of(new Pair<User, AuthToken>(user, token))
                 : Optional.empty()

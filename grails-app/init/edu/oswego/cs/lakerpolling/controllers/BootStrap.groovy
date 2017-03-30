@@ -36,18 +36,28 @@ class BootStrap {
 //        michael.setAuthToken(new AuthToken(subject: "michael-stu", accessToken: "ee"))
         michael.save(flush: true, failOnError: true)
 
+        User max = new User(firstName: "Max", lastName: "Sokolovsky", email: "msokolov@oswego.edu", imageUrl: "http://media.salon.com/2015/01/chrissy_teigen.jpg")
+        max.setRole(new Role(type: RoleType.INSTRUCTOR))
+        max.save(flush: true, failOnError: true)
+
+        User jeff = new User(email: "jregistr@oswego.edu")
+        jeff.setRole(new Role(type: RoleType.ADMIN))
+        jeff.save(flush: true, failOnError: true)
+
         /* End students*/
 
         /* instructors */
-        User inst1 = new User(firstName: "Bastian", lastName: "Temb", email: "bt@oswego.edu", imageUrl: "deutschland.png")
+        User inst1 = new User(email: "bastian.tenbergen@oswego.edu")
         inst1.setRole(new Role(type: RoleType.INSTRUCTOR))
-        inst1.setAuthToken(new AuthToken(subject: "sub-inst-1", accessToken: "ins1"))
         inst1.save(flush: true, failOnError: true)
 
-        User inst2 = new User(firstName: "Chris", lastName: "Harris", email: "charris@oswego", imageUrl: "chris.png")
+        User inst2 = new User(email: "christopher.harris@oswego.edu")
         inst2.setRole(new Role(type: RoleType.INSTRUCTOR))
-        inst2.setAuthToken(new AuthToken(subject: "sub-inst-2", accessToken: "ins2"))
         inst2.save(flush: true, failOnError: true)
+
+        User inst3 = new User(email: "ldaniel@oswego.edu")
+        inst3.setRole(new Role(type: RoleType.INSTRUCTOR))
+        inst3.save(flush: true, failOnError: true)
 
         User admin = new User(firstName: "admin", lastName: "admin", email: "cooladmin@gmail.com", imageUrl: "cool")
         admin.setRole(new Role(type: RoleType.ADMIN))
@@ -70,6 +80,28 @@ class BootStrap {
         hci521.addToStudents(stu2)
         hci521.addToStudents(michael)
         hci521.save(flush: true, failOnError: true)
+
+        hci521 = new Course(name:  "TCR 101", crn: 22223, instructor: inst3)
+        hci521.addToStudents(stu)
+        hci521.addToStudents(stu2)
+        hci521.addToStudents(michael)
+        hci521.save(flush: true, failOnError: true)
+        hci521 = new Course(name:  "TCR 202", crn: 22223, instructor: inst3)
+        hci521.addToStudents(stu)
+        hci521.addToStudents(stu2)
+        hci521.addToStudents(michael)
+        hci521.save(flush: true, failOnError: true)
+        hci521 = new Course(name:  "TCR 303", crn: 22223, instructor: inst3)
+        hci521.addToStudents(stu)
+        hci521.addToStudents(stu2)
+        hci521.addToStudents(michael)
+        hci521.save(flush: true, failOnError: true)
+        hci521 = new Course(name:  "TCR 404", crn: 22223, instructor: inst3)
+        hci521.addToStudents(stu)
+        hci521.addToStudents(stu2)
+        hci521.addToStudents(michael)
+        hci521.save(flush: true, failOnError: true)
+
         /*End courses*/
 
     }

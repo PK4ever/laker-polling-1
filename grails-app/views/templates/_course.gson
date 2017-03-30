@@ -5,6 +5,7 @@ model {
 }
 
 json {
+    id course.id
     name course.name
     crn course.crn
     students ((course.students != null) ? course.students.size() : 0)
