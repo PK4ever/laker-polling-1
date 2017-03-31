@@ -189,7 +189,8 @@ var currentInstructor
 
 function identifierFormatter(_, course, index) {
     return [
-        '<a href="/course/' + course.id + '" data-course-id="' + course.id + '">',
+        '<a href="/course?' + course.id + '">',
+//        '<a href="/course/' + course.id + '" data-course-id="' + course.id + '">',
         course.name,
         '</a>'].join('');
 }

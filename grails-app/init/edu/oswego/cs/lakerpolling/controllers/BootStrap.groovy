@@ -55,10 +55,6 @@ class BootStrap {
         inst2.setRole(new Role(type: RoleType.INSTRUCTOR))
         inst2.save(flush: true, failOnError: true)
 
-        User inst3 = new User(email: "ldaniel@oswego.edu")
-        inst3.setRole(new Role(type: RoleType.INSTRUCTOR))
-        inst3.save(flush: true, failOnError: true)
-
         User admin = new User(firstName: "admin", lastName: "admin", email: "cooladmin@gmail.com", imageUrl: "cool")
         admin.setRole(new Role(type: RoleType.ADMIN))
         admin.setAuthToken(new AuthToken(subject: "sub-ad-1", accessToken: "ad1"))
@@ -80,28 +76,6 @@ class BootStrap {
         hci521.addToStudents(stu2)
         hci521.addToStudents(michael)
         hci521.save(flush: true, failOnError: true)
-
-        hci521 = new Course(name:  "TCR 101", crn: 22223, instructor: inst3)
-        hci521.addToStudents(stu)
-        hci521.addToStudents(stu2)
-        hci521.addToStudents(michael)
-        hci521.save(flush: true, failOnError: true)
-        hci521 = new Course(name:  "TCR 202", crn: 22223, instructor: inst3)
-        hci521.addToStudents(stu)
-        hci521.addToStudents(stu2)
-        hci521.addToStudents(michael)
-        hci521.save(flush: true, failOnError: true)
-        hci521 = new Course(name:  "TCR 303", crn: 22223, instructor: inst3)
-        hci521.addToStudents(stu)
-        hci521.addToStudents(stu2)
-        hci521.addToStudents(michael)
-        hci521.save(flush: true, failOnError: true)
-        hci521 = new Course(name:  "TCR 404", crn: 22223, instructor: inst3)
-        hci521.addToStudents(stu)
-        hci521.addToStudents(stu2)
-        hci521.addToStudents(michael)
-        hci521.save(flush: true, failOnError: true)
-
         /*End courses*/
 
     }

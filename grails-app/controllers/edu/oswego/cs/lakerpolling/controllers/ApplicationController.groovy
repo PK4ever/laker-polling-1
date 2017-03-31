@@ -15,14 +15,12 @@ class ApplicationController {
     }
 
     def dashboard() {
-        String access = session.getAttribute("access")
-        QueryResult<AuthToken> require = preconditionService.accessToken(access)
+        QueryResult<AuthToken> require = hasAccess()
         if (require.success) {
             User user = require.data.user
             RoleType type = user.role.type
             if (type == RoleType.STUDENT) {
-                //render(view: 'dashboardStudent')
-                render(view: 'dashboardInstructor')
+                render(view: 'dashboardStudent')
             } else if (type == RoleType.INSTRUCTOR) {
                 render(view: 'dashboardInstructor')
             } else if (type == RoleType.ADMIN) {
@@ -35,6 +33,20 @@ class ApplicationController {
             session.invalidate()
             render(view: '../failure', model: [errorCode: require.errorCode, message: require.message])
         }
+    }
+
+    def courseView(long courseId) {
+        QueryResult<AuthToken> require = hasAccess()
+        if(require.success) {
+            session.setAttribute("courseId", courseId)
+            render(view: 'courseLandingInstructor')
+        }
+    }
+
+
+    private QueryResult<AuthToken> hasAccess() {
+        String access = session.getAttribute("access")
+        preconditionService.accessToken(access)
     }
 
 }

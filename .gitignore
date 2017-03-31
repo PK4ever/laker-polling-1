@@ -169,10 +169,9 @@ gradle-app.setting
 
 .idea
 
-grails-app/conf/Application.groovy
 .DS_Store
 
-
+dbconfig.yml
 
 # Created by https://www.gitignore.io/api/node,bower
 

@@ -1,6 +1,0 @@
-response.status UNAUTHORIZED.value()
-
-json {
-    message UNAUTHORIZED.reasonPhrase
-    error UNAUTHORIZED.value()
-}

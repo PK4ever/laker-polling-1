@@ -5,6 +5,7 @@ model {
 }
 
 json {
+    id student.id
     first student.firstName
     last student.lastName
     email student.email
