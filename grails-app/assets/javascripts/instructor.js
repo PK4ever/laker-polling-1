@@ -1,23 +1,46 @@
 var courseDeleteButtonFormatter
+var currentInstructor
 (function() {
-    var currentInstructor
+    function InstructorNetworkService(instructor) {
+        var _instructor = instructor
+        this.deleteCourseById = function(courseId, onSuccess, onFail) {
+            _instructor.getTokenOrFetch((token) => {
+                var urlstring = '/api/course?access_token=' + token + '&course_id=' + courseId;
+                $.ajax({
+                    url: urlstring,
+                    method: 'DELETE',
+                    success: function() {
+                        onSuccess(courseId)
+                    },
+                    error: function(err) {
+                        onFail(err)
+                    }
+                })
+            }, onFail)
+        }
 
+        this.getToken = function(onSuccess, onFail) {
+            $.ajax({
+                url: '/user/auth',
+                method: 'GET',
+                success: function(data) {
+                    onSuccess(data.data.token)
+                },
+                error: function(err) {
+                    onFail(err)
+                }
+            });
+        }
+    }
     function CurrentInstructor(token) {
         if(!token) throw Error("Token Required for Instructor")
         var _token = token
         var _courses = []
+        var _service = new InstructorNetworkService(this)
 
         this.setCourses = function(allCourses) {
             _courses = allCourses || []
-            _courses.forEach((course) => {
-                course.name = {
-                    name: course.name,
-                    courseId: course.id
-                }
-            })
-            $('#courseTable').bootstrapTable({
-                data: currentInstructor.getCourses()
-            });
+            this.refreshCourseTable()
         }
         this.addCourse = function(newCourse) {
             _courses.push(newCourse)
@@ -29,23 +52,39 @@ var courseDeleteButtonFormatter
 
         this.getTokenOrFetch = function(onSuccess, onFail) {
             if (_token) return onSuccess(_token)
-            $.ajax({
-                url: '/user/auth',
-                method: 'GET',
-                success: function(data) {
-                    _token = data.data.token;
-                    onSuccess(_token)
-                },
-                error: function(err) {
-                    onFail(err)
-                }
-            });
+            _service.getToken((token) => {
+                _token = token;
+                onSuccess(token)
+            }, onFail)
         }
 
         this.getCourseById = function(courseId) {
             for (var i = 0; i < _courses.length; i++) {
                 if (_courses[i].id == courseId) return _courses[i]
             }
+        }
+
+        this.removeCourseById = function(courseId) {
+            for (var i = 0; i < _courses.length; i++) {
+                if (_courses[i].id == courseId) {
+                    var course = _courses[i]
+                    delete _courses[courseId]
+                    this.refreshCourseTable()
+                    return course
+                }
+            }
+        }
+
+        this.deleteCourseById = function(courseId, onSuccess, onFail) {
+            _service.deleteCourseById(courseId, (courseId) => {
+                onSuccess(this.removeCourseById(courseId))
+            }, onFail)
+        }
+
+        this.refreshCourseTable = function() {
+            $('#courseTable').bootstrapTable({
+                data: currentInstructor.getCourses()
+            });
         }
     }
 
@@ -109,26 +148,11 @@ var courseDeleteButtonFormatter
     });
 
     $('.js-deleteCourse').on('click', function() {
-        var clickedButton = $(this)
-        currentInstructor.getTokenOrFetch((token) => {
-            var courseId = clickedButton.data("course-id")
-            debugger
-            var urlstring = '/api/course?access_token=' + token + '&course_id=' + courseId;
-            console.log(courseId);
-            console.log(courseCRN);
-            console.log(urlstring);
-
-            $.ajax({
-                url: '/api/course',
-                method: 'DELETE',
-
-                data: {},
-                success: function() {
-                    alert("DELETED COURSE: " + courseId)
-                }
-            })
+        currentInstructor.deleteCourseById($(this).data("course-id"), (course) => {
+            //alert("DELETED COURSE BY ID: " + JSON.stringify(course))
+            window.location.reload()
         }, (err) => {
-            alert("SOMETHING WENT WRONG WITH DELETEING COURSE: " + err && err.message || "UNKNOWN ERROR")
+            alert(JSON.stringify(err))
         })
     });
 
@@ -136,18 +160,24 @@ var courseDeleteButtonFormatter
     function prepareDeleteButton() {
         if(preparedDeleteButton) return
         $('.js-deleteCourseButton').click(function () {
-            var course = currentInstructor.getCourseById($(this).data('course-id'))
-            $('#deleteCourseModal').find('#confirmDeleteButton').data("course-id",course.id)        
+            const clickedButton = $(this)
+            debugger
+            const courseId = clickedButton.data('course-id')
+            var course = currentInstructor.getCourseById(courseId)
+            if (!course) {
+                alert("Course not found by id " + courseId)
+            }
+            $('#deleteCourseModal').find('#confirmDeleteButton').data("course-id",course.id)
             $('#deleteCourseModal').data("course-id",  course.id);
             $('#deleteCourseModal').find('#courseId').html(course.id)
             $('#deleteCourseModal').find('#courseName').html(course.name)
         })
         preparedDeleteButton = true
     }
-    
-    courseDeleteButtonFormatter = function(value, row, index) {
-        var course = currentInstructor.getCourseById(value)
-        var deleteButton = '<button class="btn btn-danger js-deleteCourseButton" type="button" data-toggle="modal" data-target="#deleteCourseModal" data-course-id="' + value + '">'
+    courseDeleteButtonFormatter = function(_, course, index) {
+        var course = currentInstructor.getCourseById(course.id)
+        if(!course) return '<span style="color:red">Invalid Course</span>'
+        var deleteButton = '<button class="btn btn-danger js-deleteCourseButton" type="button" data-toggle="modal" data-target="#deleteCourseModal" data-course-id="' + course.id + '">'
         deleteButton += 'Delete'
         deleteButton += '</button>'
         setTimeout(() => {
@@ -157,9 +187,9 @@ var courseDeleteButtonFormatter
     }
 })()
 
-function identifierFormatter(value, row, index) {
+function identifierFormatter(_, course, index) {
     return [
-        '<a href="/course/' + value.courseId + '" data-course-id="' + value.courseId + '">',
-        value.name,
+        '<a href="/course/' + course.id + '" data-course-id="' + course.id + '">',
+        course.name,
         '</a>'].join('');
 }
