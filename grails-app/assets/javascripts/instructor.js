@@ -187,10 +187,16 @@ var currentInstructor
     }
 })()
 
+function prepareClassTitle(courseId) {
+    debugger
+    var course = currentInstructor.getCourseById(courseId)
+    debugger
+    $('#coursePageTitle').html(course.name)
+}
+
 function identifierFormatter(_, course, index) {
     return [
-        '<a href="/course?' + course.id + '">',
-//        '<a href="/course/' + course.id + '" data-course-id="' + course.id + '">',
+        '<a href="/course?courseId='+ course.id +'" class="btn btn-link" onClick="prepareClassTitle('+ course.id +')">',
         course.name,
         '</a>'].join('');
 }
