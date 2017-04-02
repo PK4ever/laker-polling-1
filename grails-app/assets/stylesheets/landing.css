@@ -1,0 +1,78 @@
+#logoimage {
+    max-width: 100px;
+    max-height: 30px;
+    margin:auto;
+}
+
+.divider-vertical {
+    height: 50px;
+    margin: 0 9px;
+    border-left: 1px solid #514e53;
+    border-right: 1px solid #514e53;
+}
+
+.laker-btn {
+    background-color: #277015!important;
+}
+
+.intro-header {
+    padding-top: 50px;
+    padding-bottom: 50px;
+    text-align: center;
+    color: #f8f8f8;
+    background: url(/assets/graduate.jpeg) no-repeat center center;
+    background-size: cover;
+}
+
+.intro-message {
+    position: relative;
+    padding-top: 20%;
+    padding-bottom: 20%;
+    /*color: gold;*/
+}
+
+.intro-message > h1 {
+    margin: 0;
+    text-shadow: 2px 2px 3px rgba(0,0,0,0.6);
+    font-size: 5em;
+}
+
+.intro-divider {
+    width: 400px;
+    border-top: 1px solid #f8f8f8;
+    border-bottom: 1px solid rgba(0,0,0,0.2);
+}
+
+.intro-message > h3 {
+    text-shadow: 2px 2px 3px rgba(0,0,0,0.6);
+}
+
+.first-section {
+    padding: 50px 0;
+    background-color: #f8f8f8;
+}
+
+/*footer {*/
+    /*padding: 50px 0;*/
+    /*background-color: #f8f8f8;*/
+/*}*/
+
+footer {
+    /*text-align: center;*/
+    opacity: .7;
+    padding: 50px;
+    background-color: #f8f8f8;
+}
+footer a {
+    color: black;
+}
+
+.links {
+    margin: 0;
+    list-style: none;
+    padding-left: 0;
+}
+
+p.copyright {
+    margin: 15px 0 0;
+}

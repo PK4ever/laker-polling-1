@@ -1,0 +1,13 @@
+import edu.oswego.cs.lakerpolling.domains.User
+
+model {
+    User user
+}
+
+json {
+    status "success"
+    data {
+        token user.authToken.accessToken
+        user g.render(template:"/templates/user", model:[user:user])
+    }
+}
