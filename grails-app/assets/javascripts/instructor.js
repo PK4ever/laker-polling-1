@@ -188,6 +188,27 @@ var currentInstructor
 })()
 
 function prepareClassTitle(courseId) {
+    $.ajax({
+        url: '/user/auth',
+        method: "GET",
+        success: function(data){
+            var token = data.data.token
+            currentInstructor = new CurrentInstructor(token)
+            $.ajax({
+                url: '/api/course',
+                method: "GET",
+                data: {
+                    access_token: token
+                },
+                success: function(data) {
+                    currentInstructor.setCourses(data.data.courses)
+                },
+                error: function() {
+                    currentInstructor.setCourses(JSON.parse('[{"id":3,"name":"TCR 101","crn":"22223","students":3},{"id":4,"name":"TCR 202","crn":"22223","students":3},{"id":5,"name":"TCR 303","crn":"22223","students":3},{"id":6,"name":"TCR 404","crn":"22223","students":3}]'))
+                }
+            });
+        }
+    });
     debugger
     var course = currentInstructor.getCourseById(courseId)
     debugger
