@@ -1,5 +1,7 @@
 var courseDeleteButtonFormatter
+var identifierFormatter
 var currentInstructor
+var courseId
 (function() {
     function InstructorNetworkService(instructor) {
         var _instructor = instructor
@@ -103,6 +105,8 @@ var currentInstructor
                     },
                     success: function(data) {
                         currentInstructor.setCourses(data.data.courses)
+                        var course = currentInstructor.getCourseById(courseId)
+                        $('#coursePageTitle').html(course.name)
                     },
                     error: function() {
                         currentInstructor.setCourses(JSON.parse('[{"id":3,"name":"TCR 101","crn":"22223","students":3},{"id":4,"name":"TCR 202","crn":"22223","students":3},{"id":5,"name":"TCR 303","crn":"22223","students":3},{"id":6,"name":"TCR 404","crn":"22223","students":3}]'))
@@ -185,39 +189,53 @@ var currentInstructor
         }, 500)
         return deleteButton
     }
+
+    function prepareClassTitle(courseId) {
+        $.ajax({
+            url: '/user/auth',
+            method: "GET",
+            success: function(data){
+                var token = data.data.token
+                currentInstructor = new CurrentInstructor(token)
+                $.ajax({
+                    url: '/api/course',
+                    method: "GET",
+                    data: {
+                        access_token: token
+                    },
+                    success: function(data) {
+                        currentInstructor.setCourses(data.data.courses)
+                        var course = currentInstructor.getCourseById(courseId)
+                        console.log(course)
+                        $('#coursePageTitle').html(course.name)
+                    },
+                    error: function() {
+                        currentInstructor.setCourses(JSON.parse('[{"id":3,"name":"TCR 101","crn":"22223","students":3},{"id":4,"name":"TCR 202","crn":"22223","students":3},{"id":5,"name":"TCR 303","crn":"22223","students":3},{"id":6,"name":"TCR 404","crn":"22223","students":3}]'))
+                    }
+                });
+            }
+        });
+
+    }
+    identifierFormatter = function(_, course, index) {
+        return [
+            '<a href="/course?courseId='+ course.id +'" class="btn btn-link" onClick="prepareClassTitle('+ course.id +')">',
+            course.name,
+            '</a>'].join('');
+    }
+
+    $(document).ready(function() {
+        $.ajax({
+            url: '/user/auth',
+            method: "GET",
+            success: function(data){
+                var token = data.data.token
+                currentInstructor = new CurrentInstructor(token)
+            }
+        });
+    })
 })()
 
-function prepareClassTitle(courseId) {
-    $.ajax({
-        url: '/user/auth',
-        method: "GET",
-        success: function(data){
-            var token = data.data.token
-            currentInstructor = new CurrentInstructor(token)
-            $.ajax({
-                url: '/api/course',
-                method: "GET",
-                data: {
-                    access_token: token
-                },
-                success: function(data) {
-                    currentInstructor.setCourses(data.data.courses)
-                },
-                error: function() {
-                    currentInstructor.setCourses(JSON.parse('[{"id":3,"name":"TCR 101","crn":"22223","students":3},{"id":4,"name":"TCR 202","crn":"22223","students":3},{"id":5,"name":"TCR 303","crn":"22223","students":3},{"id":6,"name":"TCR 404","crn":"22223","students":3}]'))
-                }
-            });
-        }
-    });
-    debugger
-    var course = currentInstructor.getCourseById(courseId)
-    debugger
-    $('#coursePageTitle').html(course.name)
-}
-
-function identifierFormatter(_, course, index) {
-    return [
-        '<a href="/course?courseId='+ course.id +'" class="btn btn-link" onClick="prepareClassTitle('+ course.id +')">',
-        course.name,
-        '</a>'].join('');
+function prepareClassTitle(cId) {
+    courseId = cId;
 }
