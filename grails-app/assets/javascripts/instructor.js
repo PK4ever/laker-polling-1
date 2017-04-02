@@ -1,5 +1,6 @@
 var courseDeleteButtonFormatter
 var identifierFormatter
+var studentDeleteButtonFormatter
 var currentInstructor
 var courseId
 (function() {
@@ -8,17 +9,17 @@ var courseId
         this.deleteCourseById = function(courseId, onSuccess, onFail) {
             _instructor.getTokenOrFetch((token) => {
                 var urlstring = '/api/course?access_token=' + token + '&course_id=' + courseId;
-                $.ajax({
-                    url: urlstring,
-                    method: 'DELETE',
-                    success: function() {
-                        onSuccess(courseId)
-                    },
-                    error: function(err) {
-                        onFail(err)
-                    }
-                })
-            }, onFail)
+            $.ajax({
+                url: urlstring,
+                method: 'DELETE',
+                success: function() {
+                    onSuccess(courseId)
+                },
+                error: function(err) {
+                    onFail(err)
+                }
+            })
+        }, onFail)
         }
 
         this.getToken = function(onSuccess, onFail) {
@@ -56,8 +57,8 @@ var courseId
             if (_token) return onSuccess(_token)
             _service.getToken((token) => {
                 _token = token;
-                onSuccess(token)
-            }, onFail)
+            onSuccess(token)
+        }, onFail)
         }
 
         this.getCourseById = function(courseId) {
@@ -80,12 +81,17 @@ var courseId
         this.deleteCourseById = function(courseId, onSuccess, onFail) {
             _service.deleteCourseById(courseId, (courseId) => {
                 onSuccess(this.removeCourseById(courseId))
-            }, onFail)
+        }, onFail)
         }
 
         this.refreshCourseTable = function() {
             $('#courseTable').bootstrapTable({
                 data: currentInstructor.getCourses()
+            });
+        }
+        this.refreshStudentTable = function(){
+            $('#studentTable').bootstrapTable({
+                data: _courses[courseId].students
             });
         }
     }
@@ -105,8 +111,10 @@ var courseId
                     },
                     success: function(data) {
                         currentInstructor.setCourses(data.data.courses)
-                        var course = currentInstructor.getCourseById(courseId)
-                        $('#coursePageTitle').html(course.name)
+                        if (courseId) {
+                            var course = currentInstructor.getCourseById(courseId)
+                            $('#coursePageTitle').html(course.name)
+                        }
                     },
                     error: function() {
                         currentInstructor.setCourses(JSON.parse('[{"id":3,"name":"TCR 101","crn":"22223","students":3},{"id":4,"name":"TCR 202","crn":"22223","students":3},{"id":5,"name":"TCR 303","crn":"22223","students":3},{"id":6,"name":"TCR 404","crn":"22223","students":3}]'))
@@ -118,13 +126,12 @@ var courseId
 
 
     $('#courseButton').on('click', function() {
-        console.log('Clicked');
-
         $.ajax({
             url: '/user/auth',
             method: 'GET',
             success: function(data) {
                 token = data.data.token;
+                console.log(token); // temp
 
                 var courseName = $('#courseName').val();
                 var courseCRN = $('#courseCRN').val();
@@ -151,11 +158,72 @@ var courseId
         });
     });
 
+    $('#csv-form').submit(function(event) {
+        event.preventDefault();
+        $.ajax({
+            url: '/user/auth',
+            type: 'GET',
+            success: function(data) {
+                var token = data.data.token;
+                console.log(token);
+                var formData = new FormData();
+                formData.append('file', $('#csv-file')[0].files[0]);
+
+                $.ajax({
+                    url: '/api/course/student?access_token=' + token + '&course_id=' + courseId,
+                    type: 'POST',
+                    data: formData,
+                    cache: false,
+                    async: false,
+                    contentType: false,
+                    processData: false,
+                    success: function(data) {
+                        console.log(formData.get('file').length)
+                        window.location.reload();
+                    },
+                    error: function(jqXHR, textStatus, errorMessage) {
+                        console.log(textStatus)
+                    }
+
+                });
+            }
+        });
+    });
+
+    $('#csv-form-email').submit(function(event) {
+        // event.preventDefault();
+        $.ajax({
+            url: '/user/auth',
+            type: 'GET',
+            success: function(data) {
+                var token = data.data.token;
+                var email = $("#email").val();
+
+                console.log(email);
+
+                // course_id is hardcoded in the url!
+
+                $.ajax({
+                    url: '/api/course/student?access_token=' + token + '&course_id=' + courseId + '&email=' + email,
+                    type: 'POST',
+                    success: function(data) {
+                        console.log('Works');
+                        // window.location.reload();
+                    },
+                    error: function(jqXHR, textStatus, errorMessage) {
+                        console.log(errorMessage)
+                    }
+
+                });
+            }
+        });
+    });
+
     $('.js-deleteCourse').on('click', function() {
         currentInstructor.deleteCourseById($(this).data("course-id"), (course) => {
             //alert("DELETED COURSE BY ID: " + JSON.stringify(course))
             window.location.reload()
-        }, (err) => {
+    }, (err) => {
             alert(JSON.stringify(err))
         })
     });
@@ -165,7 +233,7 @@ var courseId
         if(preparedDeleteButton) return
         $('.js-deleteCourseButton').click(function () {
             const clickedButton = $(this)
-            debugger
+            // debugger
             const courseId = clickedButton.data('course-id')
             var course = currentInstructor.getCourseById(courseId)
             if (!course) {
@@ -217,6 +285,29 @@ var courseId
         });
 
     }
+
+    var preparedSDelete = false
+    function prepareSDelete(){
+        if(preparedSDelete) return
+        $('.js-deleteStudentButton').click(function () {
+            const clickedSButton = $(this)
+            const sId = clickedSButton.data('userid')
+            $('deleteStudentModal').find('#confirmDeleteStudent').data("student-id", sId)
+            $('deleteStudentModal').data("student-id", sId);
+            $('deleteStudentModal').find('#studentId').html(sId)
+        })
+        prepareSDelete = true;
+    }
+    studentDeleteButtonFormatter = function(course, index) {
+        var deleteStudentButton = '<button class="btn btn-danger js-deleteStudentButton" type="button" data-toggle="modal" data-target="#deleteStudentModal" data-sId="' + student.id + '">'
+        deleteStudentButton += 'Delete'
+        deleteStudentButton += '</button>'
+        setTimeout(() => {
+            prepareStudentDeleteButton()
+        }, 500)
+        return deleteStudentButton
+    }
+
     identifierFormatter = function(_, course, index) {
         return [
             '<a href="/course?courseId='+ course.id +'" class="btn btn-link" onClick="prepareClassTitle('+ course.id +')">',
