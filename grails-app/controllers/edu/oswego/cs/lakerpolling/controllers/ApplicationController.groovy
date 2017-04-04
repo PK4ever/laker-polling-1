@@ -20,7 +20,8 @@ class ApplicationController {
             User user = require.data.user
             RoleType type = user.role.type
             if (type == RoleType.STUDENT) {
-                render(view: 'dashboardStudent')
+                // render(view: 'dashboardStudent')
+                render(view: 'dashboardInstructor')
             } else if (type == RoleType.INSTRUCTOR) {
                 render(view: 'dashboardInstructor')
             } else if (type == RoleType.ADMIN) {

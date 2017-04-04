@@ -10,6 +10,9 @@
     border-left: 1px solid #514e53;
     border-right: 1px solid #514e53;
 }
+body{
+    background-color: rgba(147, 147, 147, 0.36) !important;
+}
 
 .laker-btn {
     background-color: #277015!important;
@@ -19,8 +22,8 @@
     padding-top: 50px;
     padding-bottom: 50px;
     text-align: center;
-    color: #f8f8f8;
-    background: url(/assets/graduate.jpeg) no-repeat center center;
+    color: #277015;
+    /*background: url(/assets/LakerPolingBackground.png) no-repeat center center;*/
     background-size: cover;
 }
 
@@ -45,6 +48,7 @@
 
 .intro-message > h3 {
     text-shadow: 2px 2px 3px rgba(0,0,0,0.6);
+    color: #fffe00;
 }
 
 .first-section {

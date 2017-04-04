@@ -4,26 +4,63 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Instructor</title>
-    <asset:stylesheet href="bootstrap.min.css"/>
-    <asset:stylesheet href="bootstrap-theme.min.css"/>
+    <!--<asset:stylesheet href="bootstrap.min.css"/>
+    <asset:stylesheet href="bootstrap-theme.min.css"/>-->
     <!-- jQuery (necessary for Bootstrap"s JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 </head>
-<body>
-    <div class="navbar navbar-default" role="navigation">
-        <div class="navbar-header">
-            <asset:image class="img-responsive navbar-brand" src="logo.png"/>
-            <a class="navbar-brand">Instructor Dashboard</a>
+<body class="bg-light-gray">
+    <nav id="mainNav" class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" onclick="logout()" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span> LOGOUT <i class="fa fa-bars"></i>
+            </button>
+            <a class="navbar-brand page-scroll" href="#page-top">
+                <asset:image src="logo.png"
+                             style="height: 60px !important; width: 120px !important; position: absolute; top: 0%"/>
+            </a>
+            <a id="pageName" class="navbar-brand" style="position: absolute; left: 45%; font-size: x-large">Instructor's Dashboard</a>
+    
+        <!--<a class="navbar-brand page-scroll" href="#page-top">LOGO HERE</a>-->
         </div>
-        <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
-                <button onclick="logout()" class="btn btn-default navbar-right navbar-btn">Logout</button>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    %{--<button onclick="logout()" class="btn btn-default navbar-right navbar-btn">Logout</button>--}%
+                    <a onclick="logout()" >LogOut</a>
+                </li>
             </ul>
         </div>
     </div>
+</nav>
 
+<section id="portfolio">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+        
+                <div id="userName"></div>
+                <div id="profilePic"></div>
+                <h3 class="section-subheading text-muted">Welcome to your dashboard</h3>
+
+            </div>
+        </div>
+
+        <h3 class="text-muted">Your Courses:</h3>
+        <div class="row" id="courses">
+            %{--courses are displayed here--}%
+            </div>
+
+        </div>
+    </div>
+</section>
+<div><br><br><br><br><br><br><br><br><br><br><br><br><br></div>
     <div class="container">
         <div class="row">
             <div class="col-sm-3"></div>
@@ -98,5 +135,10 @@
 <asset:javascript src="auth/config.js"/>
 <asset:javascript src="auth/logout.js"/>
 <asset:javascript src="instructor.js"/>
+<asset:javascript src="bootstrap.min.js"/>
+<asset:stylesheet href="bootstrap.css"/>
+<asset:stylesheet href="agency.min.css"/>
+<asset:stylesheet href="agency.css"/>
+<asset:stylesheet href="style.css"/>
 </body>
 </html>

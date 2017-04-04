@@ -6,7 +6,6 @@ $(document).ready(function () {
         });
 
         function doLogOut() {
-            console.log("HERE");
             auth2.signOut().then(function () {
                 document.location.href = "/";
             });
