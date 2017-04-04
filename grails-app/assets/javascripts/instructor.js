@@ -82,15 +82,7 @@ var currentInstructor
         }
 
         this.refreshCourseTable = function() {
-        
-            //  var i;
-			// 		var courseDiv = document.getElementById("courses");
-			// 		for (i = 0; i < courses.length; i++) {
-			// 			var string = courseHTML(courses[i].name,courses[i].crn)
-			// 			var div = document.createElement("div")
-			// 				div.innerHTML = string;
-			// 			courseDiv.appendChild(div);
-			// 		}
+            
             $('#courseTable').bootstrapTable({
                 data: currentInstructor.getCourses()
             });
@@ -111,6 +103,9 @@ var currentInstructor
                         access_token: token
                     },
                     success: function(data) {
+
+
+
                         // place holder courses
                         var courses = [{"name":"csc 212","crn":1123123,"students":8,"id":1},
 						{"name":"csc 212","crn":1123123, "students":8,"id":1},
@@ -123,6 +118,9 @@ var currentInstructor
 						var div = document.createElement("div")
 							div.innerHTML = string;
 						courseDiv.appendChild(div);
+
+
+
 					}
                         currentInstructor.setCourses(courses)
                     },
@@ -217,7 +215,7 @@ function identifierFormatter(_, course, index) {
         '</a>'].join('');
 }
 
-
+// remove??
 function courseHTML(courseName, crn) {
 	//var str = '<div class="col-md-4 col-sm-6 portfolio-item" style="box-shadow: 0px 0px 0px gray; padding: 20px;">'
 	var str = '<div class="col-md-4 col-sm-6 portfolio-item" style="box-shadow: 10px 10px 50px gray; padding: 10px;">'
