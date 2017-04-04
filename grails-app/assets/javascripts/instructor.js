@@ -35,7 +35,7 @@ var currentInstructor
     function CurrentInstructor(token) {
         if(!token) throw Error("Token Required for Instructor")
         var _token = token
-        var _courses = []
+        var _courses = []        
         var _service = new InstructorNetworkService(this)
 
         this.setCourses = function(allCourses) {
@@ -82,6 +82,15 @@ var currentInstructor
         }
 
         this.refreshCourseTable = function() {
+        
+            //  var i;
+			// 		var courseDiv = document.getElementById("courses");
+			// 		for (i = 0; i < courses.length; i++) {
+			// 			var string = courseHTML(courses[i].name,courses[i].crn)
+			// 			var div = document.createElement("div")
+			// 				div.innerHTML = string;
+			// 			courseDiv.appendChild(div);
+			// 		}
             $('#courseTable').bootstrapTable({
                 data: currentInstructor.getCourses()
             });
@@ -102,7 +111,20 @@ var currentInstructor
                         access_token: token
                     },
                     success: function(data) {
-                        currentInstructor.setCourses(data.data.courses)
+                        // place holder courses
+                        var courses = [{"name":"csc 212","crn":1123123,"students":8,"id":1},
+						{"name":"csc 212","crn":1123123, "students":8,"id":1},
+						{"name":"csc 212","crn":1123123,"students":8,"id":1}]
+                        // currentInstructor.setCourses(data.data.courses)
+                        var i;
+					var courseDiv = document.getElementById("courses");
+					for (i = 0; i < courses.length; i++) {
+						var string = courseHTML(courses[i].name,courses[i].crn)
+						var div = document.createElement("div")
+							div.innerHTML = string;
+						courseDiv.appendChild(div);
+					}
+                        currentInstructor.setCourses(courses)
                     },
                     error: function() {
                         currentInstructor.setCourses(JSON.parse('[{"id":3,"name":"TCR 101","crn":"22223","students":3},{"id":4,"name":"TCR 202","crn":"22223","students":3},{"id":5,"name":"TCR 303","crn":"22223","students":3},{"id":6,"name":"TCR 404","crn":"22223","students":3}]'))
@@ -194,3 +216,18 @@ function identifierFormatter(_, course, index) {
         course.name,
         '</a>'].join('');
 }
+
+
+function courseHTML(courseName, crn) {
+	//var str = '<div class="col-md-4 col-sm-6 portfolio-item" style="box-shadow: 0px 0px 0px gray; padding: 20px;">'
+	var str = '<div class="col-md-4 col-sm-6 portfolio-item" style="box-shadow: 10px 10px 50px gray; padding: 10px;">'
+	//var str = '<div class="col-md-4 col-sm-6 portfolio-item" style="box-shadow: 0px 0px 0px gray; padding: 10px;">'
+	str += '<a href="#portfolioModal2" class="portfolio-link" data-toggle="modal">'
+		str += '<div class="portfolio-hover">'
+		str += '<div class="portfolio-hover-content">'
+		str += '<i class="fa fa-plus fa-3x"></i></div></div>'
+		//str += '<asset:image class="img-responsive" src="logo.png" alt=""/>'
+		//str += '<img src="assets/images/startup-framework.png" class="img-responsive" alt=""></a>'
+	str += '<div class="portfolio-caption"><h4>' +courseName +'</h4><p class="text-muted"> CRN: '+ crn + '</p></div></div>'
+	return str
+};
