@@ -20,8 +20,7 @@ class ApplicationController {
             User user = require.data.user
             RoleType type = user.role.type
             if (type == RoleType.STUDENT) {
-                // render(view: 'dashboardStudent')
-                render(view: 'dashboardInstructor')
+                render(view: 'dashboardStudent')
             } else if (type == RoleType.INSTRUCTOR) {
                 render(view: 'dashboardInstructor')
             } else if (type == RoleType.ADMIN) {
@@ -39,11 +38,26 @@ class ApplicationController {
     def courseView(long courseId) {
         QueryResult<AuthToken> require = hasAccess()
         if(require.success) {
-            session.setAttribute("courseId", courseId)
-            render(view: 'courseLandingInstructor')
+            def preReq = preconditionService.notNull(params, ["courseId"])
+            if(preReq.success) {
+                session.setAttribute("courseId", courseId)
+                render(view: 'courseLandingInstructor')
+            } else {
+                render(view: '../failure', model: [errorCode: preReq.errorCode, message: preReq.message])
+            }
+        } else {
+            render(view: '../failure', model: [errorCode: require.errorCode, message: require.message])
         }
     }
 
+    def classRoster() {
+        def require = hasAccess()
+        if(require.success) {
+            render(view: 'classRoster.gsp')
+        } else {
+            render(view: '../failure', model: [errorCode: require.errorCode, message: require.message])
+        }
+    }
 
     private QueryResult<AuthToken> hasAccess() {
         String access = session.getAttribute("access")

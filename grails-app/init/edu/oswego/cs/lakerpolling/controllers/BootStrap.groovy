@@ -55,6 +55,10 @@ class BootStrap {
         inst2.setRole(new Role(type: RoleType.INSTRUCTOR))
         inst2.save(flush: true, failOnError: true)
 
+        User tyler = new User(email: "tmoson@oswego.edu")
+        tyler.setRole(new Role (type: RoleType.INSTRUCTOR))
+        tyler.save(flush: true, failOnError: true)
+
         User admin = new User(firstName: "admin", lastName: "admin", email: "cooladmin@gmail.com", imageUrl: "cool")
         admin.setRole(new Role(type: RoleType.ADMIN))
         admin.setAuthToken(new AuthToken(subject: "sub-ad-1", accessToken: "ad1"))
@@ -64,7 +68,7 @@ class BootStrap {
 
 
         /*Courses*/
-        Course csc480 = new Course(name: "CSC 480", crn: 11111, instructor: inst1)
+        Course csc480 = new Course(name: "CSC 480", crn: 11111, instructor: tyler)
         csc480.addToStudents(a)
         csc480.addToStudents(b)
         csc480.addToStudents(michael);

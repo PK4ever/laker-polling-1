@@ -8,6 +8,7 @@ class UrlMappings {
         "/"(controller: 'application', action: 'landing')
         "/dashboard"(controller: 'application', action: 'dashboard')
         "/course"(controller: 'application', action: 'courseView')
+        "/course/roster"(controller: 'application', action: 'classRoster')
 
         /* end Page url mapping */
 
