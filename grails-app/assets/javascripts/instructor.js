@@ -24,7 +24,7 @@ var courseId
 
         this.deleteStudentById = function(studentId, onSuccess, onFail){
             _instructor.getTokenOrFetch((token) => {
-                debugger
+                //debugger
                 var urlString = '/api/course/student?access_token=' + token + '&course_id=' + courseId + '&user_id=' + studentId;
                 $.ajax({
                     url: urlString,
@@ -109,9 +109,9 @@ var courseId
 
         this.removeStudentById = function (studentId){
             for (var i = 0; i < _roster.length; ++i) {
-                if(roster[i].id == studentId){
-                    var student = roster[i]
-                    delete roster[i]
+                if(_roster[i].id == studentId){
+                    var student = _roster[i]
+                    delete _roster[i]
                     this.refreshStudentTable()
                     return student
                 }
@@ -119,7 +119,7 @@ var courseId
         }
 
         this.deleteStudentById = function(studentId, onSuccess, onFail){
-            debugger
+            //debugger
             _service.deleteStudentById(studentId, (studentId) => {
                 onSuccess(this.removeStudentById(studentId))
             }, onFail)
