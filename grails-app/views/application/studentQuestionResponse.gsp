@@ -26,11 +26,12 @@
 <a href="#">< Return to Course Page</a>
 <div class="form-group" style="text-align: right;">
     <form action="/action_page.php" method="get">
-      <input type="checkbox" name="vehicle" value="A">A<br>
-      <input type="checkbox" name="vehicle" value="B">B<br>
-      <input type="checkbox" name="vehicle" value="C">C<br>
-      <input type="checkbox" name="vehicle" value="D">D<br>
-      <input type="checkbox" name="vehicle" value="E">E<br>
+      <input type="checkbox" name="A" value="A">A<br>
+      <input type="checkbox" name="B" value="B">B<br>
+      <input type="checkbox" name="C" value="C">C<br>
+      <input type="checkbox" name="D" value="D">D<br>
+      <input type="checkbox" name="E" value="E">E<br>
+      <input type="submit" name="Submit" value="Submit">Submit Poll<br>
     </form>
 </div>
 <div class="form-group" style="text-align: right;">
