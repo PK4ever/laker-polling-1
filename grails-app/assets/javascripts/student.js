@@ -23,7 +23,7 @@ $(function() {
 					var i;
 					var courseDiv = document.getElementById("courses");
 					for (i = 0; i < courses.length; i++) {
-						var string = courseHTML(courses[i].name,courses[i].crn)
+						var string = courseHTML(courses[i].name,courses[i].crn, courses[i].id)
 						var div = document.createElement("div")
 							div.innerHTML = string;
 						courseDiv.appendChild(div);
@@ -68,11 +68,11 @@ $(function() {
 
 
 
-function courseHTML(courseName, crn) {
+function courseHTML(courseName, crn, id) {
 	//var str = '<div class="col-md-4 col-sm-6 portfolio-item" style="box-shadow: 0px 0px 0px gray; padding: 20px;">'
 	var str = '<div class="col-md-4 col-sm-6 portfolio-item" style="box-shadow: 10px 10px 50px gray; padding: 10px;">'
 	//var str = '<div class="col-md-4 col-sm-6 portfolio-item" style="box-shadow: 0px 0px 0px gray; padding: 10px;">'
-	str += '<a href="#portfolioModal2" class="portfolio-link" data-toggle="modal">'
+	str += '<a href="/course?courseId=' + id + '" class="portfolio-link" data-toggle="modal">'
 		str += '<div class="portfolio-hover">'
 		str += '<div class="portfolio-hover-content">'
 		str += '<i class="fa fa-plus fa-3x"></i></div></div>'
