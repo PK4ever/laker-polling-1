@@ -19,28 +19,7 @@ $(function() {
 
 
 			    success: function(data){
-
-			    	//courses = data.data.courses;
-					courses = [
-						{"name":"csc 212","crn":1123123,"students":8,"id":1},
-						{"name":"csc 212","crn":1123123, "students":8,"id":1},
-						{"name":"csc 212","crn":1123123,"students":8,"id":1},
-						{"name":"csc 212","crn":1123123,"students":8,"id":1},
-						{"name":"csc 212","crn":1123123,"students":8,"id":1},
-						//{"name":"csc 212","crn":1123123,"students":8,"id":1},
-						//{"name":"csc 212","crn":1123123,"students":8,"id":1},
-						//{"name":"csc 212","crn":1123123,"students":8,"id":1},
-						//{"name":"csc 212","crn":1123123,"students":8,"id":1},
-						//{"name":"csc 212","crn":1123123,"students":8,"id":1},
-						//{"name":"csc 212","crn":1123123,"students":8,"id":1},
-						//{"name":"csc 212","crn":1123123,"students":8,"id":1},
-						//{"name":"csc 212","crn":1123123,"students":8,"id":1},
-						{"name":"csc 212","crn":1123123,"students":8,"id":1}]
-				    //$('#courseTable').bootstrapTable({
-				    //    data: courses
-				    //});
-
-
+					courses = data.data.courses;
 					var i;
 					var courseDiv = document.getElementById("courses");
 					for (i = 0; i < courses.length; i++) {
