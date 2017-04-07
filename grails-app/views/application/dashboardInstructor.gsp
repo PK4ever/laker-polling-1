@@ -55,31 +55,11 @@
         <h3 class="text-muted">Your Courses:</h3>
         <div class="row" id="courses">
             %{--courses are displayed here--}%
-            </div>
-
         </div>
+
     </div>
 </section>
-<div><br><br><br><br><br><br><br><br><br><br><br><br><br></div>
     <div class="container">
-        <div class="row">
-            <div class="col-sm-3"></div>
-            <div class="col-sm-6">
-                <div id="courses" class="table-responsive">
-                    <table id="courseTable" class="table">
-                        <thead>
-                        <tr>
-                            <th class="col-md-3" data-field="name" data-formatter="identifierFormatter">Course Name</th>
-                            <th class="col-md-1" data-field="crn">CRN</th>
-                            <th class="col-md-1" data-field="students">Number of Students</th>
-                            <th class="col-md-1" data-field="students" data-formatter="courseDeleteButtonFormatter">Delete</th>
-                        </tr>
-                        </thead>
-                    </table>
-                </div>
-            </div>
-            <div class="col-sm-3"></div>
-        </div>
         <div class="row">
             <div class="col-sm-4"></div>
             <div class="col-sm-4">

@@ -24,7 +24,6 @@ var courseId
 
         this.deleteStudentById = function(studentId, onSuccess, onFail){
             _instructor.getTokenOrFetch((token) => {
-                //debugger
                 var urlString = '/api/course/student?access_token=' + token + '&course_id=' + courseId + '&user_id=' + studentId;
                 $.ajax({
                     url: urlString,
@@ -119,7 +118,6 @@ var courseId
         }
 
         this.deleteStudentById = function(studentId, onSuccess, onFail){
-            //debugger
             _service.deleteStudentById(studentId, (studentId) => {
                 onSuccess(this.removeStudentById(studentId))
             }, onFail)
@@ -133,9 +131,14 @@ var courseId
         };
 
         this.refreshCourseTable = function() {
-            $('#courseTable').bootstrapTable({
-                data: currentInstructor.getCourses()
-            });
+            var i;
+            var courseDiv = document.getElementById("courses");
+            for (i = 0; i < _courses.length; i++) {
+                var string = courseHTML(_courses[i].name,_courses[i].crn,_courses[i].id)
+                var div = document.createElement("div")
+                    div.innerHTML = string;
+                courseDiv.appendChild(div);
+            }
         };
         this.refreshStudentTable = function(){
             _roster = getCourseRoster(courseId);
@@ -167,12 +170,57 @@ var courseId
                         }
                     },
                     error: function() {
-                        currentInstructor.setCourses(JSON.parse('[{"id":3,"name":"TCR 101","crn":"22223","students":3},{"id":4,"name":"TCR 202","crn":"22223","students":3},{"id":5,"name":"TCR 303","crn":"22223","students":3},{"id":6,"name":"TCR 404","crn":"22223","students":3}]'))
+                        //currentInstructor.setCourses(JSON.parse('[{"id":3,"name":"TCR 101","crn":"22223","students":3},{"id":4,"name":"TCR 202","crn":"22223","students":3},{"id":5,"name":"TCR 303","crn":"22223","students":3},{"id":6,"name":"TCR 404","crn":"22223","students":3}]'))
                     }
                 });
             }
         });
+
+        //GET USER INFO AND DISPLAY ON THE PAGE
+        var Name = '';
+        var profpic = '';
+        $.ajax({
+            url: '/user/auth',
+            method: "GET",
+
+            success: function(data){
+                var user = data.data.user
+                Name = user.name;
+
+                profpic = user.imageUrl;
+                var courseDiv = document.getElementById("userName");
+
+                var string = '<h2 class="section-heading">Hello, '+Name+'</h2>';
+                var div = document.createElement("div")
+                div.innerHTML = string;
+                courseDiv.appendChild(div);
+
+                var pic = document.getElementById("profilePic");
+                var picString ='<img src="'+profpic+'" class="img-circle" style="width: 5%">';
+
+                var profDiv = document.createElement("div");
+                profDiv.innerHTML = picString;
+                pic.appendChild(profDiv);
+
+
+            }
+        });
     });
+
+    function courseHTML(courseName, crn, id) {
+        //var str = '<div class="col-md-4 col-sm-6 portfolio-item" style="box-shadow: 0px 0px 0px gray; padding: 20px;">'
+        var str = '<div class="col-md-4 col-sm-6 portfolio-item" style="box-shadow: 10px 10px 50px gray; padding: 10px;">'
+        //var str = '<div class="col-md-4 col-sm-6 portfolio-item" style="box-shadow: 0px 0px 0px gray; padding: 10px;">'
+        str += '<a href="/course?courseId=' + id + ' class="portfolio-link" data-toggle="modal">'
+            str += '<div class="portfolio-hover">'
+            str += '<div class="portfolio-hover-content">'
+            str += '<i class="fa fa-plus fa-3x"></i></div></div>'
+            //str += '<asset:image class="img-responsive" src="logo.png" alt=""/>'
+            //str += '<img src="assets/images/startup-framework.png" class="img-responsive" alt=""></a>'
+        str += '<div class="portfolio-caption"><h4>' +courseName +'</h4><p class="text-muted"> CRN: '+ crn + '</p>'
+        str+= '<button class="btn btn-danger js-deleteCourseButton" type="button" data-toggle="modal" data-target="#deleteCourseModal" data-course-id="' + id + '"></div></div>'
+        return str
+    };
 
     function getCourseRoster(course_id) {
         var result = [1,2,3,4];
@@ -316,7 +364,6 @@ var courseId
         if(preparedDeleteButton) return;
         $('.js-deleteCourseButton').click(function () {
             const clickedButton = $(this);
-            // debugger
             const courseId = clickedButton.data('course-id');
             var course = currentInstructor.getCourseById(courseId);
             if (!course) {
