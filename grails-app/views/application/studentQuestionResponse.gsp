@@ -23,6 +23,7 @@
         </ul>
     </div>
 </div>
+<<<<<<< HEAD
 
 <a href="/dashboard" style="margin-left: 60px; href="/dashboard" class="btn btn-default btn-md">
           <span class="glyphicon glyphicon-arrow-left"></span> Back to Dashboard
@@ -50,6 +51,17 @@
         </div>
 
         <input type="submit" class="btn btn-success" name="Submit" value="Submit answer"><br>
+
+<a href="/course?courseId=${session.courseId}">< Return to Course Page</a>
+<div class="form-group" style="text-align: right;">
+    <form action="/action_page.php" method="get">
+      <input type="checkbox" name="A" value="A">A<br>
+      <input type="checkbox" name="B" value="B">B<br>
+      <input type="checkbox" name="C" value="C">C<br>
+      <input type="checkbox" name="D" value="D">D<br>
+      <input type="checkbox" name="E" value="E">E<br>
+      <input type="submit" name="Submit" value="Submit">Submit Poll<br>
+>>>>>>> 1cd0b010cafc61c6fe29330c1144214b1978c5b9
     </form>
   </div>
     <div class="form-group">
