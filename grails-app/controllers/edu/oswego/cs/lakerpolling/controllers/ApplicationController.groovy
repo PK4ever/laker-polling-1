@@ -38,6 +38,8 @@ class ApplicationController {
     def courseView(long courseId) {
         QueryResult<AuthToken> require = hasAccess()
         if(require.success) {
+            User user = require.data.user
+            RoleType type = user.role.type
             def preReq = preconditionService.notNull(params, ["courseId"])
             if(preReq.success) {
                 session.setAttribute("courseId", courseId)
