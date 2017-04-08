@@ -23,20 +23,41 @@
         </ul>
     </div>
 </div>
-<a href="#">< Return to Course Page</a>
-<div class="form-group" style="text-align: right;">
-    <form action="/action_page.php" method="get">
-      <input type="checkbox" name="A" value="A">A<br>
-      <input type="checkbox" name="B" value="B">B<br>
-      <input type="checkbox" name="C" value="C">C<br>
-      <input type="checkbox" name="D" value="D">D<br>
-      <input type="checkbox" name="E" value="E">E<br>
-      <input type="submit" name="Submit" value="Submit">Submit Poll<br>
+
+<a href="/dashboard" style="margin-left: 60px; href="/dashboard" class="btn btn-default btn-md">
+          <span class="glyphicon glyphicon-arrow-left"></span> Back to Dashboard
+</a>
+
+<div class="container">
+  <div class="col-sm-4"></div>
+  <div class="col-sm-4">
+  <div class="form-group">
+    <form method="get">
+        <div class="checkbox">
+            <label><input type="checkbox" value="A">A</label>
+        </div>
+        <div class="checkbox">
+          <label><input type="checkbox" value="B">B</label>
+        </div>
+        <div class="checkbox">
+            <label><input type="checkbox" value="C">C</label>
+        </div>
+        <div class="checkbox">
+          <label><input type="checkbox" value="D">D</label>
+        </div>
+        <div class="checkbox">
+          <label><input type="checkbox" value="E">E</label>
+        </div>
+
+        <input type="submit" class="btn btn-success" name="Submit" value="Submit answer"><br>
     </form>
+  </div>
+    <div class="form-group">
+        <a href="#" class="btn btn-info" role="button">View Results</a>
+    </div>
+    </div>
 </div>
-<div class="form-group" style="text-align: right;">
-    <a href="#" class="btn btn-success" role="button">View Results</a>
-</div>
+
 <asset:javascript src="auth/config.js"/>
 <asset:javascript src="auth/logout.js"/>
 </body>
