@@ -359,6 +359,7 @@ class CourseService {
                 }
                 if(students) {
                     result.data = students.attendees.toList()
+                    result.success = true
                     result
                 } else {
                     QueryResult.fromHttpStatus(HttpStatus.BAD_REQUEST)

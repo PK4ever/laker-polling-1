@@ -474,8 +474,6 @@ function prepareClassTitle(cId) {
     courseId = cId;
 }
 
-
-
 function changeStartDate(date) {
     console.log(date.value)
     updateDates(date.value, null)
