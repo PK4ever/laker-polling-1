@@ -24,7 +24,7 @@
     </div>
 </div>
 <!-- <a style="margin-left: 40px; font-weight: bold" href="/dashboard">Return to Dashboard</a> -->
-<a style="margin-left: 60px; href="/dashboard" class="btn btn-lg">
+<a href="/dashboard" style="margin-left: 60px; href="/dashboard" class="btn btn-default btn-md">
           <span class="glyphicon glyphicon-arrow-left"></span> Back to Dashboard
 </a>
 <h1 id="coursePageTitle" style="text-align: center;"></h1> <!-- Class name here -->
