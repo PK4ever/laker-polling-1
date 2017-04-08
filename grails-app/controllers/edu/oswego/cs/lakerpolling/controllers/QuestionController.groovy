@@ -83,4 +83,17 @@ class QuestionController {
             } else render(view: '../failure', model: [errorCode: 400, message: "no questions"])
         } else render(view: '../failure', model: [errorCode: result.errorCode, message: result.message])
     }
+
+    def getActiveQuestion(String access_token, String course_id) {
+        def result = preconditionService.notNull(params, ["access_token", "course_id"])
+        def token = preconditionService.accessToken(access_token).data
+
+        if(result.success) {
+            def question = questionService.getActiveQuestion(token, course_id)
+            if(question) {
+                render(view: 'activeQuestion', model: [token: token, id: question.id])
+            } else render(view: '../failure', model: [errorCode: 400, message: "no available questions"])
+        } else render(view: '../failure', model: [errorCode: result.errorCode, message: result.message])
+
+    }
 }

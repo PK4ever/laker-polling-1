@@ -38,16 +38,10 @@ class ApplicationController {
     def courseView(long courseId) {
         QueryResult<AuthToken> require = hasAccess()
         if(require.success) {
-            User user = require.data.user
-            RoleType type = user.role.type
             def preReq = preconditionService.notNull(params, ["courseId"])
             if(preReq.success) {
                 session.setAttribute("courseId", courseId)
-                if (type == RoleType.STUDENT) {
-                    render(view: 'courseLandingStudent')
-                } else if (type == RoleType.INSTRUCTOR) {
-                    render(view: 'courseLandingInstructor')
-                }
+                render(view: 'courseLandingInstructor')
             } else {
                 render(view: '../failure', model: [errorCode: preReq.errorCode, message: preReq.message])
             }
@@ -59,53 +53,16 @@ class ApplicationController {
     def classRoster() {
         def require = hasAccess()
         if(require.success) {
-            render(view: 'classRoster')
+            render(view: 'classRoster.gsp')
         } else {
             render(view: '../failure', model: [errorCode: require.errorCode, message: require.message])
         }
     }
-
-
-    def createQuestionView(long courseId) {
-        QueryResult<AuthToken> require = hasAccess()
+    
+    def classAttendance() {
+        def require = hasAccess()
         if(require.success) {
-            def preReq = preconditionService.notNull(params, ["courseId"])
-            if(preReq.success) {
-                session.setAttribute("courseId", courseId)
-                render(view: 'instructorQuestionBuilder')
-            } else {
-                render(view: '../failure', model: [errorCode: preReq.errorCode, message: preReq.message])
-            }
-        } else {
-            render(view: '../failure', model: [errorCode: require.errorCode, message: require.message])
-        }
-    }
-
-    def resultsView(long courseId) {
-        QueryResult<AuthToken> require = hasAccess()
-        if(require.success) {
-            def preReq = preconditionService.notNull(params, ["courseId"])
-            if(preReq.success) {
-                session.setAttribute("courseId", courseId)
-                render(view: 'pollResults')
-            } else {
-                render(view: '../failure', model: [errorCode: preReq.errorCode, message: preReq.message])
-            }
-        } else {
-            render(view: '../failure', model: [errorCode: require.errorCode, message: require.message])
-        }
-    }
-
-    def answerView(long courseId) {
-        QueryResult<AuthToken> require = hasAccess()
-        if(require.success) {
-            def preReq = preconditionService.notNull(params, ["courseId"])
-            if(preReq.success) {
-                session.setAttribute("courseId", courseId)
-                render(view: 'studentQuestionResponse')
-            } else {
-                render(view: '../failure', model: [errorCode: preReq.errorCode, message: preReq.message])
-            }
+            render(view: 'classAttendance.gsp')
         } else {
             render(view: '../failure', model: [errorCode: require.errorCode, message: require.message])
         }
