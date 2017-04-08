@@ -44,47 +44,43 @@
     <!-- /.container-fluid -->
 </nav>
 
-    <section>
+<section>
 
 <a href="/course?courseId=${session.courseId}">< Return to Course Page</a>
 <div class="form-group" style="text-align: center;">
     <form id="question-form" method="post">
         <div class="btn-group" data-toggle="buttons" >
             <label class="btn btn-default" id="answers">
-            <input type="checkbox" autocomplete="off" name="vehicle" value="A">A</label><br>
+            <input type="checkbox" autocomplete="off" name="vehicle">A</label><br>
             <label class="btn btn-default" id="answers">
-            <input type="checkbox" autocomplete="off" name="vehicle" value="B">B</label><br>
+            <input type="checkbox" autocomplete="off" name="vehicle" >B</label><br>
             <label class="btn btn-default" id="answers">
-            <input type="checkbox" autocomplete="off" name="vehicle" value="C">C</label><br>
+            <input type="checkbox" autocomplete="off" name="vehicle" >C</label><br>
             <label class="btn btn-default" id="answers">
-            <input type="checkbox" autocomplete="off" name="vehicle" value="D">D</label><br>
+            <input type="checkbox" autocomplete="off" name="vehicle">D</label><br>
             <label class="btn btn-default" id="answers">
-            <input type="checkbox" autocomplete="off" name="vehicle" value="E">E</label><br>
+            <input type="checkbox" autocomplete="off" name="vehicle" >E</label><br>
         </div>
         <br>
         <input class="btn btn-success" type="submit" data-course-id="${session.courseId}" id="submit-question-btn" value="Submit">
     </form>
+        <button class="btn btn-danger" id="close-question-btn" style="display:none";>Close Question</button>
 </div>
 </section>
 
 <asset:javascript src="jquery-3.2.0.min.js"/>
 <script src="https://apis.google.com/js/platform.js"></script>
 
-<asset:javascript src="bootstrap.min.js"/>
-<asset:stylesheet href="bootstrap.css"/>
+
 <asset:javascript src="instructor.js"/>
 <asset:javascript src="question.js"/>
-<script>
-    window.onload=prepareClassTitle(${session.courseId});
-</script>
-<asset:javascript src="jquery-3.2.0.min.js"/>
-<script src="https://apis.google.com/js/platform.js"></script>
-<asset:javascript src="question.js"/>
-<asset:javascript src="instructor.js"/>
 <asset:javascript src="auth/config.js"/>
 <asset:javascript src="auth/logout.js"/>
 <asset:stylesheet href="agency.min.css"/>
 <asset:stylesheet href="agency.css"/>
-<asset:stylesheet href="style.css"/>
+<script>
+    window.onload=prepareClassTitle(${session.courseId});
+</script>
+
 </body>
 </html>

@@ -1,6 +1,7 @@
 var token = '';
 var question_id;
 var answer;
+var toggleButtons;
 
 // get student's access token
 $(function() {
@@ -47,31 +48,58 @@ $("#submitAnswer").click(function() {
 	});
 });
 
+
+
+//Instructor Submit Question
 $("#submit-question-btn").click(function(){
-    var form = $('#question-form')
     var courseId = $(this).data('course-id')
-    var selected = ''
+    var selected = [];
     $(':checkbox').each(function(){
         if ($(this).is(':checked')){
-            selected = selected + 'true';
+            selected.push("true");
         }
         else{
             selected.push("false");
         }
-        console.log(selected.toString())
     });
-    // debugger
     $.ajax({
-        url: '/api/question?access_token=' + token + '&course_id=' + courseId + '&answers=' + selected,
+        url: '/api/question?access_token=' + token + '&course_id=' + courseId + '&answers=' + selected.toString(),
         method: 'POST',
         success: function(data){
             question_id = data.id
-            console.log("IT WORKED!!!!")
+            $.ajax({
+                url: '/api/question?access_token=' + token + '&question_id=' + question_id + '&flip=true',
+                method: 'PUT',
+                success: toggleButtons()
+            });
         },
         error: function(err){
             alert(JSON.stringify(err))
         }
-    })
+    });
+    debugger
 });
+
+$("#close-question-btn").click(function(){
+    $.ajax({
+        url: '/api/question?access_token=' + token + '&question_id=' + question_id + '&flip=false',
+        method: 'PUT',
+        success: toggleButtons()
+    });
+})
+
+//Make close and start buttons appear/disappear
+ toggleButtons = function(){
+    var close = document.getElementById('close-question-btn')
+    var question = document.getElementById('question-form')
+    if (close.style.display === 'none'){
+        close.style.display = 'block'
+        question.style.display = 'none'
+    } else {
+        question.style.display = 'block'
+        close.style.display = 'none'
+    }
+    debugger
+ }
 
 
