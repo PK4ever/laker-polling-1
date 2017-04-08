@@ -59,7 +59,53 @@ class ApplicationController {
     def classRoster() {
         def require = hasAccess()
         if(require.success) {
-            render(view: 'classRoster.gsp')
+            render(view: 'classRoster')
+        } else {
+            render(view: '../failure', model: [errorCode: require.errorCode, message: require.message])
+        }
+    }
+
+
+    def createQuestionView(courseId){
+        QueryResult<AuthToken> require = hasAccess()
+        if(require.success) {
+            def preReq = preconditionService.notNull(params, ["courseId"])
+            if(preReq.success) {
+                session.setAttribute("courseId", courseId)
+                render(view: 'instructorQuestionBuilder')
+            } else {
+                render(view: '../failure', model: [errorCode: preReq.errorCode, message: preReq.message])
+            }
+        } else {
+            render(view: '../failure', model: [errorCode: require.errorCode, message: require.message])
+        }
+    }
+
+    def resultsView(courseId){
+        QueryResult<AuthToken> require = hasAccess()
+        if(require.success) {
+            def preReq = preconditionService.notNull(params, ["courseId"])
+            if(preReq.success) {
+                session.setAttribute("courseId", courseId)
+                render(view: 'pollResults')
+            } else {
+                render(view: '../failure', model: [errorCode: preReq.errorCode, message: preReq.message])
+            }
+        } else {
+            render(view: '../failure', model: [errorCode: require.errorCode, message: require.message])
+        }
+    }
+
+    def answerView(courseId){
+        QueryResult<AuthToken> require = hasAccess()
+        if(require.success) {
+            def preReq = preconditionService.notNull(params, ["courseId"])
+            if(preReq.success) {
+                session.setAttribute("courseId", courseId)
+                render(view: 'studentQuestionResponse')
+            } else {
+                render(view: '../failure', model: [errorCode: preReq.errorCode, message: preReq.message])
+            }
         } else {
             render(view: '../failure', model: [errorCode: require.errorCode, message: require.message])
         }
