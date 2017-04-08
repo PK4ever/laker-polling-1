@@ -41,7 +41,11 @@ class ApplicationController {
             def preReq = preconditionService.notNull(params, ["courseId"])
             if(preReq.success) {
                 session.setAttribute("courseId", courseId)
-                render(view: 'courseLandingInstructor')
+                if (type == RoleType.STUDENT) {
+                    render(view: 'courseLandingStudent')
+                } else if (type == RoleType.INSTRUCTOR) {
+                    render(view: 'courseLandingInstructor')
+                }
             } else {
                 render(view: '../failure', model: [errorCode: preReq.errorCode, message: preReq.message])
             }
