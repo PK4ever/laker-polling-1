@@ -29,12 +29,12 @@
 </a>
 <h1 id="coursePageTitle" style="text-align: center;">
     <script>
-        var i=0
-        if (i==0) {
-            document.getElementById("coursePageTitle").innerHTML = "There is no question available";
-        } else {
-            document.getElementById("coursePageTitle").innerHTML = "Select the question";
-        }
+        // var i=0
+        // if (i==0) {
+        //     document.getElementById("coursePageTitle").innerHTML = "There is no question available";
+        // } else {
+        //     document.getElementById("coursePageTitle").innerHTML = "Select the question";
+        // }
     </script>
 
 </h1> <!-- Class name here -->
