@@ -61,8 +61,7 @@ var courseId
 
         this.setCourses = function(allCourses) {
             _courses = allCourses || []
-            if(location.pathname.substring(location.pathname.lastIndexOf("/") + 1) != "roster"
-            && location.pathname.substring(location.pathname.lastIndexOf("/") + 1) != "course") {
+            if(location.pathname.substring(location.pathname.lastIndexOf("/") + 1) == "dashboard") {
                 this.refreshCourseTable()
             }
         };
@@ -182,8 +181,7 @@ var courseId
             }
         });
 
-        if(location.pathname.substring(location.pathname.lastIndexOf("/") + 1) != "roster"
-            && location.pathname.substring(location.pathname.lastIndexOf("/") + 1) != "course") {
+        if(location.pathname.substring(location.pathname.lastIndexOf("/") + 1) == "dashboard") {
             //GET USER INFO AND DISPLAY ON THE PAGE
             var Name = '';
             var profpic = '';
