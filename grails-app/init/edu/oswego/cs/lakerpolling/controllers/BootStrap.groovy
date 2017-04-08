@@ -39,7 +39,7 @@ class BootStrap {
         michael.save(flush: true, failOnError: true)
 
         User max = new User(firstName: "Max", lastName: "Sokolovsky", email: "msokolov@oswego.edu", imageUrl: "http://media.salon.com/2015/01/chrissy_teigen.jpg")
-        max.setRole(new Role(type: RoleType.INSTRUCTOR))
+        max.setRole(new Role(type: RoleType.STUDENT))
         max.save(flush: true, failOnError: true)
 
         User mike = new User(firstName: "Mike", lastName: "Mekker", email: "mmekker@oswego.edu", imageUrl: "http://media.salon.com/2015/01/chrissy_teigen.jpg")
@@ -83,6 +83,7 @@ class BootStrap {
         csc480.addToStudents(a)
         csc480.addToStudents(b)
         csc480.addToStudents(michael);
+        csc480.addToStudents(max);
         csc480.save(flush: true, failOnError: true)
 
 
@@ -90,6 +91,7 @@ class BootStrap {
         hci521.addToStudents(stu)
         hci521.addToStudents(stu2)
         hci521.addToStudents(michael)
+        hci521.addToStudents(max)
         hci521.save(flush: true, failOnError: true)
 
         Course csc212 = new Course(name: "CSC 212", crn: 123456, instructor: tyler)

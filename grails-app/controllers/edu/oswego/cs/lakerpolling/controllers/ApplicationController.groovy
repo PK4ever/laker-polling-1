@@ -81,7 +81,7 @@ class ApplicationController {
         }
     }
 
-    def resultsView(courseId){
+    def resultsView(long courseId){
         QueryResult<AuthToken> require = hasAccess()
         if(require.success) {
             def preReq = preconditionService.notNull(params, ["courseId"])
@@ -96,7 +96,7 @@ class ApplicationController {
         }
     }
 
-    def answerView(courseId){
+    def answerView(long courseId){
         QueryResult<AuthToken> require = hasAccess()
         if(require.success) {
             def preReq = preconditionService.notNull(params, ["courseId"])
