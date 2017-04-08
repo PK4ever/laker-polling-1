@@ -61,7 +61,8 @@ var courseId
 
         this.setCourses = function(allCourses) {
             _courses = allCourses || []
-            if(location.pathname.substring(location.pathname.lastIndexOf("/") + 1) != "roster") {
+            if(location.pathname.substring(location.pathname.lastIndexOf("/") + 1) != "roster"
+            && location.pathname.substring(location.pathname.lastIndexOf("/") + 1) != "course") {
                 this.refreshCourseTable()
             }
         };
@@ -181,7 +182,8 @@ var courseId
             }
         });
 
-        if(location.pathname.substring(location.pathname.lastIndexOf("/") + 1) != "roster") {
+        if(location.pathname.substring(location.pathname.lastIndexOf("/") + 1) != "roster"
+            && location.pathname.substring(location.pathname.lastIndexOf("/") + 1) != "course") {
             //GET USER INFO AND DISPLAY ON THE PAGE
             var Name = '';
             var profpic = '';
@@ -443,7 +445,7 @@ var courseId
                         $('#coursePageTitle').html(course.name)
                     },
                     error: function() {
-                        currentInstructor.setCourses(JSON.parse('[{"id":3,"name":"TCR 101","crn":"22223","students":3},{"id":4,"name":"TCR 202","crn":"22223","students":3},{"id":5,"name":"TCR 303","crn":"22223","students":3},{"id":6,"name":"TCR 404","crn":"22223","students":3}]'))
+                        // currentInstructor.setCourses(JSON.parse('[{"id":3,"name":"TCR 101","crn":"22223","students":3},{"id":4,"name":"TCR 202","crn":"22223","students":3},{"id":5,"name":"TCR 303","crn":"22223","students":3},{"id":6,"name":"TCR 404","crn":"22223","students":3}]'))
                     }
                 });
             }
