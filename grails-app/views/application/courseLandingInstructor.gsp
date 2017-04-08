@@ -23,7 +23,10 @@
         </ul>
     </div>
 </div>
-<a href="/dashboard">Return to Dashboard</a>
+<!-- <a style="margin-left: 40px; font-weight: bold" href="/dashboard">Return to Dashboard</a> -->
+<a href="/dashboard" style="margin-left: 60px; href="/dashboard" class="btn btn-default btn-md">
+          <span class="glyphicon glyphicon-arrow-left"></span> Back to Dashboard
+</a>
 <h1 id="coursePageTitle" style="text-align: center;"></h1> <!-- Class name here -->
 <div class="form-group" style="text-align: center;">
     <a href="/course/createquestion?courseId=${session.courseId}" class="btn btn-success" role="button">Create Question</a>
