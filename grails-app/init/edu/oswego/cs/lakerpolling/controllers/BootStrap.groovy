@@ -7,6 +7,7 @@ import edu.oswego.cs.lakerpolling.domains.Course
 import edu.oswego.cs.lakerpolling.domains.Role
 import edu.oswego.cs.lakerpolling.domains.User
 import edu.oswego.cs.lakerpolling.util.RoleType
+import edu.oswego.cs.lakerpolling.domains.Question
 
 class BootStrap {
 
@@ -104,16 +105,21 @@ class BootStrap {
         csc212.addToStudents(stu)
         csc212.addToStudents(stu2)
         csc212.addToStudents(michael)
+        csc212.addToStudents(max)
         csc212.save(flush: true, failOnError: true)
         /*End courses*/
 
         /*Attendance*/
-        Attendee brandon = new Attendee(attended: true, student: stu)
-        Date someDate = new Date("1/22/91")
-        Attendance something = new Attendance(date: someDate, course: csc480)
-        something.addToAttendees(brandon)
+        Attendee maxAttendee = new Attendee(attended: true, student: max)
+        Date someDate = new Date("4/8/2017")
+        Attendance something = new Attendance(date: someDate, course: csc212)
+        something.addToAttendees(maxAttendee)
         something.save(flush: true, failOnError: true)
-        brandon.save(flusth: true, failOnError: true)
+        maxAttendee.save(flush: true, failOnError: true)
+
+        Question q1 = new Question(active: true, answers: [true, false, false, false, false])
+        csc212.addToQuestions(q1);
+        csc212.save(flush: true, failOnError: true)
 
     }
 

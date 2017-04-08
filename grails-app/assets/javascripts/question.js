@@ -33,16 +33,18 @@ $("#submitAnswer").click(function() {
 		}
 	});
 	console.log(selected);
+	var question_id = 1;
+	var answer = selected.toString();
 
 	$.ajax({
-		url: '/api/question/answer',
-		type: 'POST',
-		data: {
-			access_token: token,
-			question_id: 2,
-			answer: selected.toString()
-
-		},
+		url: '/api/question/answer?access_token=' + token + '&question_id=' 
+			+ question_id + '&answer=' + answer + '&date=4/8/2017',
+		type: 'PUT',
+		// data: {
+		// 	access_token: token,
+		// 	question_id: 1,
+		// 	answer: selected.toString()
+		// },
 		success: function(data) {
 			console.log('It works');
 		},
