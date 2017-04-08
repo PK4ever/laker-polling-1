@@ -49,7 +49,7 @@
     <div class="row">
         <div class="col-sm-4"></div>
         <div class="col-sm-4">
-            <form id="csv-form-email" method="post">
+            <form id="csv-form-email" method="post" style="margin-top: 30px;">
                 <label>Add student by email</label>
                 <div class="form-cotrol">
                     <input id="email" type="email" placeholder="lakernetID@oswego.edu" required>
@@ -69,7 +69,7 @@
                 <label>Add a CSV file</label>
                 <div class="form-group">
                     <input id="csv-file" type="file" accept=".csv">
-                    <input type="submit" value="Send CSV" class="btn btn-success" id="file-button">
+                    <input style="margin-top: 5px;" type="submit" value="Send CSV" class="btn btn-success" id="file-button">
                 </div>
             </form>
         </div>

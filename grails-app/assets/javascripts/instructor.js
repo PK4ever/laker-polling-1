@@ -86,8 +86,6 @@ var courseId
         };
 
         this.getCourseById = function(courseId) {
-            console.log(_courses)
-            console.log(courseId)
             for (var i = 0; i < _courses.length; i++) {
                 console.log(_courses[i])
                 if (_courses[i].id == courseId) {
@@ -149,7 +147,6 @@ var courseId
         };
         this.refreshStudentTable = function(){
             _roster = getCourseRoster(courseId);
-            console.log(_roster)
             $('#studentTable').bootstrapTable({
                 data: _roster
             });
@@ -163,7 +160,6 @@ var courseId
             success: function(data){
                 var token = data.data.token
                 currentInstructor = new CurrentInstructor(token)
-                console.log(currentInstructor)
                 $.ajax({
                     url: '/api/course',
                     method: "GET",
@@ -172,9 +168,7 @@ var courseId
                     },
                     success: function(data) {
                         currentInstructor.setCourses(data.data.courses);
-                        console.log(currentInstructor.getCourses())
                         if (courseId) {
-                            console.log(courseId)
                             var course = currentInstructor.getCourseById(courseId);
                             currentInstructor.setRoster(courseId);
                             $('#coursePageTitle').html(course.name)
@@ -446,7 +440,6 @@ var courseId
                     success: function(data) {
                         currentInstructor.setCourses(data.data.courses);
                         var course = currentInstructor.getCourseById(courseId);
-                        console.log(course);
                         $('#coursePageTitle').html(course.name)
                     },
                     error: function() {
