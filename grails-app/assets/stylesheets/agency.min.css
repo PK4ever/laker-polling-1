@@ -160,7 +160,7 @@ a.active, a:active, a:focus, a:hover {
 
 @media (min-width: 768px) {
     .navbar-custom {
-        background-color: darkgreen !important;
+        background-color: gray !important;
         padding: 25px 0;
         -webkit-transition: padding .3s;
         -moz-transition: padding .3s;
