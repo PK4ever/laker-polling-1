@@ -66,7 +66,7 @@ class ApplicationController {
     }
 
 
-    def createQuestionView(courseId){
+    def createQuestionView(long courseId){
         QueryResult<AuthToken> require = hasAccess()
         if(require.success) {
             def preReq = preconditionService.notNull(params, ["courseId"])
