@@ -6,9 +6,16 @@
 #sign-in-btn {
     padding: 20px;
 }
-/*removes the line uner page name*/
+/*removes the line under page name*/
 #pageName{
     text-decoration: none !important;
+}
+#answers{
+    width: 200px !important;
+    padding: 15px !important;
+}
+#submit-btn{
+    width: 200px !important;
 }
 body{
     background-image: url("/assets/LakerPolingBackground.png") !important;
