@@ -38,16 +38,10 @@ class ApplicationController {
     def courseView(long courseId) {
         QueryResult<AuthToken> require = hasAccess()
         if(require.success) {
-            User user = require.data.user
-            RoleType type = user.role.type
             def preReq = preconditionService.notNull(params, ["courseId"])
             if(preReq.success) {
                 session.setAttribute("courseId", courseId)
-                if (type == RoleType.STUDENT) {
-                    render(view: 'courseLandingStudent')
-                } else if (type == RoleType.INSTRUCTOR) {
-                    render(view: 'courseLandingInstructor')
-                }
+                render(view: 'courseLandingInstructor')
             } else {
                 render(view: '../failure', model: [errorCode: preReq.errorCode, message: preReq.message])
             }

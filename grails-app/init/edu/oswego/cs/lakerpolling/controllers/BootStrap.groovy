@@ -1,5 +1,7 @@
 package edu.oswego.cs.lakerpolling.controllers
 
+import edu.oswego.cs.lakerpolling.domains.Attendance
+import edu.oswego.cs.lakerpolling.domains.Attendee
 import edu.oswego.cs.lakerpolling.domains.AuthToken
 import edu.oswego.cs.lakerpolling.domains.Course
 import edu.oswego.cs.lakerpolling.domains.Role
@@ -40,6 +42,10 @@ class BootStrap {
         max.setRole(new Role(type: RoleType.INSTRUCTOR))
         max.save(flush: true, failOnError: true)
 
+        User mike = new User(firstName: "Mike", lastName: "Mekker", email: "mmekker@oswego.edu", imageUrl: "http://media.salon.com/2015/01/chrissy_teigen.jpg")
+        mike.setRole(new Role(type: RoleType.INSTRUCTOR))
+        mike.save(flush: true, failOnError: true)
+
         User jeff = new User(email: "jregistr@oswego.edu")
         jeff.setRole(new Role(type: RoleType.ADMIN))
         jeff.save(flush: true, failOnError: true)
@@ -49,15 +55,12 @@ class BootStrap {
         /* instructors */
         User inst1 = new User(email: "bastian.tenbergen@oswego.edu")
         inst1.setRole(new Role(type: RoleType.INSTRUCTOR))
+        inst1.setAuthToken(new AuthToken(accessToken: "inst-1", subject: "inst-1-subj"))
         inst1.save(flush: true, failOnError: true)
 
         User inst2 = new User(email: "christopher.harris@oswego.edu")
         inst2.setRole(new Role(type: RoleType.INSTRUCTOR))
         inst2.save(flush: true, failOnError: true)
-
-        User tyler = new User(email: "tmoson@oswego.edu")
-        tyler.setRole(new Role (type: RoleType.INSTRUCTOR))
-        tyler.save(flush: true, failOnError: true)
 
         User admin = new User(firstName: "admin", lastName: "admin", email: "cooladmin@gmail.com", imageUrl: "cool")
         admin.setRole(new Role(type: RoleType.ADMIN))
@@ -68,7 +71,7 @@ class BootStrap {
 
 
         /*Courses*/
-        Course csc480 = new Course(name: "CSC 480", crn: 11111, instructor: tyler)
+        Course csc480 = new Course(name: "CSC 480", crn: 11111, instructor: inst1)
         csc480.addToStudents(a)
         csc480.addToStudents(b)
         csc480.addToStudents(michael);
@@ -81,6 +84,14 @@ class BootStrap {
         hci521.addToStudents(michael)
         hci521.save(flush: true, failOnError: true)
         /*End courses*/
+
+        /*Attendance*/
+        Attendee brandon = new Attendee(attended: true, student: stu)
+        Date someDate = new Date("1/22/91")
+        Attendance something = new Attendance(date: someDate, course: csc480)
+        something.addToAttendees(brandon)
+        something.save(flush: true, failOnError: true)
+        brandon.save(flusth: true, failOnError: true)
 
     }
 

@@ -1,0 +1,9 @@
+import edu.oswego.cs.lakerpolling.domains.Question
+
+model {
+    Question question
+}
+json {
+    status "success"
+    id question.id
+}

@@ -79,7 +79,7 @@ class CourseListParserService {
     private Map<Column, Integer> parseHeader(Map<String,Integer> headerIndexMap) {
         Map<Column, Integer> columnIndexMap = new HashMap<>()
 
-        // associate the logical columns with the actual column index in the CSV based on the headers
+        // associate the logical columns with the actual column index in the CSV based active the headers
         for (headerIndexEntry in headerIndexMap.entrySet()) {
             for (column in Column.values()) {
                 if (columnIndexMap.containsKey(column)) {

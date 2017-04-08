@@ -26,6 +26,16 @@ class UrlMappings {
             "/student"(controller: 'course', action: 'getCourseStudent', method: 'get')
             "/student"(controller: 'course', action: 'postCourseStudent', method: 'post')
             "/student"(controller: 'course', action: 'deleteCourseStudent', method: 'delete')
+
+            "/attendance"(controller: 'course', action: 'getAttendance', method: 'get')
+        }
+
+        group "/api/question", {
+            "/create"(controller: 'question', action: 'createQuestion', method: 'post')
+            "/change"(controller: 'question', action: 'changeQuestionStatus', method: 'put')
+
+            "/answer"(controller: 'question', action: 'getAnswers', mehtod: 'get')
+            "/answer"(controller: 'question', action: 'answerQuestion', method: 'put')
         }
     }
 }

@@ -28,7 +28,7 @@ class VerifierService {
     /**
      * Method to get verification results for a given id token string.
      * @param idTokenString The raw id token string to be verified.
-     * @return An object containing information on the verification of the candidate.
+     * @return An object containing information active the verification of the candidate.
      */
     QueryResult<GoogleIdToken> getVerifiedResults(String idTokenString) {
         QueryResult<GoogleIdToken> data = new QueryResult<>()
@@ -108,7 +108,7 @@ class VerifierService {
     }
 
     /**
-     * Verifies the email on the profile
+     * Verifies the email active the profile
      * @param data The data object to push results onto.
      */
     private void verifyEmail(QueryResult<GoogleIdToken> data) {

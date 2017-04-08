@@ -1,5 +1,7 @@
 package edu.oswego.cs.lakerpolling.services
 
+import edu.oswego.cs.lakerpolling.domains.Attendance
+import edu.oswego.cs.lakerpolling.domains.Attendee
 import edu.oswego.cs.lakerpolling.domains.AuthToken
 import edu.oswego.cs.lakerpolling.domains.Course
 import edu.oswego.cs.lakerpolling.domains.Role
@@ -161,6 +163,7 @@ class CourseService {
 
         res
     }
+
     /**
      * Creates a course for an instructor
      * @param token - The AuthToken of the instructor
@@ -191,7 +194,7 @@ class CourseService {
     QueryResult<Course> adminCreateCourse(AuthToken token, String crn, String name, String instructor, QueryResult<Course> result = new QueryResult<>(success: true)) {
         User admin = token?.user
         User inst = User.findById(Long.parseLong(instructor))
-        if (admin.role.type == RoleType.ADMIN && inst.role.type == RoleType.INSTRUCTOR && !courseExists(crn)) {
+        if (admin && inst && admin.role.type == RoleType.ADMIN && inst.role.type == RoleType.INSTRUCTOR && !courseExists(crn)) {
             result = createCourse(inst, name, crn, result)
         } else {
             QueryResult.fromHttpStatus(HttpStatus.BAD_REQUEST, result)
@@ -343,4 +346,72 @@ class CourseService {
         }
         return res
     }
+
+    QueryResult<List<Attendee>> getAllStudentAttendance(String course_id, String date) {
+        QueryResult<List<Attendee>> result = new QueryResult<>()
+        Date getDate = new Date(date)
+        def course = Course.findById(course_id.toLong())
+        if(course) {
+            def attendance = Attendance.findAllByCourse(course)
+            if(attendance) {
+                def students = attendance.find { a ->
+                    a.date == getDate
+                }
+                if(students) {
+                    result.data = students.attendees.toList()
+                    result
+                } else {
+                    QueryResult.fromHttpStatus(HttpStatus.BAD_REQUEST)
+                }
+            } else {
+                QueryResult.fromHttpStatus(HttpStatus.BAD_REQUEST)
+            }
+        } else {
+            QueryResult.fromHttpStatus(HttpStatus.BAD_REQUEST)
+        }
+    }
+
+    QueryResult<List<Attendee>> getStudentAttendance(String student_id, String start_date, String end_date) {
+        QueryResult<List<Attendee>> result = new QueryResult<>()
+        List<Attendee> attendeeList = new ArrayList<>()
+        Date getStart = new Date(start_date)
+        Date getEnd = new Date(end_date)
+        def student = User.findById(student_id.toLong())
+        if(student) {
+            def attendance = Attendee.findAllByStudent(student)
+            if(attendance) {
+                attendance.forEach({a ->
+                    if(a.attendance.date >= getStart || a.attendance.date <= getEnd) attendeeList.add(a)
+                })
+                result.data = attendeeList
+                result
+            } else {
+                QueryResult.fromHttpStatus(HttpStatus.BAD_REQUEST)
+            }
+        } else {
+            QueryResult.fromHttpStatus(HttpStatus.BAD_REQUEST)
+        }
+
+    }
+
+    private Date makeDate() {
+        Calendar calendar = Calendar.getInstance()
+        calendar.setTime(new Date())
+        return removeTime(calendar)
+    }
+
+    private Date makeDate(String input) {
+        Calendar calendar = Calendar.getInstance()
+        calendar.setTime(new Date(input))
+        return removeTime(calendar)
+    }
+
+    private static Date removeTime(Calendar calendar) {
+        calendar.set(Calendar.HOUR_OF_DAY, 0)
+        calendar.set(Calendar.MINUTE, 0)
+        calendar.set(Calendar.SECOND, 0)
+        calendar.set(Calendar.MILLISECOND, 0)
+        return calendar.getTime()
+    }
+
 }

@@ -1,5 +1,6 @@
 package edu.oswego.cs.lakerpolling.controllers
 
+import edu.oswego.cs.lakerpolling.domains.Attendance
 import edu.oswego.cs.lakerpolling.domains.AuthToken
 import edu.oswego.cs.lakerpolling.domains.Course
 import edu.oswego.cs.lakerpolling.services.CourseListParserService
@@ -51,16 +52,16 @@ class CourseController {
     def postCourse(String access_token, String crn, String name, String user_id) {
         def require = preconditionService.notNull(params, ["access_token", "crn", "name"])
         AuthToken token = preconditionService.accessToken(access_token, require).data
-        if(require.success) {
+        if (require.success) {
             def adminCreate = preconditionService.notNull(params, ["user_id"])
             def result
-            if(adminCreate.success) {
+            if (adminCreate.success) {
                 result = courseService.adminCreateCourse(token, crn, name, user_id)
             } else {
                 result = courseService.instructorCreateCourse(token, crn, name)
             }
 
-            if(result.success) {
+            if (result.success) {
                 render(view: 'newCourse', model: [course: result.data])
             } else {
                 render(view: '../failure', model: [errorCode: result.errorCode, message: result.message])
@@ -72,7 +73,7 @@ class CourseController {
     }
 
     /**
-     * Endpoint to perform delete operation on courses.
+     * Endpoint to perform delete operation active courses.
      * @param access_token - The access token of the requesting user.
      * @param course_id - The id of the course.
      */
@@ -111,12 +112,10 @@ class CourseController {
             def results = courseService.getAllStudents(require.data, course_id)
             if (results.success) {
                 render(view: 'studentList', model: [token: require.data, courseID: course_id.toLong(), students: results.data])
-            }
-            else {
+            } else {
                 render(view: '../failure', model: [errorCode: results.errorCode, message: results.message])
             }
-        }
-        else {
+        } else {
             render(view: '../failure', model: [errorCode: require.errorCode, message: require.message])
         }
     }
@@ -146,8 +145,7 @@ class CourseController {
                     QueryResult<List<String>> parseResult = courseListParserService.parse(file)
                     if (parseResult.success) {
                         emails = parseResult.data
-                    }
-                    else {
+                    } else {
                         render(view: '../failure', model: [errorCode: parseResult.errorCode, message: parseResult.message])
                         return
                     }
@@ -171,7 +169,6 @@ class CourseController {
     }
 
     def deleteCourseStudent(String access_token, String course_id, String user_id) {
-//        println(course_id)
         QueryResult<AuthToken> checks = new QueryResult<>()
 
         preconditionService.notNull(params, ["access_token", "course_id", "user_id"], checks)
@@ -192,6 +189,35 @@ class CourseController {
             }
         } else {
             render(view: '../failure', model: [errorCode: checks.errorCode, message: checks.message])
+        }
+
+    }
+
+    def getAttendance(String access_token, String course_id, String student_id, String date, String start_date, String end_date) {
+        QueryResult<AuthToken> check = new QueryResult<>()
+        preconditionService.notNull(params, ["access_token", "course_id"], check)
+        preconditionService.accessToken(access_token, check)
+
+        if (check.success) {
+            if (preconditionService.notNull(params, ["date"], check).success) {
+                def students = courseService.getAllStudentAttendance(course_id, date)
+                if (students.success) {
+                    render(view: 'attendanceList', model: [token: check.data, attendees: students.data])
+                } else {
+                    render(view: '../failure', model: [errorCode: students.errorCode, message: students.message])
+                }
+            } else if (preconditionService.notNull(params, ["student_id", "start_date", "end_date"], check).success) {
+                def student = courseService.getStudentAttendance(student_id, start_date, end_date)
+                if (student.success) {
+                    render(view: 'attendanceList', model: [token: check.data, attendees: student.data])
+                } else {
+                    render(view: '../failure', model: [errorCode: student.errorCode, message: student.message])
+                }
+            } else {
+                render(view: '../failure', model: [errorCode: check.errorCode, message: check.message])
+            }
+        } else {
+            render(view: '../failure', model: [errorCode: check.errorCode, message: check.message])
         }
 
     }
