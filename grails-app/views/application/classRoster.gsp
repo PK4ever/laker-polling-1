@@ -43,7 +43,7 @@
     </div>
     <!-- /.container-fluid -->
 </nav>
-
+<section>
 <div class="container">
     <a href="/course?courseId=${session.courseId}"><h1 id="coursePageTitle"></h1></a>
 
@@ -63,7 +63,7 @@
         </div>
         <div class="col-sm-4"></div>
     </div>
-
+</section>
     <!-- add student by email -->
     <div class="row">
         <div class="col-sm-4"></div>
