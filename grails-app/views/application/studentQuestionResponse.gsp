@@ -23,9 +23,11 @@
         </ul>
     </div>
 </div>
-<a href="/course?courseId=${session.courseId}">< Return to Course Page</a>
+<a href="/dashboard" style="margin-left: 60px; href="/dashboard" class="btn btn-default btn-md">
+          <span class="glyphicon glyphicon-arrow-left"></span> Back to Dashboard
+</a>
 <div class="form-group" style="text-align: center;">
-    <form action="/action_page.php" method="get">
+    <form method="post">
         <div class="btn-group" data-toggle="buttons" >
             <label class="btn btn-default" id="answers">
                 <input type="checkbox" autocomplete="off" name="vehicle" value="A">A</label><br>
@@ -38,12 +40,13 @@
             <label class="btn btn-default" id="answers">
                 <input type="checkbox" autocomplete="off" name="vehicle" value="E">E</label><br>
         </div>
-        <br>
-        <input class="btn btn-success" type="submit" id="submit-btn" value="Submit Answer">
+        <div class="form-group">
+        <input class="btn btn-success" id="submitAnswer" type="submit" value="Submit answer">
+        </div>
     </form>
 </div>
 <div class="form-group" style="text-align: center;">
-    <a href="#" class="btn btn-success" role="button">View Results</a>
+    <a href="#" class="btn btn-info" role="button">View Results</a>
 </div>
 
     <!-- user interaction -->
@@ -56,5 +59,6 @@
 <script src="https://apis.google.com/js/platform.js"></script>
 <asset:javascript src="auth/config.js"/>
 <asset:javascript src="auth/logout.js"/>
+<asset:javascript src="question.js"/>
 </body>
 </html>

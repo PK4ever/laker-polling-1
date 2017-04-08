@@ -9,7 +9,7 @@ class UrlMappings {
         "/dashboard"(controller: 'application', action: 'dashboard')
         "/course"(controller: 'application', action: 'courseView')
         "/course/roster"(controller: 'application', action: 'classRoster')
-        "/course/createquestion"(controller: 'application', action: 'createQuestionView')
+        "/course/createquestion" (controller: 'application', action: 'createQuestionView')
         "/course/answerquestion" (controller: 'application', action: 'answerView')
         "/course/viewresults" (controller: 'application', action: 'resultsView')
 
