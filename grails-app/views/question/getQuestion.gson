@@ -1,9 +1,11 @@
 import edu.oswego.cs.lakerpolling.domains.AuthToken
 
 model {
+    Collection<Long> questionId
     AuthToken token
 }
+
 json {
-    status "success"
     accessToken token.accessToken
+    questions questionId
 }

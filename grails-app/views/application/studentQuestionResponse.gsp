@@ -47,10 +47,9 @@
                 <input type="checkbox" autocomplete="off">D</label><br>
             <label class="btn btn-default answer-btn" id="answers">
                 <input type="checkbox" autocomplete="off">E</label><br>
-
         </div>
         <div class="form-group">
-        <input class="btn btn-success" id="submitAnswer" value="Submit answer">
+        <input class="btn btn-success" id="submitAnswer" data-course-id="${session.courseId}" value="Submit answer">
         </div>
     </form>
 </div>

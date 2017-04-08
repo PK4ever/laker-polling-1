@@ -1,10 +1,14 @@
+import edu.oswego.cs.lakerpolling.domains.AuthToken
 import edu.oswego.cs.lakerpolling.domains.Question
 
 model {
     Question question
+    AuthToken token
 }
 
 json {
+    status "success"
+    accessToken token.accessToken
     id question.id
     answers question.studentAnswers
 }

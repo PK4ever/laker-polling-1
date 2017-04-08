@@ -2,7 +2,6 @@ package edu.oswego.cs.lakerpolling.services
 
 import edu.oswego.cs.lakerpolling.util.QueryResult
 import org.apache.commons.csv.CSVFormat
-import org.apache.commons.csv.CSVParser
 import org.apache.commons.csv.CSVRecord
 import org.springframework.http.HttpStatus
 import org.springframework.web.multipart.MultipartFile
@@ -10,7 +9,7 @@ import org.springframework.web.multipart.MultipartFile
 class CourseListParserService {
 
     class ParseError {
-        final static String MISSING_HEADER = "Missing required 'Email' or 'Username' header"
+        final static String MISSING_COLUMN = "Missing required 'Email' or 'Username' column"
     }
 
     private enum Column {
@@ -28,8 +27,29 @@ class CourseListParserService {
         }
     }
 
-    private static final CSVFormat format = CSVFormat.DEFAULT.withFirstRecordAsHeader().withAllowMissingColumnNames().withIgnoreSurroundingSpaces()
+    private static class CourseListFormat {
+        final Map<Column, Integer> columnIndexMap
+        final boolean firstRowIsHeader
 
+        CourseListFormat(Map<Column, Integer> columnIndexMap, boolean firstRowIsHeader) {
+            this.columnIndexMap = columnIndexMap
+            this.firstRowIsHeader = firstRowIsHeader
+        }
+    }
+
+    private static final CSVFormat CSV_FORMAT = CSVFormat.DEFAULT
+
+    /**
+     * Parses the given CSV file as a course list of students. The CSV file may contain a header row with a header
+     * labeled either "Email" or "Username" (case insensitive). If the file does not contain a header row then the
+     * parser will identify the Email column by searching the first row for data that ends with "@oswego.edu". For each
+     * record in the file the parser will either extract the student's email directly from the "Email" column or will
+     * generate it dynamically using the student's Laker NetID extracted from the "Username" column. If a record does
+     * not contain a student email then the parser will skip the record without throwing an exception.
+     *
+     * @param file - a MultipartFile object associated with a CSV file containing a list of students
+     * @return a QueryResult containing either a list of student emails extracted from the CSV file or an error
+     */
     QueryResult<List<String>> parse(MultipartFile file, QueryResult<List<String>> result = new QueryResult<>()) {
         BufferedReader reader = null
         try {
@@ -51,21 +71,22 @@ class CourseListParserService {
     }
 
      /**
-     * Parses the given CSV file as a course list of students. The first row in the CSV file must be a header row, which
-     * must contain a header labeled either "Email" or "Username" (case insensitive). For each record in the file the
-     * parser will either extract the student's email directly from the "Email" column or will generate it dynamically
-     * using the student's Laker NetID extracted from the "Username" column. If a record does not contain a student email
-     * then the parser will skip the record without throwing an exception.
+     * Parses the given CSV file as a course list of students. The CSV file may contain a header row with a header
+     * labeled either "Email" or "Username" (case insensitive). If the file does not contain a header row then the
+     * parser will identify the Email column by searching the first row for data that ends with "@oswego.edu". For each
+     * record in the file the parser will either extract the student's email directly from the "Email" column or will
+     * generate it dynamically using the student's Laker NetID extracted from the "Username" column. If a record does
+     * not contain a student email then the parser will skip the record without throwing an exception.
      *
      * @param reader - a Reader object associated with a character stream for a CSV file containing a list of students
-     * @return a list of student emails extracted from the CSV file
+     * @return a QueryResult containing either a list of student emails extracted from the CSV file or an error
      */
     QueryResult<List<String>> parse(Reader reader, QueryResult<List<String>> result = new QueryResult<>()) {
         try {
-            CSVParser parser = format.parse(reader)
-            def columnIndexMap = parseHeader(parser.getHeaderMap())
-            verifyHeaderFormat(columnIndexMap, result)
-            parseRecords(columnIndexMap, parser, result)
+            List<CSVRecord> records = CSV_FORMAT.parse(reader).getRecords()
+            CourseListFormat courseListFormat = parseHeader(records.get(0))
+            verifyFormat(courseListFormat, result)
+            parseRecords(courseListFormat, records, result)
         }catch (IllegalArgumentException e1) {
             e1.printStackTrace()
             QueryResult.fromHttpStatus(HttpStatus.BAD_REQUEST, result)
@@ -76,44 +97,63 @@ class CourseListParserService {
         result
     }
 
-    private Map<Column, Integer> parseHeader(Map<String,Integer> headerIndexMap) {
+    // Associate the logical columns with the actual column index in the CSV based either on the header row or the
+    // format of the column data (i.e. a column containing email data will be mapped to the Email column)
+    private CourseListFormat parseHeader(CSVRecord headerRow) {
         Map<Column, Integer> columnIndexMap = new HashMap<>()
-
-        // associate the logical columns with the actual column index in the CSV based active the headers
-        for (headerIndexEntry in headerIndexMap.entrySet()) {
-            for (column in Column.values()) {
-                if (columnIndexMap.containsKey(column)) {
-                    continue
-                }
-                if (column.matches(headerIndexEntry.getKey())) {
-                    columnIndexMap.put(column, headerIndexEntry.value)
-                    break
-                }
+        for (int i = 0; i < headerRow.size(); i++) {
+            String header = headerRow.get(i)
+            if (isOswegoEmail(header)) {
+                columnIndexMap.put(Column.EMAIL, i)
+                return new CourseListFormat(columnIndexMap, false)
+            } else {
+                mapColumnToIndex(columnIndexMap, header, i)
             }
         }
-        columnIndexMap
+        new CourseListFormat(columnIndexMap, true)
     }
 
-    private QueryResult<List<String>> verifyHeaderFormat(Map<Column,Integer> columnIndexMap, QueryResult result) {
+    private void mapColumnToIndex(Map<Column, Integer> columnIndexMap, String header, int columnIndex) {
+        for (column in Column.values()) {
+            if (columnIndexMap.containsKey(column)) {
+                continue
+            }
+            if (column.matches(header)) {
+                columnIndexMap.put(column, columnIndex)
+                break
+            }
+        }
+    }
+
+    private static boolean isOswegoEmail(String str) {
+        str.endsWith("@oswego.edu")
+    }
+
+    private QueryResult<List<String>> verifyFormat(CourseListFormat format, QueryResult result) {
         if (!result.success) {
             return result
         }
 
-        if (columnIndexMap.isEmpty()) {
+        if (format.columnIndexMap.isEmpty()) {
             QueryResult.fromHttpStatus(HttpStatus.BAD_REQUEST, result)
-            result.message = ParseError.MISSING_HEADER
+            result.message = ParseError.MISSING_COLUMN
         }
         result
     }
 
-    private QueryResult<List<String>> parseRecords(Map<Column, Integer> columnIndexMap, Iterable<CSVRecord> records, QueryResult result) {
+    private QueryResult<List<String>> parseRecords(CourseListFormat format, Iterable<CSVRecord> records, QueryResult result) {
         if (!result.success) {
             return result
         }
 
+        Iterator<CSVRecord> recordIterator = records.iterator()
+        if (format.firstRowIsHeader && recordIterator.hasNext()) {
+            recordIterator.next()
+        }
+
         List<String> emails = new ArrayList<>()
-        for (CSVRecord record : records) {
-            def maybeEmail = parseEmail(columnIndexMap, record)
+        while (recordIterator.hasNext()) {
+            def maybeEmail = parseEmail(format.columnIndexMap, recordIterator.next())
             if (maybeEmail.isPresent()) {
                 emails.add(maybeEmail.get())
             }

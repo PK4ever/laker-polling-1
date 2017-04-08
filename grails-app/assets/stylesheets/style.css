@@ -14,7 +14,10 @@
     width: 200px !important;
     padding: 15px !important;
 }
-#submit-btn{
+#submit-question-btn{
+    width: 200px !important;
+}
+#submitAnswer{
     width: 200px !important;
 }
 body{

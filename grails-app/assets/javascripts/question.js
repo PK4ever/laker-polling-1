@@ -34,7 +34,34 @@ $("#submitAnswer").click(function() {
 			selected.push("false");
 		}
 	});
-	console.log(selected);
+});
+
+$("#submit-question-btn").click(function(){
+    var form = $('#question-form')
+    var courseId = $(this).data('course-id')
+    var selected = ''
+    $(':checkbox').each(function(){
+        if ($(this).is(':checked')){
+            selected = selected + 'true');
+        }
+        else{
+            selected.push("false");
+        }
+        console.log(selected)
+    });
+    debugger
+    $.ajax({
+        url: '/api/question?access_token=' + token + '&course_id=' + courseId + '&answers=' + selected,
+        method: 'POST',
+        success: function(data){
+            question_id = data.id
+            console.log("IT WORKED!!!!")
+        },
+        error: function(err){
+            alert(JSON.stringify(err))
+        }
+    })
+});
 
 	// $.ajax({
 	// 	url: '/api/question/answer',
@@ -47,5 +74,4 @@ $("#submitAnswer").click(function() {
 	// 	}
 
 	// });
-});
 

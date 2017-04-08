@@ -35,8 +35,9 @@ class UrlMappings {
         }
 
         group "/api/question", {
-            "/create"(controller: 'question', action: 'createQuestion', method: 'post')
-            "/change"(controller: 'question', action: 'changeQuestionStatus', method: 'put')
+            "/"(controller: 'question', action: 'createQuestion', method: 'post')
+            "/"(controller: 'question', action: 'changeQuestionStatus', method: 'put')
+            "/"(controller: 'question', action: 'getQuestion', method: 'get')
 
             "/answer"(controller: 'question', action: 'getAnswers', mehtod: 'get')
             "/answer"(controller: 'question', action: 'answerQuestion', method: 'put')
