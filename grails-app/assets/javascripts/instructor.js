@@ -171,7 +171,9 @@ var endDate
                         currentInstructor.setCourses(data.data.courses);
                         if (courseId) {
                             var course = currentInstructor.getCourseById(courseId);
+                            if(location.pathname.substring(location.pathname.lastIndexOf("/") + 1) == "roster") {
                             currentInstructor.setRoster(courseId);
+                            }
                             $('#coursePageTitle').html(course.name);
                         }
                     },

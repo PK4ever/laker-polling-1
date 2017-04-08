@@ -9,7 +9,10 @@ class UrlMappings {
         "/dashboard"(controller: 'application', action: 'dashboard')
         "/course"(controller: 'application', action: 'courseView')
         "/course/roster"(controller: 'application', action: 'classRoster')
-        "/course/attendance"(controller: 'application', action: 'classAttendance')
+        "/course/createquestion" (controller: 'application', action: 'createQuestionView')
+        "/course/answerquestion" (controller: 'application', action: 'answerView')
+        "/course/viewresults" (controller: 'application', action: 'resultsView')
+
 
         /* end Page url mapping */
 
@@ -35,7 +38,6 @@ class UrlMappings {
             "/"(controller: 'question', action: 'createQuestion', method: 'post')
             "/"(controller: 'question', action: 'changeQuestionStatus', method: 'put')
             "/"(controller: 'question', action: 'getQuestion', method: 'get')
-            "/active"(controller: 'question', action: 'getActiveQuestion', method: 'get')
 
             "/answer"(controller: 'question', action: 'getAnswers', mehtod: 'get')
             "/answer"(controller: 'question', action: 'answerQuestion', method: 'put')
