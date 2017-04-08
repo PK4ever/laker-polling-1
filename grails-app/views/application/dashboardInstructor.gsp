@@ -58,7 +58,6 @@
         </div>
 
     </div>
-</section>
     <div class="container">
         <div class="row">
             <div class="col-sm-4"></div>
@@ -81,7 +80,7 @@
             </div>
             </div>
         </div>
-
+</section>
         <!-- Modal -->
         <div id="deleteCourseModal" class="modal fade" role="dialog">
             <div class="modal-dialog">
