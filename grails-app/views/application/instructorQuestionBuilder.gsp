@@ -67,6 +67,8 @@
 </div>
 </section>
 
+<asset:javascript src="jquery-3.2.0.min.js"/>
+<script src="https://apis.google.com/js/platform.js"></script>
 
 <asset:javascript src="bootstrap.min.js"/>
 <asset:stylesheet href="bootstrap.css"/>
