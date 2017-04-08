@@ -31,7 +31,7 @@
 <asset:javascript src="auth/logout.js"/>
 
 <script>
-    window.onload=prepareClassTitle(${session.courseId});
+    // window.onload=prepareClassTitle(${session.courseId});
 </script>
 </body>
 </html>

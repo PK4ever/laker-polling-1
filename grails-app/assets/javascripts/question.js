@@ -22,6 +22,8 @@ $(':checkbox').change(function() { // just for testing
 	}
 });
 
+
+// STUDENT - submit answer
 $("#submitAnswer").click(function() {
 	var selected = [];
 	$(':checkbox').each(function() {
@@ -35,6 +37,18 @@ $("#submitAnswer").click(function() {
 	console.log(selected);
 	var question_id = 1;
 	var answer = selected.toString();
+	$.ajax({
+		url: '/api/question/answer?access_token=' + token + '&question_id=' 
+ 			+ question_id + '&answer=' + answer + '&date=4/8/2017',
+ 		type: 'PUT',
+ 		success: function() {
+ 			console.log('it works')
+ 		}
+	});
+});
+
+
+
 
 $("#submit-question-btn").click(function(){
     var form = $('#question-form')
@@ -42,14 +56,14 @@ $("#submit-question-btn").click(function(){
     var selected = ''
     $(':checkbox').each(function(){
         if ($(this).is(':checked')){
-            selected = selected + 'true');
+            selected = selected + 'true';
         }
         else{
             selected.push("false");
         }
         console.log(selected)
     });
-    debugger
+    // debugger
     $.ajax({
         url: '/api/question?access_token=' + token + '&course_id=' + courseId + '&answers=' + selected,
         method: 'POST',
@@ -63,15 +77,4 @@ $("#submit-question-btn").click(function(){
     })
 });
 
-	// $.ajax({
-	// 	url: '/api/question/answer',
-	// 	data: {
-	// 		access_token: token,
-
-	// 	},
-	// 	success: function(data) {
-
-	// 	}
-
-	// });
 
