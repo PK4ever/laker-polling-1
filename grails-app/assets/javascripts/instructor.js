@@ -170,8 +170,10 @@ var courseId
                         currentInstructor.setCourses(data.data.courses);
                         if (courseId) {
                             var course = currentInstructor.getCourseById(courseId);
-                            currentInstructor.setRoster(courseId);
-                            $('#coursePageTitle').html(course.name)
+                            if(location.pathname.substring(location.pathname.lastIndexOf("/") + 1) == "roster") {
+                                currentInstructor.setRoster(courseId);
+                            }
+                            $('#coursePageTitle').html(course.name);
                         }
                     },
                     error: function() {

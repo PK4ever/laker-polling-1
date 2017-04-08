@@ -27,7 +27,17 @@
 <a href="/dashboard" style="margin-left: 60px; href="/dashboard" class="btn btn-default btn-md">
           <span class="glyphicon glyphicon-arrow-left"></span> Back to Dashboard
 </a>
-<h1 id="coursePageTitle" style="text-align: center;"></h1> <!-- Class name here -->
+<h1 id="coursePageTitle" style="text-align: center;">
+    <script>
+        // var i=0
+        // if (i==0) {
+        //     document.getElementById("coursePageTitle").innerHTML = "There is no question available";
+        // } else {
+        //     document.getElementById("coursePageTitle").innerHTML = "Select the question";
+        // }
+    </script>
+
+</h1> <!-- Class name here -->
 <div class="form-group" style="text-align: center;">
     <a href="course/answerquestion?courseId=${session.courseId}" class="btn btn-success" role="button">Answer Question</a>
 </div>

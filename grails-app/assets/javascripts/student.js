@@ -92,7 +92,11 @@ function courseHTML(courseName, crn, id) {
 
 function identifierFormatter(value, row, index) {
     return [
-            '<a class="like" href="javascript:void(0)" title="Like">',
-                value,
-            '</a>'].join('');
+        '<a class="like" href="javascript:void(0)" title="Like">',
+        value,
+        '</a>'].join('');
+}
+
+function checkquestionfromcourse(crn) {
+    //retrieve the number of question of course
 }

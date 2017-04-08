@@ -22,8 +22,16 @@
         </ul>
     </div>
 </div>
-<a href="#">< Return to Course Page</a>
+<a onclick="history.go(-1)"; class="btn btn-default btn-md" style="margin-left: 60px";>
+          <span class="glyphicon glyphicon-arrow-left"></span> Back to Course Page
+</a>
+
+<script src="https://apis.google.com/js/platform.js"></script>
 <asset:javascript src="auth/config.js"/>
 <asset:javascript src="auth/logout.js"/>
+
+<script>
+    window.onload=prepareClassTitle(${session.courseId});
+</script>
 </body>
 </html>

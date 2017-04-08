@@ -13,43 +13,39 @@
 </head>
 <body>
     <nav id="mainNav" class="navbar navbar-default navbar-custom navbar-fixed-top">
-        <div class="container">
-            <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header page-scroll">
-                <button type="button" onclick="logout()" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                    <span class="sr-only">Toggle navigation</span> LOGOUT <i class="fa fa-bars"></i>
-                </button>
-                <a class="navbar-brand page-scroll" href="#page-top">
-                    <asset:image src="logo.png"
-                                 style="height: 60px !important; width: 120px !important; position: absolute; top: 0%"/>
-                </a>
-                <a id="pageName" class="navbar-brand" style="position: absolute; left: 45%; font-size: x-large">Instructor's Dashboard</a>
+    <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" onclick="logout()" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span> LOGOUT <i class="fa fa-bars"></i>
+            </button>
+            <a class="navbar-brand page-scroll" href="/dashboard">
+                <asset:image src="logo.png"
+                             style="height: 60px !important; width: 120px !important; position: absolute; top: 0%"/>
+                %{--<img src="logo.png" style="height: 60px !important; width: 120px !important; position: absolute; top: 0%">--}%
+            </a>
+            <a id="coursePageTitle" class="navbar-brand" style="position: absolute; left: 45%; font-size: x-large"></a>
+    
 
-            <!--<a class="navbar-brand page-scroll" href="#page-top">LOGO HERE</a>-->
-            </div>
-
-            <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav navbar-right">
-                    <li>
-                        %{--<button onclick="logout()" class="btn btn-default navbar-right navbar-btn">Logout</button>--}%
-                        <a onclick="logout()" >LogOut</a>
-                    </li>
-                </ul>
-            </div>
+        <!--<a class="navbar-brand page-scroll" href="#page-top">LOGO HERE</a>-->
         </div>
-    </nav>
-<div class="navbar navbar-default" role="navigation">
-    <div class="navbar-header">
-        <asset:image class="img-responsive navbar-brand" src="logo.png"/>
-        <a class="navbar-brand">Make a Question</a>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    %{--<button onclick="logout()" class="btn btn-default navbar-right navbar-btn">Logout</button>--}%
+                    <a onclick="logout()" >LogOut</a>
+                </li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
     </div>
-    <div class="navbar-collapse collapse">
-        <ul class="nav navbar-nav">
-            <button onclick="logout()" class="btn btn-default navbar-right navbar-btn">Logout</button>
-        </ul>
-    </div>
-</div>
+    <!-- /.container-fluid -->
+</nav>
+
+    <section>
+
 <a href="/course?courseId=${session.courseId}">< Return to Course Page</a>
 <div class="form-group" style="text-align: center;">
     <form id="question-form" method="post">
@@ -69,11 +65,26 @@
         <input class="btn btn-success" type="submit" data-course-id="${session.courseId}" id="submit-question-btn" value="Submit">
     </form>
 </div>
+</section>
+
+<asset:javascript src="jquery-3.2.0.min.js"/>
+<script src="https://apis.google.com/js/platform.js"></script>
+
+<asset:javascript src="bootstrap.min.js"/>
+<asset:stylesheet href="bootstrap.css"/>
+<asset:javascript src="instructor.js"/>
+<asset:javascript src="question.js"/>
+<script>
+    window.onload=prepareClassTitle(${session.courseId});
+</script>
 <asset:javascript src="jquery-3.2.0.min.js"/>
 <script src="https://apis.google.com/js/platform.js"></script>
 <asset:javascript src="question.js"/>
 <asset:javascript src="instructor.js"/>
 <asset:javascript src="auth/config.js"/>
 <asset:javascript src="auth/logout.js"/>
+<asset:stylesheet href="agency.min.css"/>
+<asset:stylesheet href="agency.css"/>
+<asset:stylesheet href="style.css"/>
 </body>
 </html>

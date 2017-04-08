@@ -17,14 +17,12 @@ $('.answer-btn').click(function() {
     $(this).toggleClass("answer-selected"); // change color of answer
 });
 
-$(':checkbox').change(function() {
+$(':checkbox').change(function() { // just for testing
 	if ($(this).is(':checked')) {
-		console.log("Checked");
 	}
 });
 
 $("#submitAnswer").click(function() {
-	var form = $('#answer-form');
 	var selected = [];
 	$(':checkbox').each(function() {
 		if ($(this).is(':checked')) {
@@ -34,7 +32,9 @@ $("#submitAnswer").click(function() {
 			selected.push("false");
 		}
 	});
-});
+	console.log(selected);
+	var question_id = 1;
+	var answer = selected.toString();
 
 $("#submit-question-btn").click(function(){
     var form = $('#question-form')
