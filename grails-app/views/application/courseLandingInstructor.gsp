@@ -26,7 +26,7 @@
 <a href="/dashboard">Return to Dashboard</a>
 <h1 id="coursePageTitle" style="text-align: center;"></h1> <!-- Class name here -->
 <div class="form-group" style="text-align: center;">
-    <button type="submit" class="btn btn-success" id="createPollButton" action="#">Create Polling Session</button>
+    <a href="/course/createquestion?courseId=${session.courseId}" class="btn btn-success" role="button">Create Question</a>
 </div>
 <div class="form-group" style="text-align: center;">
     <a href="/course/roster" class="btn btn-success" role="button">Roster</a>
