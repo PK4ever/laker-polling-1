@@ -29,7 +29,7 @@
 </a>
 <h1 id="coursePageTitle" style="text-align: center;"></h1> <!-- Class name here -->
 <div class="form-group" style="text-align: center;">
-    <a href="course/answerquestion?courseId=${session.courseId}" class="btn btn-success" role="button">Join Poll</a>
+    <a href="course/answerquestion?courseId=${session.courseId}" class="btn btn-success" role="button">Answer Question</a>
 </div>
 
 <asset:javascript src="jquery-3.2.0.min.js"/>
