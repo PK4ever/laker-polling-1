@@ -163,14 +163,15 @@ var courseId
                         access_token: token
                     },
                     success: function(data) {
-                        if(location.pathname.substring(location.pathname.lastIndexOf("/") + 1) != "roster") {
+                        // if(location.pathname.substring(location.pathname.lastIndexOf("/") + 1) != "roster") {
                             currentInstructor.setCourses(data.data.courses);
-                        }
+                        // }
                         if (courseId) {
-                            console.log(courseId)
+                            console.log(courseId + ' is the course id')
                             var course = currentInstructor.getCourseById(courseId);
                             currentInstructor.setRoster(courseId);
-                            $('#coursePageTitle').html(course.name)
+                            console.log(course)
+                            $('#coursePageTitle').html(course.name);
                         }
                     },
                     error: function() {
@@ -246,7 +247,7 @@ var courseId
 
                     },
                     error: function(err) {
-                        // console.log(err);
+                        console.log(err);
                     }
                 });
             }
@@ -308,7 +309,7 @@ var courseId
                     contentType: false,
                     processData: false,
                     success: function(data) {
-                        console.log(formData.get('file').length);
+                        // console.log(formData.get('file').length);
                         window.location.reload();
                     },
                     error: function(jqXHR, textStatus, errorMessage) {
