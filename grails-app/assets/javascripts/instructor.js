@@ -3,6 +3,8 @@ var identifierFormatter
 var studentDeleteButtonFormatter
 var currentInstructor
 var courseId
+var startDate
+var endDate
 (function() {
     function InstructorNetworkService(instructor) {
         var _instructor = instructor
@@ -87,7 +89,6 @@ var courseId
 
         this.getCourseById = function(courseId) {
             for (var i = 0; i < _courses.length; i++) {
-                console.log(_courses[i])
                 if (_courses[i].id == courseId) {
                     return _courses[i]
                 }
@@ -170,9 +171,7 @@ var courseId
                         currentInstructor.setCourses(data.data.courses);
                         if (courseId) {
                             var course = currentInstructor.getCourseById(courseId);
-                            if(location.pathname.substring(location.pathname.lastIndexOf("/") + 1) == "roster") {
-                                currentInstructor.setRoster(courseId);
-                            }
+                            currentInstructor.setRoster(courseId);
                             $('#coursePageTitle').html(course.name);
                         }
                     },
@@ -213,9 +212,6 @@ var courseId
 
                 }
             });
-        }
-        else {
-            console.log(currentInstructor)
         }
     });
 
@@ -477,3 +473,74 @@ var courseId
 function prepareClassTitle(cId) {
     courseId = cId;
 }
+
+
+
+function changeStartDate(date) {
+    console.log(date.value)
+    updateDates(date.value, null)
+};
+
+function changeEndDate(date) {
+    console.log(date.value)
+    updateDates(null, date.value)
+};
+
+function updateDates(_startDate, _endDate) {
+    if(_startDate != null) startDate = _startDate
+    if(_endDate != null) endDate = _endDate
+    console.log(startDate)
+    console.log(endDate)
+    console.log(currentInstructor)
+    var _token
+    var attendees = []
+    currentInstructor.getTokenOrFetch((token) => {
+                _token = token
+            }, function(){alert("Error updating dates.")})
+
+    if(startDate > endDate) {
+        alert("Start date must be before end date.")
+    }
+    else if(startDate && !endDate) {
+        $.ajax({
+            url: '/api/course/attendance',
+            data: {
+                access_token: _token,
+                course_id: courseId,
+                date: startDate
+            },
+            type: 'GET',
+            async: false,
+            success: function(stuff) {
+                attendees = stuff;
+            },
+            error: function(err) {
+                // console.log(err);
+            }
+        });
+    }
+    else if(startDate && endDate) {
+        $.ajax({
+            url: '/api/course/attendance',
+            data: {
+                access_token: _token,
+                course_id: courseId,
+                startDate: startDate,
+                endDate: endDate
+            },
+            type: 'GET',
+            async: false,
+            success: function(stuff) {
+                attendees = stuff;
+            },
+            error: function(err) {
+                // console.log(err);
+            }
+        });
+    }
+    console.log("TEST")
+    console.log(attendees)
+    $('#studentTable').bootstrapTable({
+        data: attendees
+    });
+};

@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Course Page</title>
+    <title>Instructor</title>
     <asset:stylesheet href="bootstrap.min.css"/>
     <!-- jQuery (necessary for Bootstrap"s JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
@@ -43,30 +44,44 @@
     <!-- /.container-fluid -->
 </nav>
 <section>
-<!-- <a style="margin-left: 40px; font-weight: bold" href="/dashboard">Return to Dashboard</a> -->
-<a href="/dashboard" style="margin-left: 60px; href="/dashboard" class="btn btn-default btn-md">
-          <span class="glyphicon glyphicon-arrow-left"></span> Back to Dashboard
-</a>
-<h1 id="coursePageTitle" style="text-align: center;">
+<div class="container">
+    <a href="/course?courseId=${session.courseId}">Back to Course Page</a>
+    <div class="row">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-6">
+        <form>
+            Start Date:
+            <input id="startdatepicker" type="date" name="startDate" onchange="changeStartDate(this)" />
+            End Date:
+            <input id="enddatepicker" type="date" name="endDate" onchange="changeEndDate(this)" />
+        </form>
+        </div>
+        <div class="col-sm-3"></div>
+    </div><br>  
 
-</h1> <!-- Class name here -->
-
-<div class="form-group" style="text-align: center;">
-    <a href="/course/createquestion?courseId=${session.courseId}" class="btn btn-success" role="button">Create Question</a>
-</div>
-<div class="form-group" style="text-align: center;">
-    <a href="/course/roster" class="btn btn-success" role="button">Roster</a>
-</div>
-<div class="form-group" style="text-align: center;">
-    <a href="/course/attendance" class="btn btn-success" role="button">Attendance</a>
-</div>
+    <div class="row">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-6">
+            <div id="attendance" class="table-responsive">
+                <table id="attendanceTable" class="table">
+                    <thead>
+                    <tr>
+                        <th class="col-md-1" data-field="name">Name</th>
+                        <th class="col-md-1" data-field="attended">Attended</th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+        <div class="col-sm-3"></div>
+    </div>
 </section>
-
-<asset:javascript src="jquery-3.2.0.min.js"/>
-<script src="https://apis.google.com/js/platform.js"></script>
 
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.css">
+
+<asset:javascript src="jquery-3.2.0.min.js"/>
+<script src="https://apis.google.com/js/platform.js"></script>
 
 <!-- Latest compiled and minified JavaScript -->
 <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.js"></script>
@@ -74,11 +89,14 @@
 <asset:javascript src="auth/config.js"/>
 <asset:javascript src="auth/logout.js"/>
 <asset:javascript src="instructor.js"/>
-<script>
-    window.onload=prepareClassTitle(${session.courseId});
-</script>
+<asset:stylesheet href="bootstrap.css"/>
 <asset:stylesheet href="agency.min.css"/>
 <asset:stylesheet href="agency.css"/>
 <asset:stylesheet href="style.css"/>
+
+<script>
+    window.onload=prepareClassTitle(${session.courseId});
+</script>
+
 </body>
 </html>
