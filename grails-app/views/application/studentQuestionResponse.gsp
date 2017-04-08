@@ -23,7 +23,7 @@
         </ul>
     </div>
 </div>
-<a href="#">< Return to Course Page</a>
+<a href="/course?courseId=${session.courseId}">< Return to Course Page</a>
 <div class="form-group" style="text-align: right;">
     <form action="/action_page.php" method="get">
       <input type="checkbox" name="A" value="A">A<br>
