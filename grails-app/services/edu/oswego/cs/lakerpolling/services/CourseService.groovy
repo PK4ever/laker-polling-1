@@ -92,9 +92,9 @@ class CourseService {
 
     /**
      * Adds the users associated with the each of the emails in the given list of emails to the course with the
-     * specified courseId. Only admin and instructors can only add students and instructors can only add students to
-     * their own courses. If a user with the one of the emails does not already exist then a placeholder account is
-     * created for that user.
+     * specified courseId if the user is a student. Only admin and instructors can only add students and instructors can
+     * only add students to their own courses. If a user with the one of the emails does not already exist then a
+     * placeholder account is created for that user.
      * @param token - The token to use to retrieve the requesting user.
      * @param courseId - The id of the course to delete.
      * @param emails - A list of emails to add to the course
@@ -109,13 +109,7 @@ class CourseService {
             Course course = Course.findById(cid)
             if (course != null) {
                 if (hasInstructorAccess(requestingUser, course)) {
-                    List<User> users = new ArrayList<>()
-                    for (email in emails) {
-                        User user = userService.getOrMakeByEmail(email)
-                        course.addToStudents(user)
-                        users.add(user)
-                    }
-                    result.data = users
+                    addStudentsToCourseByEmail(emails, course, result)
                 } else {
                     QueryResult.fromHttpStatus(HttpStatus.UNAUTHORIZED, result)
                 }
@@ -125,7 +119,25 @@ class CourseService {
         } else {
             QueryResult.fromHttpStatus(HttpStatus.UNAUTHORIZED, result)
         }
+    }
 
+    private QueryResult<List<User>> addStudentsToCourseByEmail(List<String> emails, Course course, QueryResult<List<User>> result) {
+        if(!result.success) {
+            return result
+        }
+
+        List<User> students = new ArrayList<>()
+        for (email in emails) {
+            User user = userService.getOrMakeByEmail(email)
+            if (user.role.type == RoleType.STUDENT) {
+                students.add(user)
+                course.addToStudents(user)
+            }
+            else {
+                result = QueryResult.fromHttpStatus(HttpStatus.CONFLICT)
+                result.message = "User is not a student"
+            }
+        }
         result
     }
 
