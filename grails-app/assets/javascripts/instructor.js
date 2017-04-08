@@ -61,7 +61,9 @@ var courseId
 
         this.setCourses = function(allCourses) {
             _courses = allCourses || []
-            this.refreshCourseTable()
+            if(location.pathname.substring(location.pathname.lastIndexOf("/") + 1) != "roster") {
+                this.refreshCourseTable()
+            }
         };
         this.addCourse = function(newCourse) {
             _courses.push(newCourse)
@@ -84,8 +86,13 @@ var courseId
         };
 
         this.getCourseById = function(courseId) {
+            console.log(_courses)
+            console.log(courseId)
             for (var i = 0; i < _courses.length; i++) {
-                if (_courses[i].id == courseId) return _courses[i]
+                console.log(_courses[i])
+                if (_courses[i].id == courseId) {
+                    return _courses[i]
+                }
             }
         }
 
@@ -156,6 +163,7 @@ var courseId
             success: function(data){
                 var token = data.data.token
                 currentInstructor = new CurrentInstructor(token)
+                console.log(currentInstructor)
                 $.ajax({
                     url: '/api/course',
                     method: "GET",
@@ -163,15 +171,13 @@ var courseId
                         access_token: token
                     },
                     success: function(data) {
-                        // if(location.pathname.substring(location.pathname.lastIndexOf("/") + 1) != "roster") {
-                            currentInstructor.setCourses(data.data.courses);
-                        // }
+                        currentInstructor.setCourses(data.data.courses);
+                        console.log(currentInstructor.getCourses())
                         if (courseId) {
-                            console.log(courseId + ' is the course id')
+                            console.log(courseId)
                             var course = currentInstructor.getCourseById(courseId);
                             currentInstructor.setRoster(courseId);
-                            console.log(course)
-                            $('#coursePageTitle').html(course.name);
+                            $('#coursePageTitle').html(course.name)
                         }
                     },
                     error: function() {
@@ -212,7 +218,9 @@ var courseId
                 }
             });
         }
-        
+        else {
+            console.log(currentInstructor)
+        }
     });
 
     function courseHTML(courseName, crn, id) {
@@ -247,7 +255,7 @@ var courseId
 
                     },
                     error: function(err) {
-                        console.log(err);
+                        // console.log(err);
                     }
                 });
             }
@@ -309,7 +317,7 @@ var courseId
                     contentType: false,
                     processData: false,
                     success: function(data) {
-                        // console.log(formData.get('file').length);
+                        console.log(formData.get('file').length);
                         window.location.reload();
                     },
                     error: function(jqXHR, textStatus, errorMessage) {
