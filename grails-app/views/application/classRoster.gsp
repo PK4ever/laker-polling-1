@@ -45,7 +45,7 @@
 </nav>
 <section>
 <div class="container">
-    <a href="/course?courseId=${session.courseId}"><h1 id="coursePageTitle"></h1></a>
+    <a href="/course?courseId=${session.courseId}">Back to Course Page</a>
 
     <div class="row">
         <div class="col-sm-4"></div>
