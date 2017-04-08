@@ -10,6 +10,14 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+    
+
+    <style> 
+        .answer-selected {
+            color: red;
+        }
+    </style>
 </head>
 <body>
 <div class="navbar navbar-default" role="navigation">
@@ -59,6 +67,14 @@
     </div>
 </div>
 
+    <!-- user interaction -->
+    <script>
+        $('.checkbox').change(function() {
+            $(this).toggleClass("answer-selected");
+        })
+    </script>
+
+<script src="https://apis.google.com/js/platform.js"></script>
 <asset:javascript src="auth/config.js"/>
 <asset:javascript src="auth/logout.js"/>
 </body>
