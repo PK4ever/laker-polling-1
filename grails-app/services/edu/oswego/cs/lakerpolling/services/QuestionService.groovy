@@ -63,10 +63,12 @@ class QuestionService {
                         if (attendee) {
                             def isRight = false
                             def realAnswers = question.answers
+                            // println("Real answerz" + realAnswers)
                             realAnswers.eachWithIndex { a, i ->
                                 isRight = (a == answerList.get(i))
-                                println("ANSWERLIST-STUDENT: " + answerList.get(i))
+                                // println("ANSWERLIST-STUDENT: " + answerList.get(i))
                                 if (answerList.get(i)) {
+                                    println(answerList.size())
                                     def num = question.studentAnswers.get(i)
                                     num += 1
                                     question.studentAnswers.remove(i)

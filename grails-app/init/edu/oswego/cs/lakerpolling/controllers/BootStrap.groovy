@@ -117,9 +117,9 @@ class BootStrap {
         something.save(flush: true, failOnError: true)
         maxAttendee.save(flush: true, failOnError: true)
 
-        Question q1 = new Question(active: true, answers: [true, false, false, false, false])
-        csc212.addToQuestions(q1);
-        csc212.save(flush: true, failOnError: true)
+        // Question q1 = new Question(active: true, answers: [true,false,false,false,false])
+        // csc212.addToQuestions(q1)
+        // csc212.save(flush: true, failOnError: true)
 
     }
 
