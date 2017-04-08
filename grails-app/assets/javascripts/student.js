@@ -22,6 +22,12 @@ $(function() {
 					courses = data.data.courses;
 					var i;
 					var courseDiv = document.getElementById("courses");
+					if (courses.length == 0) {
+                        var string = "<p style=\"text-align: center;\">You are not enrolled in any courses.</p>";
+                            var div = document.createElement("div")
+                            div.innerHTML = string;
+                            courseDiv.appendChild(div);
+                    }
 					for (i = 0; i < courses.length; i++) {
 						var string = courseHTML(courses[i].name,courses[i].crn, courses[i].id)
 						var div = document.createElement("div")
