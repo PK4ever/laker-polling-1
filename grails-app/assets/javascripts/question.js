@@ -17,14 +17,12 @@ $('.answer-btn').click(function() {
     $(this).toggleClass("answer-selected"); // change color of answer
 });
 
-$(':checkbox').change(function() {
+$(':checkbox').change(function() { // just for testing
 	if ($(this).is(':checked')) {
-		console.log("Checked");
 	}
 });
 
 $("#submitAnswer").click(function() {
-	var form = $('#answer-form');
 	var selected = [];
 	$(':checkbox').each(function() {
 		if ($(this).is(':checked')) {
@@ -36,16 +34,20 @@ $("#submitAnswer").click(function() {
 	});
 	console.log(selected);
 
-	// $.ajax({
-	// 	url: '/api/question/answer',
-	// 	data: {
-	// 		access_token: token,
+	$.ajax({
+		url: '/api/question/answer',
+		type: 'POST',
+		data: {
+			access_token: token,
+			question_id: 2,
+			answer: selected.toString()
 
-	// 	},
-	// 	success: function(data) {
+		},
+		success: function(data) {
+			console.log('It works');
+		},
+		error: function(err) {}
 
-	// 	}
-
-	// });
+	});
 });
 
