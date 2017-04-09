@@ -43,14 +43,15 @@ $("#submitAnswer").click(function() {
     $.ajax({
         url: '/api/question/active?access_token=' + token + '&course_id=' + courseId,
         type: 'GET',
-        success: function() {
+        success: function(data) {
+            console.log(data)
+            question_id = data.questionId; // get question_id
             $.ajax({
                 url: '/api/question/answer?access_token=' + token + '&question_id=' 
                     + question_id + '&answer=' + answer,
                 type: 'PUT',
                 success: function() {
-                    question_id = data.id; // get question_id
-                    console.log('it works')
+                    console.log(question_id + 'is the q id')
                 }
             });
         },
