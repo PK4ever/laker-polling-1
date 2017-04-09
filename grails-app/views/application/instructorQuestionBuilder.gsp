@@ -62,7 +62,7 @@
             <input type="checkbox" autocomplete="off" name="vehicle" >E</label><br>
         </div>
         <br>
-        <input class="btn btn-success" type="submit" data-course-id="${session.courseId}" id="submit-question-btn" value="Submit">
+        <input class="btn btn-info" type="submit" data-course-id="${session.courseId}" id="submit-question-btn" value="Submit">
     </form>
         <button class="btn btn-danger" id="close-question-btn" style="display:none";>Close Question</button>
 </div>
