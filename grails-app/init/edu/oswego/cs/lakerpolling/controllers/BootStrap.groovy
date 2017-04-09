@@ -66,6 +66,10 @@ class BootStrap {
         tyler.setRole(new Role(type: RoleType.INSTRUCTOR))
         tyler.save(flush: true, failOnError: true)
 
+        User linc = new User(email: "ldaniel@oswego.edu")
+        linc.setRole(new Role(type: RoleType.INSTRUCTOR))
+        linc.save(flush: true, failOnError: true)
+
         User admin = new User(firstName: "admin", lastName: "admin", email: "cooladmin@gmail.com", imageUrl: "cool")
         admin.setRole(new Role(type: RoleType.ADMIN))
         admin.setAuthToken(new AuthToken(subject: "sub-ad-1", accessToken: "ad1"))
@@ -89,7 +93,7 @@ class BootStrap {
         csc212.save(flush: true, failOnError: true)
 
 
-        Course hci521 = new Course(name:  "HCI 521", crn: 22222, instructor: inst2)
+        Course hci521 = new Course(name:  "HCI 521", crn: 22222, instructor: linc)
         hci521.addToStudents(stu)
         hci521.addToStudents(stu2)
         hci521.addToStudents(michael)
