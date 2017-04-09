@@ -4,12 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Instructor</title>
+    <asset:javascript src="main.js"/>
     <!--<asset:stylesheet href="bootstrap.min.css"/>
     <asset:stylesheet href="bootstrap-theme.min.css"/>-->
     <!-- jQuery (necessary for Bootstrap"s JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <asset:stylesheet href="bootstrap.css"/>
+    <asset:stylesheet href="agency.min.css"/>
+    <asset:stylesheet href="agency.css"/>
+    <asset:stylesheet href="style.css"/>
 </head>
 <body class="bg-light-gray">
     <nav id="mainNav" class="navbar navbar-default navbar-custom navbar-fixed-top">
@@ -76,7 +81,14 @@
                         <button type="submit" class="btn btn-success" id="courseButton">Create Course</button>
                     </div>
                 </form>
-
+            </div>
+            <div class="col-sm-4">
+                <button class="js-enableDeleteCoursesMode">
+                    <asset:image src="icon_trash_can.svg" style="height: 60px !important; width: 120px !important; position: absolute; top: 0%"/>
+                </button>
+                <button style="display: none" class="js-disableDeleteCoursesMode">
+                    Done Deleting Courses
+                </button>
             </div>
             </div>
         </div>
@@ -114,10 +126,5 @@
 <asset:javascript src="auth/config.js"/>
 <asset:javascript src="auth/logout.js"/>
 <asset:javascript src="instructor.js"/>
-<asset:javascript src="bootstrap.min.js"/>
-<asset:stylesheet href="bootstrap.css"/>
-<asset:stylesheet href="agency.min.css"/>
-<asset:stylesheet href="agency.css"/>
-<asset:stylesheet href="style.css"/>
 </body>
 </html>
