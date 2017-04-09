@@ -7,6 +7,8 @@ model {
 json {
     course_id attendee.attendance.course.id
     student_id attendee.student.id
+    name String.format("%s %s", attendee.student.firstName, attendee.student.lastName)
+    email attendee.student.email
     date attendee.attendance.date
     attended attendee.attended
 }

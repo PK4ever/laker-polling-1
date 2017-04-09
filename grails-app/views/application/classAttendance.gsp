@@ -66,7 +66,7 @@
                 <table id="attendanceTable" class="table">
                     <thead>
                     <tr>
-                        <th class="col-md-1" data-field="name">Name</th>
+                        <th class="col-md-1" data-field="email">Email</th>
                         <th class="col-md-1" data-field="attended">Attended</th>
                     </tr>
                     </thead>

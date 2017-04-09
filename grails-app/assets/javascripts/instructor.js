@@ -160,6 +160,7 @@ var endDate
             method: "GET",
             success: function(data){
                 var token = data.data.token
+                console.log(token)
                 currentInstructor = new CurrentInstructor(token)
                 $.ajax({
                     url: '/api/course',
@@ -497,7 +498,6 @@ function updateDates(_startDate, _endDate) {
     currentInstructor.getTokenOrFetch((token) => {
                 _token = token
             }, function(){alert("Error updating dates.")})
-
     if(startDate > endDate) {
         alert("Start date must be before end date.")
     }
@@ -512,7 +512,9 @@ function updateDates(_startDate, _endDate) {
             type: 'GET',
             async: false,
             success: function(stuff) {
-                attendees = stuff;
+                var _attendees = stuff.data.attendees
+                console.log(_attendees)
+                attendees = _attendees;
             },
             error: function(err) {
                 // console.log(err);
@@ -525,13 +527,13 @@ function updateDates(_startDate, _endDate) {
             data: {
                 access_token: _token,
                 course_id: courseId,
-                startDate: startDate,
-                endDate: endDate
+                start_date: startDate,
+                end_date: endDate
             },
             type: 'GET',
             async: false,
             success: function(stuff) {
-                attendees = stuff;
+                attendees = stuff.data.attendees;
             },
             error: function(err) {
                 // console.log(err);
@@ -540,7 +542,7 @@ function updateDates(_startDate, _endDate) {
     }
     console.log("TEST")
     console.log(attendees)
-    $('#studentTable').bootstrapTable({
+    $('#attendanceTable').bootstrapTable({
         data: attendees
     });
 };
