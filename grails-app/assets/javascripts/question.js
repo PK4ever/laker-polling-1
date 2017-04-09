@@ -1,7 +1,6 @@
 var token = '';
 var question_id;
 var answer;
-var toggleButtons;
 
 // get student's access token
 $(function() {
@@ -62,6 +61,7 @@ $("#submit-question-btn").click(function(){
             selected.push("false");
         }
     });
+    debugger
     $.ajax({
         url: '/api/question?access_token=' + token + '&course_id=' + courseId + '&answers=' + selected.toString(),
         method: 'POST',
@@ -89,7 +89,8 @@ $("#close-question-btn").click(function(){
 })
 
 //Make close and start buttons appear/disappear
- toggleButtons = function(){
+ function toggleButtons() {
+    debugger
     var close = document.getElementById('close-question-btn')
     var question = document.getElementById('question-form')
     if (close.style.display === 'none'){

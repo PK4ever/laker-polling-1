@@ -352,7 +352,7 @@ var endDate
 
     $('.js-deleteStudent').click(function () {
         currentInstructor.deleteStudentById($(this).data("student-id"), (student) => {
-            alert("REMOVED STUDENT: " + JSON.stringify(student))
+            // alert("REMOVED STUDENT: " + JSON.stringify(student))
             window.location.reload()
         },
         (err) => {
