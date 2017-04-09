@@ -20,8 +20,10 @@
                 <span class="sr-only">Toggle navigation</span> LOGOUT <i class="fa fa-bars"></i>
             </button>
             <a class="navbar-brand page-scroll" href="/dashboard">
+
                 <asset:image src="logo2.png"
-                             style="height: 60px !important; width: 120px !important; position: absolute; top: 0%"/>
+                             style="height: 80px !important; width: 120px !important; position: absolute; top: 0%"/>
+
                 %{--<img src="logo.png" style="height: 60px !important; width: 120px !important; position: absolute; top: 0%">--}%
             </a>
             <a id="coursePageTitle" class="navbar-brand" style="position: absolute; left: 45%; font-size: x-large"></a>
@@ -45,7 +47,9 @@
 </nav>
 <section>
 <div class="container">
-    <a href="/course?courseId=${session.courseId}">Back to Course Page</a>
+<a href="/course?courseId=${session.courseId}" style="margin-left: 60px; href="/course?courseId=${session.courseId}" class="btn btn-default btn-md">
+          <span class="glyphicon glyphicon-arrow-left"></span> Back to Course Page
+</a>
     <div class="row">
         <div class="col-sm-3"></div>
         <div class="col-sm-6">

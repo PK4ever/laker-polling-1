@@ -28,10 +28,9 @@
         </ul>
     </div>
 </div>
-<a onclick="history.go(-1)"; class="btn btn-default btn-md" style="margin-left: 60px";>
+<a href="/course?courseId=${session.courseId}" style="margin-left: 60px; href="/course?courseId=${session.courseId}" class="btn btn-default btn-md">
           <span class="glyphicon glyphicon-arrow-left"></span> Back to Course Page
 </a>
-
 		
 	
 <section>
@@ -45,11 +44,12 @@
 <asset:javascript src="auth/config.js"/>
 <asset:javascript src="auth/logout.js"/>
 <asset:javascript src="instructor.js"/>
+<asset:javascript src="question.js"/>
 
 
 
 <script>
-     window.onload=prepareClassTitle(${session.courseId});
+	 window.onload=prepareQuestionId(${session.courseId}, ${session.questionId});
 </script>
 </body>
 </html>

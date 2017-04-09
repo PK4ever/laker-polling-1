@@ -19,8 +19,9 @@
                 <span class="sr-only">Toggle navigation</span> LOGOUT <i class="fa fa-bars"></i>
             </button>
             <a class="navbar-brand page-scroll" href="/dashboard">
+
                 <asset:image src="logo2.png"
-                             style="height: 60px !important; width: 120px !important; position: absolute; top: 0%"/>
+                             style="height: 80px !important; width: 120px !important; position: absolute; top: 0%"/>
                 %{--<img src="logo.png" style="height: 60px !important; width: 120px !important; position: absolute; top: 0%">--}%
             </a>
             <a id="coursePageTitle" class="navbar-brand" style="position: absolute; left: 45%; font-size: x-large"></a>

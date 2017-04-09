@@ -17,9 +17,10 @@
 #submit-question-btn{
     width: 200px !important;
 }
-#close-question-btn{
+#show-results-btn{
     width: 200px !important;
     text-align: center !important;
+    display: none;
 }
 #submitAnswer{
     width: 200px !important;

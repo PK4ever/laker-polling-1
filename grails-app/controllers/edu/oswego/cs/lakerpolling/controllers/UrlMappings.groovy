@@ -39,6 +39,7 @@ class UrlMappings {
             "/"(controller: 'question', action: 'createQuestion', method: 'post')
             "/"(controller: 'question', action: 'changeQuestionStatus', method: 'put')
             "/"(controller: 'question', action: 'getQuestion', method: 'get')
+            "/active"(controller: 'question', action: 'getActiveQuestion', method: 'get')
 
             "/answer"(controller: 'question', action: 'getAnswers', method: 'get')
             "/answer"(controller: 'question', action: 'answerQuestion', method: 'put')

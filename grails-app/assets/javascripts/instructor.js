@@ -3,6 +3,7 @@ var identifierFormatter
 var studentDeleteButtonFormatter
 var currentInstructor
 var courseId
+
 (function() {
     function InstructorNetworkService(instructor) {
         var _instructor = instructor
@@ -58,24 +59,26 @@ var courseId
         var _courses = [];
         var _service = new InstructorNetworkService(this);
         var _roster;
+        var _isInDeleteCoursesMode = false
 
         this.setCourses = function(allCourses) {
             _courses = allCourses || []
             if(location.pathname.substring(location.pathname.lastIndexOf("/") + 1) == "dashboard") {
                 this.refreshCourseTable()
             }
-        };
+        }
+
         this.addCourse = function(newCourse) {
             _courses.push(newCourse)
-        };
+        }
 
         this.getCourses = function() {
             return _courses
-        };
+        }
 
         this.setRoster = function(course_id) {
               this.refreshStudentTable();
-        };
+        }
 
         this.getTokenOrFetch = function(onSuccess, onFail) {
             if (_token) return onSuccess(_token)
@@ -83,7 +86,7 @@ var courseId
                 _token = token;
             onSuccess(token)
             }, onFail)
-        };
+        }
 
         this.getCourseById = function(courseId) {
             for (var i = 0; i < _courses.length; i++) {
@@ -100,14 +103,15 @@ var courseId
         }
 
         this.removeCourseById = function(courseId) {
-            for (var i = 0; i < _courses.length; i++) {
-                if (_courses[i].id == courseId) {
-                    var course = _courses[i]
-                    delete _courses[courseId]
-                    this.refreshCourseTable()
-                    return course
-                }
-            }
+            var removedCourse
+            _courses = _courses.filter((course) => {
+                if (course.id == courseId) removedCourse = course
+                return course.id != courseId
+            })
+            setTimeout(() => {
+                this.refreshCourseTable()
+            }, 0)
+            return removedCourse
         }
 
         this.removeStudentById = function (studentId){
@@ -135,20 +139,28 @@ var courseId
         };
 
         this.refreshCourseTable = function() {
-            var i;
-            var courseDiv = document.getElementById("courses");
-            for (i = 0; i < _courses.length; i++) {
-                var string = courseHTML(_courses[i].name,_courses[i].crn,_courses[i].id)
+            $("#courses").html("")
+            for (var i = 0, length = _courses.length; i < length; i++) {
                 var div = document.createElement("div")
-                    div.innerHTML = string;
-                courseDiv.appendChild(div);
+                div.innerHTML = courseHTML(_courses[i], _isInDeleteCoursesMode)
+                $("#courses").append(div);
             }
+            if (_isInDeleteCoursesMode) prepareDeleteButton()
         };
         this.refreshStudentTable = function(){
             _roster = getCourseRoster(courseId);
             $('#studentTable').bootstrapTable({
                 data: _roster
             });
+        }
+
+        this.toggleDeleteCoursesMode = function(enabled) {
+            _isInDeleteCoursesMode = !!enabled
+            this.refreshCourseTable()
+        }
+
+        this.isInDeleteCoursesMode = function() {
+            return _isInDeleteCoursesMode
         }
     }
 
@@ -215,20 +227,27 @@ var courseId
             });
         }
     });
-
-    function courseHTML(courseName, crn, id) {
-        //var str = '<div class="col-md-4 col-sm-6 portfolio-item" style="box-shadow: 0px 0px 0px gray; padding: 20px;">'
-        var str = '<div class="col-md-4 col-sm-6 portfolio-item" style="box-shadow: 10px 10px 50px gray; padding: 10px;">'
-        //var str = '<div class="col-md-4 col-sm-6 portfolio-item" style="box-shadow: 0px 0px 0px gray; padding: 10px;">'
-        str += '<a href="/course?courseId=' + id + '" class="portfolio-link" data-toggle="modal">'
-            str += '<div class="portfolio-hover">'
-            str += '<div class="portfolio-hover-content">'
-            str += '<i class="fa fa-plus fa-3x"></i></div></div>'
-            //str += '<asset:image class="img-responsive" src="logo.png" alt=""/>'
-            //str += '<img src="assets/images/startup-framework.png" class="img-responsive" alt=""></a>'
-        str += '<div class="portfolio-caption"><h4>' +courseName +'</h4><p class="text-muted"> CRN: '+ crn + '</p>'
-        str+= '<button class="btn btn-danger js-deleteCourseButton" type="button" data-toggle="modal" data-target="#deleteCourseModal" data-course-id="' + id + '"></div></div>'
-        return str
+    
+    function courseHTML(course, isInDeleteCoursesMode) {  
+        var html = '<div id="course-item--{{course.id}}" class="col-md-4 col-sm-6 portfolio-item" style="box-shadow: 10px 10px 50px gray; padding: 10px;">'
+            if (!isInDeleteCoursesMode) {
+                html += '<a id="course-item-link--{{course.id}}" href="/course?courseId={{course.id}}" class="portfolio-link">'
+            } else {
+                html += '<div id="course-item-link--{{course.id}}">'
+            }
+            html += '<div class="portfolio-hover">'
+                html += '<div class="portfolio-hover-content">'
+                html += '<i class="fa fa-plus fa-3x"></i></div></div>'
+                html += '<div class="portfolio-caption"><h4>{{course.name}}</h4><p class="text-muted"> CRN: {{course.crn}}</p>'
+                if (isInDeleteCoursesMode) {
+                    html+= '<button class="btn btn-danger js-deleteCourseButton" type="button" data-toggle="modal" data-target="#deleteCourseModal" data-course-id="{{course.id}}">Delete</button>'
+                }
+            html+= '</div>'
+        html+= '</div>'
+        return html
+            .replaceAll('{{course.id}}', course.id)
+            .replaceAll('{{course.name}}', course.name)
+            .replaceAll('{{course.crn}}', course.crn)
     };
 
     function getCourseRoster(course_id) {
@@ -352,8 +371,7 @@ var courseId
         currentInstructor.deleteStudentById($(this).data("student-id"), (student) => {
             // alert("REMOVED STUDENT: " + JSON.stringify(student))
             window.location.reload()
-        },
-        (err) => {
+        }, (err) => {
             alert(JSON.stringify(err))
         })
     });
@@ -362,28 +380,44 @@ var courseId
     $('.js-deleteCourse').on('click', function() {
         currentInstructor.deleteCourseById($(this).data("course-id"), (course) => {
             //alert("DELETED COURSE BY ID: " + JSON.stringify(course))
-            window.location.reload()
-    }, (err) => {
+        }, (err) => {
             alert(JSON.stringify(err))
         })
     });
 
-    var preparedDeleteButton = false;
+    $('.js-enableDeleteCoursesMode').on('click', function() {
+        currentInstructor.toggleDeleteCoursesMode(true)
+        $(".js-enableDeleteCoursesMode").hide()
+        $(".js-disableDeleteCoursesMode").show()
+    });
+    $('.js-disableDeleteCoursesMode').on('click', function() {
+        currentInstructor.toggleDeleteCoursesMode(false)
+        $(".js-enableDeleteCoursesMode").show()
+        $(".js-disableDeleteCoursesMode").hide()
+    });
+
     function prepareDeleteButton() {
-        if(preparedDeleteButton) return;
         $('.js-deleteCourseButton').click(function () {
             const clickedButton = $(this);
+            debugger
             const courseId = clickedButton.data('course-id');
             var course = currentInstructor.getCourseById(courseId);
+
+            //clear existing data
+            $('#deleteCourseModal').find('#confirmDeleteButton').data("course-id","");
+            $('#deleteCourseModal').data("course-id", "");
+            $('#deleteCourseModal').find('#courseId').html("");
+            $('#deleteCourseModal').find('#courseName').html("")
             if (!course) {
                 alert("Course not found by id " + courseId);
+                return
             }
+            debugger
             $('#deleteCourseModal').find('#confirmDeleteButton').data("course-id",course.id);
             $('#deleteCourseModal').data("course-id",  course.id);
             $('#deleteCourseModal').find('#courseId').html(course.id);
             $('#deleteCourseModal').find('#courseName').html(course.name)
         });
-        preparedDeleteButton = true
     }
 
     var preparedSDelete = false
@@ -400,18 +434,6 @@ var courseId
         prepareSDelete = true;
     }
 
-    courseDeleteButtonFormatter = function(_, course, index) {
-        var course = currentInstructor.getCourseById(course.id);
-        if(!course) return '<span style="color:red">Invalid Course</span>';
-        var deleteButton = '<button class="btn btn-danger js-deleteCourseButton" type="button" data-toggle="modal" data-target="#deleteCourseModal" data-course-id="' + course.id + '">'
-        deleteButton += 'Delete'
-        deleteButton += '</button>'
-        setTimeout(() => {
-            prepareDeleteButton()
-        }, 500)
-        return deleteButton
-    }
-
 
     studentDeleteButtonFormatter = function(_, student, index) {
         var deleteStudentButton = '<button class="btn btn-danger js-deleteStudentButton" type="button" data-toggle="modal" data-target="#deleteStudentModal" data-student-id="' + student.id + '">'
@@ -420,7 +442,7 @@ var courseId
         setTimeout(() => {
             prepareStudentDeleteButton()
         }, 500)
-        return deleteStudentButton
+        return deleteStudentButton 
     }
 
     function prepareClassTitle(courseId) {
@@ -443,7 +465,8 @@ var courseId
                     },
                     error: function() {
                         // currentInstructor.setCourses(JSON.parse('[{"id":3,"name":"TCR 101","crn":"22223","students":3},{"id":4,"name":"TCR 202","crn":"22223","students":3},{"id":5,"name":"TCR 303","crn":"22223","students":3},{"id":6,"name":"TCR 404","crn":"22223","students":3}]'))
-                    }
+                    
+                }
                 });
             }
         });

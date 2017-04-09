@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Course Page</title>
     <asset:stylesheet href="bootstrap.min.css"/>
     <asset:stylesheet href="style.css"/>
+
+<asset:javascript src="question.js"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Create a Question</title>
     <!-- jQuery (necessary for Bootstrap"s JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <!-- Latest compiled and minified JavaScript -->
@@ -20,8 +22,10 @@
                 <span class="sr-only">Toggle navigation</span> LOGOUT <i class="fa fa-bars"></i>
             </button>
             <a class="navbar-brand page-scroll" href="/dashboard">
+
                 <asset:image src="logo2.png"
-                             style="height: 60px !important; width: 120px !important; position: absolute; top: 0%"/>
+                             style="height: 80px !important; width: 120px !important; position: absolute; top: 0%"/>
+
                 %{--<img src="logo.png" style="height: 60px !important; width: 120px !important; position: absolute; top: 0%">--}%
             </a>
             <a id="coursePageTitle" class="navbar-brand" style="position: absolute; left: 45%; font-size: x-large"></a>
@@ -46,7 +50,10 @@
 
 <section>
 
-<a href="/course?courseId=${session.courseId}">< Return to Course Page</a>
+<a href="/course?courseId=${session.courseId}" style="margin-left: 60px; href="/course?courseId=${session.courseId}" class="btn btn-default btn-md">
+          <span class="glyphicon glyphicon-arrow-left"></span> Back to Course Page
+</a>
+
 <div class="form-group" style="text-align: center;">
     <form id="question-form" method="post">
         <div class="btn-group" data-toggle="buttons" >
@@ -62,9 +69,14 @@
             <input type="checkbox" autocomplete="off" name="vehicle" >E</label><br>
         </div>
         <br>
-        <input class="btn btn-info" type="submit" data-course-id="${session.courseId}" id="submit-question-btn" value="Submit">
+        <br>
+        <input class="btn btn-success" type="button" data-course-id="${session.courseId}" id="submit-question-btn" value="Submit">
     </form>
-        <button class="btn btn-danger" id="close-question-btn" style="display:none";>Close Question</button>
+        <button class="btn btn-danger" id="close-question-btn" style="display: none; width: 200px; text-align: center;" >Close Question</button>
+        <br> <br>
+        <div id="resultLink">
+            
+        </div>
 </div>
 </section>
 
