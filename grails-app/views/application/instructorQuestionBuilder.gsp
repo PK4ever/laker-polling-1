@@ -46,7 +46,10 @@
 
 <section>
 
-<a href="/course?courseId=${session.courseId}">< Return to Course Page</a>
+<a href="/course?courseId=${session.courseId}" style="margin-left: 60px; href="/course?courseId=${session.courseId}" class="btn btn-default btn-md">
+          <span class="glyphicon glyphicon-arrow-left"></span> Back to Course Page
+</a>
+
 <div class="form-group" style="text-align: center;">
     <form id="question-form" method="post">
         <div class="btn-group" data-toggle="buttons" >
