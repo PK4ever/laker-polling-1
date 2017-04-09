@@ -9,6 +9,12 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+	<asset:javascript src="amcharts_3.21.1.free/amcharts/amcharts.js"/>
+	<asset:javascript src="amcharts_3.21.1.free/amcharts/serial.js"/>
+	<script type="text/javascript" src="https://www.amcharts.com/lib/3/themes/black.js"></script>
+<asset:javascript src="auth/resultData.js"/>
+   
 </head>
 <body class="bg-light-gray">
 <div class="navbar navbar-default" role="navigation">
@@ -26,12 +32,24 @@
           <span class="glyphicon glyphicon-arrow-left"></span> Back to Course Page
 </a>
 
+		
+	
+<section>
+<div class="container">
+		<div id="chartdiv" style="width: 100%; height: 400px; background-color: #D4D4D4;" ></div>
+</div>
+</section>
+
+
 <script src="https://apis.google.com/js/platform.js"></script>
 <asset:javascript src="auth/config.js"/>
 <asset:javascript src="auth/logout.js"/>
+<asset:javascript src="instructor.js"/>
+
+
 
 <script>
-    // window.onload=prepareClassTitle(${session.courseId});
+     window.onload=prepareClassTitle(${session.courseId});
 </script>
 </body>
 </html>

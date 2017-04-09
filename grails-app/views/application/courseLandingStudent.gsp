@@ -14,7 +14,7 @@
 <body>
 <div class="navbar navbar-default" role="navigation">
     <div class="navbar-header">
-        <asset:image class="img-responsive navbar-brand" src="logo.png"/>
+        <asset:image class="img-responsive navbar-brand" src="logo2.png"/>
         <a class="navbar-brand">Course Page</a>
     </div>
     <div class="navbar-collapse collapse">
