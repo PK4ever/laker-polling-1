@@ -24,7 +24,7 @@
     </div>
 </div>
 
-<a href="/dashboard" style="margin-left: 60px; href="/dashboard" class="btn btn-default btn-md">
+<a href="/dashboard" style="margin-left: 80px; href="/dashboard" class="btn btn-default btn-md">
           <span class="glyphicon glyphicon-arrow-left"></span> Back to Dashboard
 </a>
 <h1 id="coursePageTitle" style="text-align: center;">

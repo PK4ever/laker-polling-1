@@ -21,7 +21,7 @@
             </button>
             <a class="navbar-brand page-scroll" href="#page-top">
                 <asset:image src="logo.png"
-                             style="height: 60px !important; width: 120px !important; position: absolute; top: 0%"/>
+                             style="height: 80px !important; width: 120px !important; position: absolute; top: 0%"/>
             </a>
             <a id="pageName" class="navbar-brand" style="position: absolute; left: 45%; font-size: x-large">Instructor's Dashboard</a>
     
