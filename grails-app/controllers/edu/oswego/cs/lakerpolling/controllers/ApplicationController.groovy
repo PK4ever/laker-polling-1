@@ -65,6 +65,15 @@ class ApplicationController {
         }
     }
 
+    def classAttendance() {
+        def require = hasAccess()
+        if(require.success) {
+            render(view: 'classAttendance')
+        } else {
+            render(view: '../failure', model: [errorCode: require.errorCode, message: require.message])
+        }
+    }
+
 
     def createQuestionView(long courseId) {
         QueryResult<AuthToken> require = hasAccess()
