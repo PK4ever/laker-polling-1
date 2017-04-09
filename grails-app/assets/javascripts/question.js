@@ -2,12 +2,12 @@ var token = '';
 var question_id;
 var answer;
 
-// get student's access token
+// get student's access token on load
 $(function() {
     $.ajax({
 	    url: '/user/auth',
 	    method: "GET",
-	    success: function(data){
+	    success: function(data) {
 	    	token = data.data.token;
 		}
 	});
@@ -17,7 +17,7 @@ $('.answer-btn').click(function() {
     $(this).toggleClass("answer-selected"); // change color of answer
 });
 
-$(':checkbox').change(function() { // just for testing
+$(':checkbox').change(function() { // just for testing, can be removed
 	if ($(this).is(':checked')) {
 	}
 });
@@ -25,6 +25,7 @@ $(':checkbox').change(function() { // just for testing
 
 // STUDENT - submit answer
 $("#submitAnswer").click(function() {
+    var courseId = $(this).data('course-id');
 	var selected = [];
 	$(':checkbox').each(function() {
 		if ($(this).is(':checked')) {
@@ -34,17 +35,29 @@ $("#submitAnswer").click(function() {
 			selected.push("false");
 		}
 	});
-	console.log(selected.toString());
-	var question_id = 1;
+	// console.log(selected.toString());
+
+	var question_id;
 	var answer = selected.toString();
-	$.ajax({
-		url: '/api/question/answer?access_token=' + token + '&question_id=' 
- 			+ question_id + '&answer=' + answer,
- 		type: 'PUT',
- 		success: function() {
- 			console.log('it works')
- 		}
-	});
+    // see if there's an active question
+    $.ajax({
+        url: '/api/question/active?access_token=' + token + '&course_id=' + courseId,
+        type: 'GET',
+        success: function() {
+            $.ajax({
+                url: '/api/question/answer?access_token=' + token + '&question_id=' 
+                    + question_id + '&answer=' + answer,
+                type: 'PUT',
+                success: function() {
+                    question_id = data.id; // get question_id
+                    console.log('it works')
+                }
+            });
+        },
+        error: function() {
+            alert('This question is not ready, please wait for instructor and try again.');
+        }
+    });
 });
 
 
