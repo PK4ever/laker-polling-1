@@ -3,8 +3,6 @@ var identifierFormatter
 var studentDeleteButtonFormatter
 var currentInstructor
 var courseId
-var startDate
-var endDate
 (function() {
     function InstructorNetworkService(instructor) {
         var _instructor = instructor
@@ -477,37 +475,25 @@ function prepareClassTitle(cId) {
     courseId = cId;
 }
 
-function changeStartDate(date) {
+function changeDate(date) {
     console.log(date.value)
-    updateDates(date.value, null)
+    updateDates(date.value)
 };
 
-function changeEndDate(date) {
-    console.log(date.value)
-    updateDates(null, date.value)
-};
-
-function updateDates(_startDate, _endDate) {
-    if(_startDate != null) startDate = _startDate
-    if(_endDate != null) endDate = _endDate
-    console.log(startDate)
-    console.log(endDate)
+function updateDates(_date) {
     console.log(currentInstructor)
     var _token
     var attendees = []
     currentInstructor.getTokenOrFetch((token) => {
                 _token = token
             }, function(){alert("Error updating dates.")})
-    if(startDate > endDate) {
-        alert("Start date must be before end date.")
-    }
-    else if(startDate && !endDate) {
+    if(_date) {
         $.ajax({
             url: '/api/course/attendance',
             data: {
                 access_token: _token,
                 course_id: courseId,
-                date: startDate
+                date: _date
             },
             type: 'GET',
             async: false,
@@ -515,25 +501,6 @@ function updateDates(_startDate, _endDate) {
                 var _attendees = stuff.data.attendees
                 console.log(_attendees)
                 attendees = _attendees;
-            },
-            error: function(err) {
-                // console.log(err);
-            }
-        });
-    }
-    else if(startDate && endDate) {
-        $.ajax({
-            url: '/api/course/attendance',
-            data: {
-                access_token: _token,
-                course_id: courseId,
-                start_date: startDate,
-                end_date: endDate
-            },
-            type: 'GET',
-            async: false,
-            success: function(stuff) {
-                attendees = stuff.data.attendees;
             },
             error: function(err) {
                 // console.log(err);

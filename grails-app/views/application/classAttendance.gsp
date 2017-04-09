@@ -50,10 +50,8 @@
         <div class="col-sm-3"></div>
         <div class="col-sm-6">
         <form>
-            Start Date:
-            <input id="startdatepicker" type="date" name="startDate" onchange="changeStartDate(this)" />
-            End Date:
-            <input id="enddatepicker" type="date" name="endDate" onchange="changeEndDate(this)" />
+            Date:
+            <input id="datepicker" type="date" name="date" onchange="changeDate(this)" />
         </form>
         </div>
         <div class="col-sm-3"></div>
