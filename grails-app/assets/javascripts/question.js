@@ -61,6 +61,7 @@ $("#submit-question-btn").click(function(){
             selected.push("false");
         }
     });
+    debugger
     $.ajax({
         url: '/api/question?access_token=' + token + '&course_id=' + courseId + '&answers=' + selected.toString(),
         method: 'POST',
