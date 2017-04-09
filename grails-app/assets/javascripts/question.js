@@ -61,7 +61,6 @@ $("#submit-question-btn").click(function(){
             selected.push("false");
         }
     });
-    debugger
     $.ajax({
         url: '/api/question?access_token=' + token + '&course_id=' + courseId + '&answers=' + selected.toString(),
         method: 'POST',
@@ -79,6 +78,7 @@ $("#submit-question-btn").click(function(){
     });
 });
 
+//
 $("#close-question-btn").click(function(){
     $.ajax({
         url: '/api/question?access_token=' + token + '&question_id=' + question_id + '&flip=false',
@@ -91,11 +91,14 @@ $("#close-question-btn").click(function(){
  function toggleButtons (){
     var close = document.getElementById('close-question-btn')
     var question = document.getElementById('question-form')
+    var showResults = document.getElementById('show-results-btn')
     if (close.style.display === 'none'){
-        close.style.display = 'block'
+        close.style.display = 'inline-block'
         question.style.display = 'none'
+        showResults.style.display = 'none'
     } else {
-        question.style.display = 'block'
+        question.style.display = 'inline-block'
+        showResults.style.display = 'inline-block'
         close.style.display = 'none'
     }
  }

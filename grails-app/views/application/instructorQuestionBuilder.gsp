@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Course Page</title>
     <asset:stylesheet href="bootstrap.min.css"/>
     <asset:stylesheet href="style.css"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Create a Question</title>
     <!-- jQuery (necessary for Bootstrap"s JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <!-- Latest compiled and minified JavaScript -->
@@ -62,9 +62,12 @@
             <input type="checkbox" autocomplete="off" name="vehicle" >E</label><br>
         </div>
         <br>
+        <br>
         <input class="btn btn-success" type="button" data-course-id="${session.courseId}" id="submit-question-btn" value="Submit">
     </form>
-        <button class="btn btn-danger" id="close-question-btn" style="display:none";>Close Question</button>
+        <button class="btn btn-danger" id="close-question-btn" style="display: none; width: 200px; text-align: center;" >Close Question</button>
+        <br> <br>
+        <a href="course/viewresults?courseId=${session.courseId}" class="btn btn-default" id="show-results-btn">Show Results</a>
 </div>
 </section>
 
