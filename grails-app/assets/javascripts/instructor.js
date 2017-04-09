@@ -464,7 +464,8 @@ var courseId
                     },
                     error: function() {
                         // currentInstructor.setCourses(JSON.parse('[{"id":3,"name":"TCR 101","crn":"22223","students":3},{"id":4,"name":"TCR 202","crn":"22223","students":3},{"id":5,"name":"TCR 303","crn":"22223","students":3},{"id":6,"name":"TCR 404","crn":"22223","students":3}]'))
-                    }
+                    
+                }
                 });
             }
         });
