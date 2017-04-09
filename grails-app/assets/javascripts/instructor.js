@@ -436,13 +436,12 @@ var courseId
 
 
     studentDeleteButtonFormatter = function(_, student, index) {
-        var deleteStudentButton = '<button class="btn btn-danger js-deleteStudentButton" type="button" data-toggle="modal" data-target="#deleteStudentModal" data-student-id="' + student.id + '">'
-        deleteStudentButton += 'Delete'
-        deleteStudentButton += '</button>'
         setTimeout(() => {
             prepareStudentDeleteButton()
         }, 500)
-        return deleteStudentButton
+        return '<button class="btn btn-danger js-deleteStudentButton" type="button" data-toggle="modal" data-target="#deleteStudentModal" data-student-id="{{student.id}}">{{text}}</button>'
+            .replaceAll('{{text}', "Delete")
+            .replaceAll('{{student.id}}', student.id)
     }
 
     function prepareClassTitle(courseId) {
