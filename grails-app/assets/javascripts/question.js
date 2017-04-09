@@ -90,7 +90,6 @@ $("#submit-question-btn").click(function(){
             alert(JSON.stringify(err))
         }
     });
-    debugger
 });
 
 $("#close-question-btn").click(function(){
@@ -102,8 +101,7 @@ $("#close-question-btn").click(function(){
 })
 
 //Make close and start buttons appear/disappear
- function toggleButtons() {
-    debugger
+ function toggleButtons (){
     var close = document.getElementById('close-question-btn')
     var question = document.getElementById('question-form')
     if (close.style.display === 'none'){
@@ -113,7 +111,6 @@ $("#close-question-btn").click(function(){
         question.style.display = 'block'
         close.style.display = 'none'
     }
-    debugger
  }
 
 

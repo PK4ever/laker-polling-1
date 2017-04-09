@@ -50,10 +50,8 @@
         <div class="col-sm-3"></div>
         <div class="col-sm-6">
         <form>
-            Start Date:
-            <input id="startdatepicker" type="date" name="startDate" onchange="changeStartDate(this)" />
-            End Date:
-            <input id="enddatepicker" type="date" name="endDate" onchange="changeEndDate(this)" />
+            Date:
+            <input id="datepicker" type="date" name="date" onchange="changeDate(this)" />
         </form>
         </div>
         <div class="col-sm-3"></div>
@@ -66,7 +64,7 @@
                 <table id="attendanceTable" class="table">
                     <thead>
                     <tr>
-                        <th class="col-md-1" data-field="name">Name</th>
+                        <th class="col-md-1" data-field="email">Email</th>
                         <th class="col-md-1" data-field="attended">Attended</th>
                     </tr>
                     </thead>

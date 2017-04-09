@@ -62,6 +62,10 @@ class BootStrap {
         inst2.setRole(new Role(type: RoleType.INSTRUCTOR))
         inst2.save(flush: true, failOnError: true)
 
+        User tyler = new User(email: "tmoson@oswego.edu")
+        tyler.setRole(new Role(type: RoleType.INSTRUCTOR))
+        tyler.save(flush: true, failOnError: true)
+
         User admin = new User(firstName: "admin", lastName: "admin", email: "cooladmin@gmail.com", imageUrl: "cool")
         admin.setRole(new Role(type: RoleType.ADMIN))
         admin.setAuthToken(new AuthToken(subject: "sub-ad-1", accessToken: "ad1"))
@@ -77,6 +81,12 @@ class BootStrap {
         csc480.addToStudents(michael);
         csc480.addToStudents(max);
         csc480.save(flush: true, failOnError: true)
+
+        Course csc212 = new Course(name: "CSC 480", crn: 11111, instructor: tyler)
+        csc212.addToStudents(a)
+        csc212.addToStudents(b)
+        csc212.addToStudents(michael);
+        csc212.save(flush: true, failOnError: true)
 
 
         Course hci521 = new Course(name:  "HCI 521", crn: 22222, instructor: inst2)
