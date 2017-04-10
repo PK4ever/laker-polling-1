@@ -9,6 +9,14 @@ class QuestionController {
     PreconditionService preconditionService
     QuestionService questionService
 
+    /**
+     * creates a new question
+     * @param access_token - the access_token of the user
+     * @param course_id - the course id of the selected course
+     * @param question - (optional) the actual string representing the question
+     * @param answers - a list of answers represented as booleans
+     * @return - returns a json view
+     */
     def createQuestion(String access_token, String course_id, String question, String answers) {
 
         def result = preconditionService.notNull(params, ["access_token", "answers" , "course_id"])
@@ -26,6 +34,12 @@ class QuestionController {
         }
     }
 
+    /**
+     * gets a collection of integers that represents the number of people who answered each question
+     * @param access_token - the access_token of the user
+     * @param question_id - the id of the question
+     * @return - returns a json view
+     */
     def getAnswers(String access_token, String question_id) {
         def result = preconditionService.notNull(params, ["access_token",  "question_id"])
         def token = preconditionService.accessToken(access_token).data
@@ -43,6 +57,13 @@ class QuestionController {
         }
     }
 
+    /**
+     * answers a selected question
+     * @param access_token - the access_token of the user
+     * @param question_id - the id of the question
+     * @param answer - the collection of answers represented as a list of booleans
+     * @return - returns a json view
+     */
     def answerQuestion(String access_token, String question_id, String answer) {
         def result = preconditionService.notNull(params, ["access_token", "question_id", "answer"])
         def token = preconditionService.accessToken(access_token).data
@@ -58,6 +79,13 @@ class QuestionController {
         }
     }
 
+    /**
+     * change a question from deactivated to active or vice versa
+     * @param access_token - the access_token of the user
+     * @param question_id - the id of the selected question
+     * @param flip - the boolean representing active or inactive
+     * @return - returns a json view
+     */
     def changeQuestionStatus(String access_token, String question_id, boolean flip) {
         def result = preconditionService.notNull(params, ["access_token", "question_id"])
         def token = preconditionService.accessToken(access_token).data
@@ -71,6 +99,12 @@ class QuestionController {
         }
     }
 
+    /**
+     * gets all questions for a selected course
+     * @param access_token - the access_token of the user
+     * @param course_id - the id of the selected course
+     * @return - returns a json view
+     */
     def getQuestion(String access_token, String course_id) {
         def result = preconditionService.notNull(params, ["access_token", "course_id"])
         def token = preconditionService.accessToken(access_token).data
@@ -84,6 +118,12 @@ class QuestionController {
         } else render(view: '../failure', model: [errorCode: result.errorCode, message: result.message])
     }
 
+    /**
+     * gets the active questions for a selected course
+     * @param access_token - the access_token of the user
+     * @param course_id - the id of the selected course
+     * @return - returns a json view
+     */
     def getActiveQuestion(String access_token, String course_id) {
         def result = preconditionService.notNull(params, ["access_token", "course_id"])
         def token = preconditionService.accessToken(access_token).data

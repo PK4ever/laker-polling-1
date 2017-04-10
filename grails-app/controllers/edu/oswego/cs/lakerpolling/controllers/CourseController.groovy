@@ -180,6 +180,16 @@ class CourseController {
 
     }
 
+    /**
+     * Gets the attendance for a selected course and date or for a selected course, student, and range of dates
+     * @param access_token - the access_token of the user
+     * @param course_id - the course id of the course being selected
+     * @param student_id - the student's id of the student being selected
+     * @param date - the single date selected for a course
+     * @param start_date - the start date of the range of dates selected
+     * @param end_date - the end date of the range of dates selected
+     * @return - returns a json view
+     */
     def getAttendance(String access_token, String course_id, String student_id, String date, String start_date, String end_date) {
         def require = preconditionService.notNull(params, ["access_token", "course_id"])
         def token = preconditionService.accessToken(access_token).data

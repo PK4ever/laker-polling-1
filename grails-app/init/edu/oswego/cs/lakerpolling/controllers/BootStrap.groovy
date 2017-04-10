@@ -50,6 +50,10 @@ class BootStrap {
         paul.setRole(new Role(type: RoleType.INSTRUCTOR))
         paul.save(flush: true, failOnError: true)
 
+        User brad = new User(firstName: "Brandon", lastName: "Lanthrip", email: "blanthri@oswego.edu", imageUrl: "http://media.salon.com/2015/01/chrissy_teigen.jpg")
+        brad.setRole(new Role(type: RoleType.INSTRUCTOR))
+        brad.save(flush: true, failOnError: true)
+
         User jeff = new User(email: "jregistr@oswego.edu")
         jeff.setRole(new Role(type: RoleType.ADMIN))
         jeff.save(flush: true, failOnError: true)

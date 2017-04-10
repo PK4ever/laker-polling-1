@@ -65,6 +65,22 @@ class ApplicationController {
         }
     }
 
+    def resultsView(long courseId, long questionId) {
+        QueryResult<AuthToken> require = hasAccess()
+        if(require.success) {
+            def preReq = preconditionService.notNull(params, ["courseId", "questionId"])
+            if(preReq.success) {
+                session.setAttribute("courseId", courseId)
+                session.setAttribute("questionId", questionId)
+                render(view: 'pollResults')
+            } else {
+                render(view: '../failure', model: [errorCode: preReq.errorCode, message: preReq.message])
+            }
+        } else {
+            render(view: '../failure', model: [errorCode: require.errorCode, message: require.message])
+        }
+    }
+
     def classAttendance() {
         def require = hasAccess()
         if(require.success) {
@@ -90,21 +106,6 @@ class ApplicationController {
         }
     }
 
-    def resultsView(long courseId, long questionId) {
-        QueryResult<AuthToken> require = hasAccess()
-        if(require.success) {
-            def preReq = preconditionService.notNull(params, ["courseId", "questionId"])
-            if(preReq.success) {
-                session.setAttribute("courseId", courseId)
-                session.setAttribute("questionId", questionId)
-                render(view: 'pollResults')
-            } else {
-                render(view: '../failure', model: [errorCode: preReq.errorCode, message: preReq.message])
-            }
-        } else {
-            render(view: '../failure', model: [errorCode: require.errorCode, message: require.message])
-        }
-    }
 
     def answerView(long courseId) {
         QueryResult<AuthToken> require = hasAccess()

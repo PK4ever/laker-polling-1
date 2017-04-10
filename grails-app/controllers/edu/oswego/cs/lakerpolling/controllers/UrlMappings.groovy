@@ -14,7 +14,6 @@ class UrlMappings {
         "/course/answerquestion" (controller: 'application', action: 'answerView')
         "/course/viewresults" (controller: 'application', action: 'resultsView')
 
-
         /* end Page url mapping */
 
         /* Auth endpoints */

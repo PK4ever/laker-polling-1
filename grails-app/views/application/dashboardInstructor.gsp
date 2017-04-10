@@ -49,7 +49,6 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-12 text-center">
-        
                 <div id="userName"></div>
                 <div id="profilePic"></div>
                 <h3 class="section-subheading text-muted">Welcome to your dashboard</h3>

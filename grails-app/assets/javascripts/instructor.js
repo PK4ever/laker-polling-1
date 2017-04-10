@@ -67,14 +67,17 @@ var courseId
                 this.refreshCourseTable()
             }
         }
-
         this.addCourse = function(newCourse) {
             _courses.push(newCourse)
-        }
+        };
 
         this.getCourses = function() {
             return _courses
-        }
+        };
+
+        this.setRoster = function(course_id) {
+              this.refreshStudentTable();
+        };
 
         this.setRoster = function(course_id) {
               this.refreshStudentTable();
@@ -93,6 +96,12 @@ var courseId
                 if (_courses[i].id == courseId) {
                     return _courses[i]
                 }
+            }
+        }
+
+        this.getStudentById = function (studentId) {
+            for (var i = 0; i < _roster.length; i++){
+                if (_roster[i].id == studentId) return _roster[i]
             }
         }
 
@@ -248,6 +257,46 @@ var courseId
             .replaceAll('{{course.id}}', course.id)
             .replaceAll('{{course.name}}', course.name)
             .replaceAll('{{course.crn}}', course.crn)
+    };
+
+    function getCourseRoster(course_id) {
+        var result = [1,2,3,4];
+        $.ajax({
+            url: '/user/auth',
+            type: 'GET',
+            async: false,
+            success: function(data) {
+                var token = data.data.token;
+                $.ajax({
+                    url: '/api/course/student?access_token=' + token + '&course_id=' + course_id,
+                    type: 'GET',
+                    async: false,
+                    success: function(stuff) {
+                        result = stuff.data.students;
+
+                    },
+                    error: function(err) {
+                        // console.log(err);
+                    }
+                });
+            }
+        });
+        return result;
+    }
+
+    function courseHTML(courseName, crn, id) {
+        //var str = '<div class="col-md-4 col-sm-6 portfolio-item" style="box-shadow: 0px 0px 0px gray; padding: 20px;">'
+        var str = '<div class="col-md-4 col-sm-6 portfolio-item" style="box-shadow: 10px 10px 50px gray; padding: 10px;">'
+        //var str = '<div class="col-md-4 col-sm-6 portfolio-item" style="box-shadow: 0px 0px 0px gray; padding: 10px;">'
+        str += '<a href="/course?courseId=' + id + ' class="portfolio-link" data-toggle="modal">'
+            str += '<div class="portfolio-hover">'
+            str += '<div class="portfolio-hover-content">'
+            str += '<i class="fa fa-plus fa-3x"></i></div></div>'
+            //str += '<asset:image class="img-responsive" src="logo.png" alt=""/>'
+            //str += '<img src="assets/images/startup-framework.png" class="img-responsive" alt=""></a>'
+        str += '<div class="portfolio-caption"><h4>' +courseName +'</h4><p class="text-muted"> CRN: '+ crn + '</p>'
+        str+= '<button class="btn btn-danger js-deleteCourseButton" type="button" data-toggle="modal" data-target="#deleteCourseModal" data-course-id="' + id + '"></div></div>'
+        return str
     };
 
     function getCourseRoster(course_id) {
@@ -443,6 +492,17 @@ var courseId
             prepareStudentDeleteButton()
         }, 500)
         return deleteStudentButton 
+    }
+
+
+    studentDeleteButtonFormatter = function(_, student, index) {
+        var deleteStudentButton = '<button class="btn btn-danger js-deleteStudentButton" type="button" data-toggle="modal" data-target="#deleteStudentModal" data-student-id="' + student.id + '">'
+        deleteStudentButton += 'Delete'
+        deleteStudentButton += '</button>'
+        setTimeout(() => {
+            prepareStudentDeleteButton()
+        }, 500)
+        return deleteStudentButton
     }
 
     function prepareClassTitle(courseId) {

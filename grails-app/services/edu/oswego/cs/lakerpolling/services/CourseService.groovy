@@ -347,6 +347,12 @@ class CourseService {
         return res
     }
 
+    /**
+     * gets the attendance for all students in a selected course on a selected date
+     * @param course_id - the id of the selected course
+     * @param date - the selected date in the mm/dd/yyyy format
+     * @return - returns a QueryResult containing a list of all attendees related to the course and date
+     */
     QueryResult<List<Attendee>> getAllStudentAttendance(String course_id, String date) {
         QueryResult<List<Attendee>> result = new QueryResult<>()
         Date getDate = new Date(date)
@@ -372,6 +378,13 @@ class CourseService {
         }
     }
 
+    /**
+     * gets the attendance for a selected student during the range of dates provided
+     * @param student_id - the id of the selected student
+     * @param start_date - the start date in the range of dates in the mm/dd/yyyy format
+     * @param end_date - the end date in the range of dates in the mm/dd/yyyy format
+     * @return - returns a QueryResult containing the list of Attendee objects related to the student
+     */
     QueryResult<List<Attendee>> getStudentAttendance(String student_id, String start_date, String end_date) {
         QueryResult<List<Attendee>> result = new QueryResult<>()
         List<Attendee> attendeeList = new ArrayList<>()
@@ -395,18 +408,32 @@ class CourseService {
 
     }
 
+    /**
+     * makes a Date for the current date
+     * @return - returns a usable date
+     */
     private Date makeDate() {
         Calendar calendar = Calendar.getInstance()
         calendar.setTime(new Date())
         return removeTime(calendar)
     }
 
+    /**
+     * makes a Date of a specific time
+     * @param input - a date in the mm/dd/yyyy format
+     * @return - returns a usable date
+     */
     private Date makeDate(String input) {
         Calendar calendar = Calendar.getInstance()
         calendar.setTime(new Date(input))
         return removeTime(calendar)
     }
 
+    /**
+     * removes all the bs junk time stuff in a date that messes up date queries
+     * @param calendar - a calender object
+     * @return - returns a usable Date object
+     */
     private static Date removeTime(Calendar calendar) {
         calendar.set(Calendar.HOUR_OF_DAY, 0)
         calendar.set(Calendar.MINUTE, 0)
