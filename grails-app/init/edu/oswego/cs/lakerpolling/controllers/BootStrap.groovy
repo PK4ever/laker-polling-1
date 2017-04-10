@@ -55,7 +55,7 @@ class BootStrap {
         brad.save(flush: true, failOnError: true)
 
         User jeff = new User(email: "jregistr@oswego.edu")
-        jeff.setRole(new Role(type: RoleType.ADMIN))
+        jeff.setRole(new Role(type: RoleType.STUDENT))
         jeff.save(flush: true, failOnError: true)
 
         /* End students*/
