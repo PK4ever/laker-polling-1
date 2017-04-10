@@ -5,40 +5,40 @@ var answer;
 // get student's access token on load
 $(function() {
     $.ajax({
-	    url: '/user/auth',
-	    method: "GET",
-	    success: function(data) {
-	    	token = data.data.token;
-		}
-	});
-});		    
+        url: '/user/auth',
+        method: "GET",
+        success: function(data) {
+            token = data.data.token;
+        }
+    });
+});
 
 $('.answer-btn').click(function() {
     $(this).toggleClass("answer-selected"); // change color of answer
 });
 
 $(':checkbox').change(function() { // just for testing, can be removed
-	if ($(this).is(':checked')) {
-	}
+    if ($(this).is(':checked')) {
+    }
 });
 
 
 // STUDENT - submit answer
 $("#submitAnswer").click(function() {
     var courseId = $(this).data('course-id');
-	var selected = [];
-	$(':checkbox').each(function() {
-		if ($(this).is(':checked')) {
-    		selected.push("true");
-		}
-		else {
-			selected.push("false");
-		}
-	});
-	// console.log(selected.toString());
+    var selected = [];
+    $(':checkbox').each(function() {
+        if ($(this).is(':checked')) {
+            selected.push("true");
+        }
+        else {
+            selected.push("false");
+        }
+    });
+    // console.log(selected.toString());
 
-	var question_id;
-	var answer = selected.toString();
+    var question_id;
+    var answer = selected.toString();
     // see if there's an active question
     $.ajax({
         url: '/api/question/active?access_token=' + token + '&course_id=' + courseId,
@@ -47,8 +47,8 @@ $("#submitAnswer").click(function() {
             console.log(data)
             question_id = data.questionId; // get question_id
             $.ajax({
-                url: '/api/question/answer?access_token=' + token + '&question_id=' 
-                    + question_id + '&answer=' + answer,
+                url: '/api/question/answer?access_token=' + token + '&question_id='
+                + question_id + '&answer=' + answer,
                 type: 'PUT',
                 success: function() {
                     console.log(question_id + 'is the q id')
@@ -102,13 +102,13 @@ $("#close-question-btn").click(function(){
 })
 
 //Make close and start buttons appear/disappear
- function toggleButtons (){
+function toggleButtons (){
 
-var linkdiv = document.getElementById("resultLink")
-         var string = '<a href="viewresults?courseId='+courseId+'&questionId='+question_id+'" class="btn btn-default" id="show-results-btn">Show Results</a>'
-         var div = document.createElement("div")
-         div.innerHTML=string
-         linkdiv.appendChild(div)
+    var linkdiv = document.getElementById("resultLink")
+    var string = '<a href="viewresults?courseId='+courseId+'&questionId='+question_id+'" class="btn btn-default" id="show-results-btn">Show Results</a>'
+    var div = document.createElement("div")
+    div.innerHTML=string
+    linkdiv.appendChild(div)
 
     var close = document.getElementById('close-question-btn')
     var question = document.getElementById('question-form')
@@ -122,13 +122,13 @@ var linkdiv = document.getElementById("resultLink")
         showResults.style.display = 'inline-block'
         close.style.display = 'none'
     }
- }
+}
 
-    //  $(document).ready(function() {
-    //      var linkdiv = document.getElementById("resultLink")
-    //      var string = '<a href="viewresults?courseId='+courseId+'&questionId='+question_id+'" class="btn btn-default" id="show-results-btn">Show Results</a>'
-    //      var div = document.createElement("div")
-    //      div.innerHTML=string
-    //      linkdiv.appendChild(div)
-    //  })
+//  $(document).ready(function() {
+//      var linkdiv = document.getElementById("resultLink")
+//      var string = '<a href="viewresults?courseId='+courseId+'&questionId='+question_id+'" class="btn btn-default" id="show-results-btn">Show Results</a>'
+//      var div = document.createElement("div")
+//      div.innerHTML=string
+//      linkdiv.appendChild(div)
+//  })
 

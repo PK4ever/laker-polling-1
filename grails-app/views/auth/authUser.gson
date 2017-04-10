@@ -9,6 +9,6 @@ model {
 json {
     status "success"
     data {
-        accessToken token.accessToken
+        token token.accessToken
     }
 }

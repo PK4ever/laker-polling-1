@@ -17,7 +17,7 @@
     <asset:stylesheet href="style.css"/>
 </head>
 <body class="bg-light-gray">
-    <nav id="mainNav" class="navbar navbar-default navbar-custom navbar-fixed-top">
+<nav id="mainNav" class="navbar navbar-default navbar-custom navbar-fixed-top">
     <div class="container">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header page-scroll">
@@ -29,8 +29,8 @@
                              style="height: 80px !important; width: 120px !important; position: absolute; top: 0%"/>
             </a>
             <a id="pageName" class="navbar-brand" style="position: absolute; left: 45%; font-size: x-large">Instructor's Dashboard</a>
-    
-        <!--<a class="navbar-brand page-scroll" href="#page-top">LOGO HERE</a>-->
+
+            <!--<a class="navbar-brand page-scroll" href="#page-top">LOGO HERE</a>-->
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
@@ -49,6 +49,7 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-12 text-center">
+
                 <div id="userName"></div>
                 <div id="profilePic"></div>
                 <h3 class="section-subheading text-muted">Welcome to your dashboard</h3>
@@ -89,29 +90,29 @@
                     Done Deleting Courses
                 </button>
             </div>
-            </div>
         </div>
+    </div>
 </section>
-        <!-- Modal -->
-        <div id="deleteCourseModal" class="modal fade" role="dialog">
-            <div class="modal-dialog">
-                <!-- Modal content-->
-                <div class="modal-content clean-container">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title heading">Delete Course?</h4>
-                </div>
-                <div class="modal-body">
-                    <p>Are you sure you want to delete course #<span id="courseId"></span> <span id="courseName"></span>?</p>
-                </div>
-                <div class="modal-footer">
-                    <button id="confirmDeleteButton" type="button" class="btn btn-danger btn-ok js-deleteCourse" data-dismiss="modal" data-course-id="">Yes</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
-                </div>
-                </div>
+<!-- Modal -->
+<div id="deleteCourseModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content clean-container">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title heading">Delete Course?</h4>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete course #<span id="courseId"></span> <span id="courseName"></span>?</p>
+            </div>
+            <div class="modal-footer">
+                <button id="confirmDeleteButton" type="button" class="btn btn-danger btn-ok js-deleteCourse" data-dismiss="modal" data-course-id="">Yes</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
             </div>
         </div>
     </div>
+</div>
+</div>
 
 <asset:javascript src="jquery-3.2.0.min.js"/>
 <script src="https://apis.google.com/js/platform.js"></script>

@@ -69,6 +69,7 @@ class QuestionController {
         def token = preconditionService.accessToken(access_token).data
 
         if(result.success) {
+            println("ANSWERING QUESTION")
             if(questionService.answerQuestion(token, question_id, answer)) {
                 render(view: 'answerQuestion', model: [token: token])
             } else {
