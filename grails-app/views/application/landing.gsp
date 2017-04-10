@@ -19,7 +19,7 @@
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse"
-                    data-target="#bs-example-navbar-collapse-1">
+                    data-target="#navmenu">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
@@ -35,17 +35,17 @@
 
         </div>
         <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse">
+        <div class="collapse navbar-collapse" id="navmenu">
             <ul class="nav navbar-nav navbar-right">
                 <!--<li class="active"><a href="#">Home</a></li>-->
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                        aria-expanded="false">Useful Campus Links <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="https://www.oswego.edu/">Suny Oswego Home</a></li>
-                        <li><a href="https://www.oswego.edu/blackboard/">Blackboard</a></li>
-                        <li><a href="https://lakerlife.oswego.edu/">Laker Life</a></li>
-                        <li><a href="https://www.oswego.edu/myoswego/">My Oswego</a></li>
+                        <li><a href="https://www.oswego.edu/" target="_blank">Suny Oswego Home</a></li>
+                        <li><a href="https://www.oswego.edu/blackboard/" target="_blank">Blackboard</a></li>
+                        <li><a href="https://lakerlife.oswego.edu/" target="_blank">Laker Life</a></li>
+                        <li><a href="https://www.oswego.edu/myoswego/" target="_blank">My Oswego</a></li>
                     </ul>
                 </li>
             </ul>

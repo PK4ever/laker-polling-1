@@ -355,7 +355,7 @@ class CourseService {
      */
     QueryResult<List<Attendee>> getAllStudentAttendance(String course_id, String date) {
         QueryResult<List<Attendee>> result = new QueryResult<>()
-        Date getDate = new Date(date)
+        Date getDate = makeDate(date)
         def course = Course.findById(course_id.toLong())
         if(course) {
             def attendance = Attendance.findAllByCourse(course)
