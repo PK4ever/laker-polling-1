@@ -31,7 +31,7 @@
             <ul class="nav navbar-nav navbar-right">
                 <li>
                     %{--<button onclick="logout()" class="btn btn-default navbar-right navbar-btn">Logout</button>--}%
-                    <a onclick="logout()" >LogOut</a>
+                    <a style="cursor: pointer" onclick="logout()" >LogOut</a>
                 </li>
             </ul>
         </div>

@@ -25,7 +25,7 @@
     </div>
     <div class="navbar-collapse collapse">
         <ul class="nav navbar-nav">
-            <button onclick="logout()" class="btn btn-default navbar-right navbar-btn">Logout</button>
+            <a onclick="logout()" class="btn btn-default navbar-right navbar-btn logout">Logout</a>
         </ul>
     </div>
 </div>
