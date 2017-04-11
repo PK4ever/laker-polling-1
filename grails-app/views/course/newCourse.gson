@@ -1,0 +1,14 @@
+import edu.oswego.cs.lakerpolling.domains.Course
+
+model {
+    Course course
+}
+
+response.status OK.value()
+json {
+    status "success"
+    data {
+        accessToken : course.instructor.authToken
+        course g.render(template: "/templates/course", model: [course:course])
+    }
+}

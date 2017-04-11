@@ -1,0 +1,22 @@
+environments:
+    development:
+        dataSource:
+            driverClassName: org.postgresql.Driver # use com.mysql.jdbc.Driver for MySQL
+            #dialect: org.hibernate.dialect.MySQL5InnoDBDialect  #uncomment this for MySQL
+            username: <YOUR DATABASE USER NAME HERE>
+            password: <YOUR DATABASE PASSWORD HERE>
+            url: jdbc:postgresql://<HOST>:<PORT>/<DATABASE NAME> # use jdbc:mysql://<HOST>:<PORT>/<DATABASE NAME> for mysql
+    test:
+        dataSource:
+            driverClassName: org.postgresql.Driver # use com.mysql.jdbc.Driver for MySQL
+            #dialect: org.hibernate.dialect.MySQL5InnoDBDialect  #uncomment this for MySQL
+            username: <YOUR DATABASE USER NAME HERE>
+            password: <YOUR DATABASE PASSWORD HERE>
+            url: jdbc:postgresql://<HOST>:<PORT>/<DATABASE NAME> # use jdbc:mysql://<HOST>:<PORT>/<DATABASE NAME> for mysql
+    production:
+        dataSource:
+            driverClassName: org.postgresql.Driver # use com.mysql.jdbc.Driver for MySQL
+            #dialect: org.hibernate.dialect.MySQL5InnoDBDialect  #uncomment this for MySQL
+            username: <YOUR DATABASE USER NAME HERE>
+            password: <YOUR DATABASE PASSWORD HERE>
+            url: jdbc:postgresql://<HOST>:<PORT>/<DATABASE NAME> # use jdbc:mysql://<HOST>:<PORT>/<DATABASE NAME> for mysql
