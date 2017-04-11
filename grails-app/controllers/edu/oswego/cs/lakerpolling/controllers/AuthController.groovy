@@ -15,7 +15,7 @@ class AuthController {
     UserService userService
 
     /**
-     * Verifies and takes action based on the given idToken query parameter.
+     * Verifies and takes action based active the given idToken query parameter.
      */
     def auth(String idToken) {
         QueryResult<GoogleIdToken> data = verifierService.getVerifiedResults(idToken)
@@ -34,7 +34,7 @@ class AuthController {
             if (optionalInfo.isPresent()) {
                 Pair<User, AuthToken> info = optionalInfo.get()
                 session.setAttribute("access", info.value.accessToken)
-                render(view: 'authUser')
+                render(view: 'authUser', model : [token : info.value])
             } else {
                 render(view: '../error')
             }

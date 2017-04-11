@@ -8,7 +8,7 @@ response.status OK.value()
 json {
     status "success"
     data {
-        accessToken : course.instructor.authToken
+        accessToken : course.instructor.authToken.accessToken
         course g.render(template: "/templates/course", model: [course:course])
     }
 }

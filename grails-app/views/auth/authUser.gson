@@ -1,10 +1,14 @@
-
+import edu.oswego.cs.lakerpolling.domains.AuthToken
 
 response.status OK.value()
 
 model {
+    AuthToken token
 }
 
 json {
     status "success"
+    data {
+        token token.accessToken
+    }
 }

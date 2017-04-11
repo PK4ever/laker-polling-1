@@ -12,7 +12,7 @@ json {
     status "success"
     data {
         accessToken token.accessToken
-        course_id courseID
-        students g.render(template: "/templates/students", model: [students:students])
+        courseId courseID
+        students g.render(template: "/templates/users", model: [users:students])
     }
 }

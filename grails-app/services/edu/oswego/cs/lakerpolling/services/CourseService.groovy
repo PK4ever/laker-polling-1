@@ -1,5 +1,7 @@
 package edu.oswego.cs.lakerpolling.services
 
+import edu.oswego.cs.lakerpolling.domains.Attendance
+import edu.oswego.cs.lakerpolling.domains.Attendee
 import edu.oswego.cs.lakerpolling.domains.AuthToken
 import edu.oswego.cs.lakerpolling.domains.Course
 import edu.oswego.cs.lakerpolling.domains.Role
@@ -161,6 +163,7 @@ class CourseService {
 
         res
     }
+
     /**
      * Creates a course for an instructor
      * @param token - The AuthToken of the instructor
@@ -191,7 +194,7 @@ class CourseService {
     QueryResult<Course> adminCreateCourse(AuthToken token, String crn, String name, String instructor, QueryResult<Course> result = new QueryResult<>(success: true)) {
         User admin = token?.user
         User inst = User.findById(Long.parseLong(instructor))
-        if (admin.role.type == RoleType.ADMIN && inst.role.type == RoleType.INSTRUCTOR && !courseExists(crn)) {
+        if (admin && inst && admin.role.type == RoleType.ADMIN && inst.role.type == RoleType.INSTRUCTOR && !courseExists(crn)) {
             result = createCourse(inst, name, crn, result)
         } else {
             QueryResult.fromHttpStatus(HttpStatus.BAD_REQUEST, result)
@@ -343,4 +346,100 @@ class CourseService {
         }
         return res
     }
+
+    /**
+     * gets the attendance for all students in a selected course on a selected date
+     * @param course_id - the id of the selected course
+     * @param date - the selected date in the mm/dd/yyyy format
+     * @return - returns a QueryResult containing a list of all attendees related to the course and date
+     */
+    QueryResult<List<Attendee>> getAllStudentAttendance(String course_id, String date) {
+        QueryResult<List<Attendee>> result = new QueryResult<>()
+        Date getDate = makeDate(date)
+        def course = Course.findById(course_id.toLong())
+        if(course) {
+            def attendance = Attendance.findAllByCourse(course)
+            if(attendance) {
+                def students = attendance.find { a ->
+                    a.date == getDate
+                }
+                if(students) {
+                    result.data = students.attendees.toList()
+                    result.success = true
+                    result
+                } else {
+                    QueryResult.fromHttpStatus(HttpStatus.BAD_REQUEST)
+                }
+            } else {
+                QueryResult.fromHttpStatus(HttpStatus.BAD_REQUEST)
+            }
+        } else {
+            QueryResult.fromHttpStatus(HttpStatus.BAD_REQUEST)
+        }
+    }
+
+    /**
+     * gets the attendance for a selected student during the range of dates provided
+     * @param student_id - the id of the selected student
+     * @param start_date - the start date in the range of dates in the mm/dd/yyyy format
+     * @param end_date - the end date in the range of dates in the mm/dd/yyyy format
+     * @return - returns a QueryResult containing the list of Attendee objects related to the student
+     */
+    QueryResult<List<Attendee>> getStudentAttendance(String student_id, String start_date, String end_date) {
+        QueryResult<List<Attendee>> result = new QueryResult<>()
+        List<Attendee> attendeeList = new ArrayList<>()
+        Date getStart = new Date(start_date)
+        Date getEnd = new Date(end_date)
+        def student = User.findById(student_id.toLong())
+        if(student) {
+            def attendance = Attendee.findAllByStudent(student)
+            if(attendance) {
+                attendance.forEach({a ->
+                    if(a.attendance.date >= getStart || a.attendance.date <= getEnd) attendeeList.add(a)
+                })
+                result.data = attendeeList
+                result
+            } else {
+                QueryResult.fromHttpStatus(HttpStatus.BAD_REQUEST)
+            }
+        } else {
+            QueryResult.fromHttpStatus(HttpStatus.BAD_REQUEST)
+        }
+
+    }
+
+    /**
+     * makes a Date for the current date
+     * @return - returns a usable date
+     */
+    private Date makeDate() {
+        Calendar calendar = Calendar.getInstance()
+        calendar.setTime(new Date())
+        return removeTime(calendar)
+    }
+
+    /**
+     * makes a Date of a specific time
+     * @param input - a date in the mm/dd/yyyy format
+     * @return - returns a usable date
+     */
+    private Date makeDate(String input) {
+        Calendar calendar = Calendar.getInstance()
+        calendar.setTime(new Date(input))
+        return removeTime(calendar)
+    }
+
+    /**
+     * removes all the bs junk time stuff in a date that messes up date queries
+     * @param calendar - a calender object
+     * @return - returns a usable Date object
+     */
+    private static Date removeTime(Calendar calendar) {
+        calendar.set(Calendar.HOUR_OF_DAY, 0)
+        calendar.set(Calendar.MINUTE, 0)
+        calendar.set(Calendar.SECOND, 0)
+        calendar.set(Calendar.MILLISECOND, 0)
+        return calendar.getTime()
+    }
+
 }

@@ -6,19 +6,20 @@
     <title>Laker Polling</title>
     <link rel="icon" href="${resource(directory: 'images', file: 'logo.ico')}"/>
     <asset:stylesheet href="bootstrap.min.css"/>
-    <asset:stylesheet href="bootstrap-theme.min.css"/>
+    %{--<asset:stylesheet href="bootstrap-theme.min.css"/>--}%
     <asset:stylesheet href="landing.css"/>
 </head>
 
-<body>
+<body class="bg-light-gray">
 
 <!-- Navigation -->
-<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+<nav id="mainNav" class="navbar navbar-default navbar-custom navbar-fixed-top">
+<!--<nav class="navbar navbar-default navbar-fixed-top" role="navigation">-->
     <div class="container topnav">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse"
-                    data-target="#bs-example-navbar-collapse-1">
+                    data-target="#navmenu">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
@@ -27,24 +28,24 @@
 
             <div class="navbar-header">
                 <a class="navbar-brand" href="/">
-                    <span><asset:image src="logo.png" id="logoimage"/></span>
+                    <span><asset:image src="logo2.png" id="logoimage"/></span>
                     Laker Polling
                 </a>
             </div>
 
         </div>
         <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse">
+        <div class="collapse navbar-collapse" id="navmenu">
             <ul class="nav navbar-nav navbar-right">
-                <li class="active"><a href="#">Home</a></li>
+                <!--<li class="active"><a href="#">Home</a></li>-->
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                        aria-expanded="false">Useful Campus Links <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="https://www.oswego.edu/">Suny Oswego Home</a></li>
-                        <li><a href="https://www.oswego.edu/blackboard/">Blackboard</a></li>
-                        <li><a href="https://lakerlife.oswego.edu/">Laker Life</a></li>
-                        <li><a href="https://www.oswego.edu/myoswego/">My Oswego</a></li>
+                        <li><a href="https://www.oswego.edu/" target="_blank">Suny Oswego Home</a></li>
+                        <li><a href="https://www.oswego.edu/blackboard/" target="_blank">Blackboard</a></li>
+                        <li><a href="https://lakerlife.oswego.edu/" target="_blank">Laker Life</a></li>
+                        <li><a href="https://www.oswego.edu/myoswego/" target="_blank">My Oswego</a></li>
                     </ul>
                 </li>
             </ul>
@@ -126,11 +127,15 @@
     <p>Find us on <a href="https://github.com/CSC480/laker-polling"><strong>Github</strong></a></p>
 </footer>
 
+
 <asset:javascript src="jquery-3.2.0.min.js"/>
 <script src="https://apis.google.com/js/platform.js"></script>
 <asset:javascript src="auth/config.js"/>
 <asset:javascript src="auth/login.js"/>
 <asset:javascript src="bootstrap.min.js"/>
+<asset:stylesheet src="agency.css"/>
+<asset:stylesheet src="agency.min.css"/>
 <asset:stylesheet src="style.css"/>
+
 </body>
 </html>
