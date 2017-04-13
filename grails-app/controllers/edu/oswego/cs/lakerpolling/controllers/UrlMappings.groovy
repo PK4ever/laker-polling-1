@@ -13,6 +13,8 @@ class UrlMappings {
         "/course/createquestion" (controller: 'application', action: 'createQuestionView')
         "/course/answerquestion" (controller: 'application', action: 'answerView')
         "/course/viewresults" (controller: 'application', action: 'resultsView')
+        "/course/quizList" (controller: 'application', action: 'quizListView')
+        "/course/createQuiz" (controller: 'application', action: 'quizBuildView')
 
         /* end Page url mapping */
 

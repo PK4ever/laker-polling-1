@@ -22,7 +22,8 @@ $(function(){
     });
 });
 
-$('#quiz-form').submit(function(event) {
+$('#quiz-form').on('click', function(event) {
+        console.log("TEST");
         $.ajax({
             url: '/user/auth',
             type: 'GET',

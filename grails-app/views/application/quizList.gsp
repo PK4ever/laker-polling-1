@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Course Page</title>
+    <title>Instructor</title>
     <asset:stylesheet href="bootstrap.min.css"/>
     <!-- jQuery (necessary for Bootstrap"s JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
@@ -22,10 +23,11 @@
 
                 <asset:image src="logo2.png"
                              style="height: 80px !important; width: 120px !important; position: absolute; top: 0%"/>
+
                 %{--<img src="logo.png" style="height: 60px !important; width: 120px !important; position: absolute; top: 0%">--}%
             </a>
             <a id="coursePageTitle" class="navbar-brand" style="position: absolute; left: 45%; font-size: x-large"></a>
-    
+
 
         <!--<a class="navbar-brand page-scroll" href="#page-top">LOGO HERE</a>-->
         </div>
@@ -44,33 +46,51 @@
     <!-- /.container-fluid -->
 </nav>
 <section>
-<!-- <a style="margin-left: 40px; font-weight: bold" href="/dashboard">Return to Dashboard</a> -->
-<a href="/dashboard" style="margin-left: 60px; href="/dashboard" class="btn btn-default btn-md">
-          <span class="glyphicon glyphicon-arrow-left"></span> Back to Dashboard
+<div class="container">
+<a href="/course?courseId=${session.courseId}" style="margin-left: 60px; href="/course?courseId=${session.courseId}" class="btn btn-default btn-md">
+          <span class="glyphicon glyphicon-arrow-left"></span> Back to Course Page
 </a>
-<h1 id="coursePageTitle" style="text-align: center;">
+    <div class="row">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-6">
+            <div id="quizzes" class="table-responsive">
+                <table id="quizTable" class="table">
+                    <thead>
+                    <tr>
+                        <th class="col-md-1" data-field="name">Quiz Name</th>
+                        <th class="col-md-1" data-field="startTime">Start Time</th>
+                        <th class="col-md-1" data-field="endTime">End Time</th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+        <div class="col-sm-3"></div>
+    </div>
 
-</h1> <!-- Class name here -->
-
-<div class="form-group" style="text-align: center;">
-    <a href="/course/createquestion?courseId=${session.courseId}" class="btn btn-success" role="button">Create Question</a>
-</div>
-<div class="form-group" style="text-align: center;">
-    <a href="/course/quizList?courseId=${session.courseId}" class="btn btn-success" role="button">At-Home Quizzes</a>
-</div>
-<div class="form-group" style="text-align: center;">
-    <a href="/course/roster" class="btn btn-success" role="button">Roster</a>
-</div>
-<div class="form-group" style="text-align: center;">
-    <a href="/course/attendance" class="btn btn-success" role="button">Attendance</a>
-</div>
+    <div class="row">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-6">
+        <form id="quiz-form" method="post">
+            <!-- TODO: Make the date pickers allow for time selection -->
+            Start Time:
+            <input id="startDate" type="date" name="startdate" onchange="changeDate(this)" /> <br><br>
+            End Time:
+            <input id="endDate" type="date" name="enddate" onchange="changeDate(this)" /> <br><br>
+            Quiz Name:
+            <input type="text" name="quizName"><br><br>
+            <input class="btn btn-success" type="button" data-course-id="${session.courseId}" id="newQuizButton" value="Create New Quiz">
+        </form>
+        </div>
+        <div class="col-sm-3"></div>
+    </div><br>
 </section>
-
-<asset:javascript src="jquery-3.2.0.min.js"/>
-<script src="https://apis.google.com/js/platform.js"></script>
 
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.css">
+
+<asset:javascript src="jquery-3.2.0.min.js"/>
+<script src="https://apis.google.com/js/platform.js"></script>
 
 <!-- Latest compiled and minified JavaScript -->
 <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.js"></script>
@@ -78,11 +98,15 @@
 <asset:javascript src="auth/config.js"/>
 <asset:javascript src="auth/logout.js"/>
 <asset:javascript src="instructor.js"/>
-<script>
-    window.onload=prepareClassTitle(${session.courseId});
-</script>
+<asset:javascript src="atHome.js"/>
+<asset:stylesheet href="bootstrap.css"/>
 <asset:stylesheet href="agency.min.css"/>
 <asset:stylesheet href="agency.css"/>
 <asset:stylesheet href="style.css"/>
+
+<script>
+    window.onload=prepareClassTitle(${session.courseId});
+</script>
+
 </body>
 </html>
