@@ -107,7 +107,7 @@ class UserService {
         }
 
         user = user.save(flush: true, failOnError: true)
-        if(user.authToken == null) {
+        if (user.authToken == null) {
             user.setAuthToken(new AuthToken(subject: subj, accessToken: UUID.randomUUID()))
             user = user.save(flush: true, failOnError: true)
         }
@@ -117,6 +117,65 @@ class UserService {
         user != null ? Optional.of(new Pair<User, AuthToken>(user, token))
                 : Optional.empty()
 
+    }
+
+    QueryResult<List<User>> findUsersBy(AuthToken token, String first, String last, String email) {
+        QueryResult<List<User>> result
+
+        if (checkIfInstructor(token.user)) {
+            def users = User.createCriteria().list {
+                if (first) {
+                    like('firstName', first.concat("%"))
+                }
+
+                if (last) {
+                    like('lastName', last.concat("%"))
+                }
+
+                if (email) {
+                    eq('email', email.concat("%"))
+                }
+            } as List<User>
+
+            result = new QueryResult<>(success: true, data: users)
+        } else {
+            result = QueryResult.fromHttpStatus(HttpStatus.UNAUTHORIZED)
+        }
+
+        result
+    }
+
+    QueryResult<User> createUser(AuthToken token, String email, String role) {
+        QueryResult<User> result
+        if (checkIfInstructor(token.user)) {
+            if (User.findByEmail(email) == null) {
+                if (email.contains("oswego.edu")) {
+                    RoleType roleType
+
+                    if (role != null) {
+                        try {
+                            roleType = role as RoleType
+                        } catch (IllegalArgumentException e) {
+                            return new QueryResult<>(success: false, errorCode: HttpStatus.BAD_REQUEST.value(), message: "Unexpected role:" + role)
+                        }
+                    } else {
+                        roleType = RoleType.STUDENT
+                    }
+
+                    User temp = new User(email: email)
+                    temp.setRole(new Role(type: roleType))
+                    temp.save(flush: true)
+                    result = new QueryResult<>(success: true, data: temp)
+                } else {
+                    result = new QueryResult<>(success: false, errorCode: HttpStatus.BAD_REQUEST.value(), message: "Non oswego.edu email.")
+                }
+            } else {
+                result = new QueryResult<>(success: false, errorCode: HttpStatus.BAD_REQUEST.value(), message: "Email already exists")
+            }
+        } else {
+            result = QueryResult.fromHttpStatus(HttpStatus.UNAUTHORIZED)
+        }
+        result
     }
 
 }

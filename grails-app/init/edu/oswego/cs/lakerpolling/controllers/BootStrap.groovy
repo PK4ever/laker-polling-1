@@ -16,47 +16,51 @@ class BootStrap {
         User a = new User(firstName: "Jason", lastName: "Parker", email: "jpark@gmail.com", imageUrl: "Some image")
         a.setRole(new Role(type: RoleType.STUDENT))
         a.setAuthToken(new AuthToken(subject: 'sub-a', accessToken: 'aa'))
-        a.save(flush: true, failOnError: true)
+        a.save(flush: true)
 
         User b = new User(firstName: "Peter", lastName: "Swanson", email: "pswan@coolpeople.com", imageUrl: "coolest")
         b.setRole(new Role(type: RoleType.STUDENT))
         b.setAuthToken(new AuthToken(subject: 'sub-b', accessToken: 'bb'))
-        b.save(flush: true, failOnError: true)
+        b.save(flush: true)
 
         User stu = new User(firstName: "Zack", lastName: "Brown", email: "zb@gmail.com", imageUrl: "The greatest image.jpg")
         stu.setRole(new Role(type: RoleType.STUDENT))
         stu.setAuthToken(new AuthToken(subject: 'sub-stu-1', accessToken: 'cc'))
-        stu.save(flush: true, failOnError: true)
+        stu.save(flush: true)
 
         User stu2 = new User(firstName: "Stephen", lastName: "Forgot", email: "steph@gmail.com", imageUrl: "The greatest image.jpg")
         stu2.setRole(new Role(type: RoleType.STUDENT))
         stu2.setAuthToken(new AuthToken(subject: 'sub-stu-2', accessToken: 'dd'))
-        stu2.save(flush: true, failOnError: true)
+        stu2.save(flush: true)
 
         User michael = new User(firstName: "Michael", lastName: "Cavataio", email: "mcavatai@oswego.edu", imageUrl: "http://media.salon.com/2015/01/chrissy_teigen.jpg")
         michael.setRole(new Role(type: RoleType.STUDENT))
 //        michael.setAuthToken(new AuthToken(subject: "michael-stu", accessToken: "ee"))
-        michael.save(flush: true, failOnError: true)
+        michael.save(flush: true)
 
         User max = new User(firstName: "Max", lastName: "Sokolovsky", email: "msokolov@oswego.edu", imageUrl: "http://media.salon.com/2015/01/chrissy_teigen.jpg")
         max.setRole(new Role(type: RoleType.STUDENT))
-        max.save(flush: true, failOnError: true)
+        max.save(flush: true)
 
         User mike = new User(firstName: "Mike", lastName: "Mekker", email: "mmekker@oswego.edu", imageUrl: "http://media.salon.com/2015/01/chrissy_teigen.jpg")
         mike.setRole(new Role(type: RoleType.STUDENT))
-        mike.save(flush: true, failOnError: true)
+        mike.save(flush: true)
+
+        User mike2 = new User(firstName: "Mike", lastName: "Other", email: "someemail222@oswego.edu", imageUrl: "http://media.salon.com/2015/01/chrissy_teigen.jpg")
+        mike2.setRole(new Role(type: RoleType.STUDENT))
+        mike2.save(flush: true)
 
         User paul = new User(firstName: "Paul", lastName: "Kwoyelo", email: "pkwoyelo@oswego.edu", imageUrl: "http://media.salon.com/2015/01/chrissy_teigen.jpg")
         paul.setRole(new Role(type: RoleType.INSTRUCTOR))
-        paul.save(flush: true, failOnError: true)
+        paul.save(flush: true)
 
         User brad = new User(firstName: "Brandon", lastName: "Lanthrip", email: "blanthri@oswego.edu", imageUrl: "http://media.salon.com/2015/01/chrissy_teigen.jpg")
         brad.setRole(new Role(type: RoleType.INSTRUCTOR))
-        brad.save(flush: true, failOnError: true)
+        brad.save(flush: true)
 
         User jeff = new User(email: "jregistr@oswego.edu")
         jeff.setRole(new Role(type: RoleType.STUDENT))
-        jeff.save(flush: true, failOnError: true)
+        jeff.save(flush: true)
 
         /* End students*/
 
@@ -64,24 +68,24 @@ class BootStrap {
         User inst1 = new User(email: "bastian.tenbergen@oswego.edu")
         inst1.setRole(new Role(type: RoleType.INSTRUCTOR))
         inst1.setAuthToken(new AuthToken(accessToken: "inst-1", subject: "inst-1-subj"))
-        inst1.save(flush: true, failOnError: true)
+        inst1.save(flush: true)
 
         User inst2 = new User(email: "christopher.harris@oswego.edu")
         inst2.setRole(new Role(type: RoleType.INSTRUCTOR))
-        inst2.save(flush: true, failOnError: true)
+        inst2.save(flush: true)
 
         User tyler = new User(email: "tmoson@oswego.edu")
         tyler.setRole(new Role(type: RoleType.INSTRUCTOR))
-        tyler.save(flush: true, failOnError: true)
+        tyler.save(flush: true)
 
         User linc = new User(email: "ldaniel@oswego.edu")
         linc.setRole(new Role(type: RoleType.INSTRUCTOR))
-        linc.save(flush: true, failOnError: true)
+        linc.save(flush: true)
 
         User admin = new User(firstName: "admin", lastName: "admin", email: "cooladmin@gmail.com", imageUrl: "cool")
         admin.setRole(new Role(type: RoleType.ADMIN))
         admin.setAuthToken(new AuthToken(subject: "sub-ad-1", accessToken: "ad1"))
-        admin.save(flush: true, failOnError: true)
+        admin.save(flush: true)
 
         /*End instructors*/
 
@@ -92,20 +96,20 @@ class BootStrap {
         csc480.addToStudents(b)
         csc480.addToStudents(michael);
         csc480.addToStudents(max);
-        csc480.save(flush: true, failOnError: true)
+        csc480.save(flush: true)
 
         Course csc212 = new Course(name: "CSC 480", crn: 11111, instructor: tyler)
         csc212.addToStudents(a)
         csc212.addToStudents(b)
         csc212.addToStudents(michael);
-        csc212.save(flush: true, failOnError: true)
+        csc212.save(flush: true)
 
 
         Course hci521 = new Course(name:  "HCI 521", crn: 22222, instructor: linc)
         hci521.addToStudents(stu)
         hci521.addToStudents(stu2)
         hci521.addToStudents(michael)
-        hci521.save(flush: true, failOnError: true)
+        hci521.save(flush: true)
         /*End courses*/
 
         /*Attendance*/
@@ -113,8 +117,8 @@ class BootStrap {
         Date someDate = new Date("1/22/91")
         Attendance something = new Attendance(date: someDate, course: csc480)
         something.addToAttendees(brandon)
-        something.save(flush: true, failOnError: true)
-        brandon.save(flusth: true, failOnError: true)
+        something.save(flush: true)
+        brandon.save(flusth: true)
 
     }
 

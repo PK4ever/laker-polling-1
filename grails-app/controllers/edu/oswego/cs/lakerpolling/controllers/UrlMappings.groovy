@@ -43,5 +43,11 @@ class UrlMappings {
             "/answer"(controller: 'question', action: 'getAnswers', method: 'get')
             "/answer"(controller: 'question', action: 'answerQuestion', method: 'put')
         }
+
+        group "/api/user", {
+            "/"(controller: 'user', action: 'getUser', method: 'get')
+            "/"(controller: 'user', action: 'postUser', method: 'post')
+        }
+
     }
 }
