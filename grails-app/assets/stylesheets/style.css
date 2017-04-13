@@ -6,3 +6,47 @@
 #sign-in-btn {
     padding: 20px;
 }
+/*removes the line under page name*/
+#pageName{
+    text-decoration: none !important;
+}
+#answers{
+    width: 200px !important;
+    padding: 15px !important;
+}
+#submit-question-btn{
+    width: 200px !important;
+}
+#show-results-btn{
+    width: 200px !important;
+    text-align: center !important;
+    display: none;
+}
+#submitAnswer{
+    width: 200px !important;
+}
+body{
+    background-image: url("/assets/LakerPolingBackground.png") !important;
+}
+@media (max-width: 414px) {
+    .navbar-brand{
+        left: 30% !important;
+        font-size: 100% !important;
+    }
+    .section-heading{
+        font-size: 200% !important;
+    }
+    .img-circle{
+        width: 12% !important;
+    }
+    .text-muted{
+        font-size: 90% !important;
+    }
+    .portfolio-item{
+        padding: 2% !important;
+    }
+}
+
+.logout {
+    cursor: pointer;
+}

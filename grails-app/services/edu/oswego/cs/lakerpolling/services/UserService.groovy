@@ -99,7 +99,7 @@ class UserService {
                 user = new User(firstName: first, lastName: last, imageUrl: imageUrl, email: email)
                 user.setRole(new Role(type: RoleType.STUDENT))
             } else {
-                //we've found the pre-loaded user, set their values to the ones on the g profile
+                //we've found the pre-loaded user, set their values to the ones active the g profile
                 user.firstName = first
                 user.lastName = last
                 user.imageUrl = imageUrl

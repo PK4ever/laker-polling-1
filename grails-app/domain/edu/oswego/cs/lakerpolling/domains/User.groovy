@@ -12,6 +12,8 @@ class User {
 
     static hasOne = [authToken: AuthToken, role: Role]
 
+    static hasMany = [attendance: Attendee, answers: Answer]
+
     static mapping = {
         table "users"
         version false
