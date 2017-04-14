@@ -10,5 +10,7 @@ json {
     data {
         accessToken token.accessToken
         id question.id
+        text question.question
+        choices question.choices
     }
 }
