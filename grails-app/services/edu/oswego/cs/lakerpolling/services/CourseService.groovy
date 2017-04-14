@@ -424,6 +424,24 @@ class CourseService {
     }
 
     /**
+     * Attempts to find the Course associated with the given ID String
+     * @param courseIdString - A String representing a Course ID
+     * @return A QueryResult containing the associated Course
+     */
+    QueryResult<Course> findCourse(String courseIdString) {
+        QueryResult<Course> result = new QueryResult<>()
+        if (!courseIdString.isLong()) {
+            return QueryResult.fromHttpStatus(HttpStatus.BAD_REQUEST)
+        }
+        Course course = Course.findById(courseIdString.toLong())
+        if (!course) {
+            return QueryResult.fromHttpStatus(HttpStatus.BAD_REQUEST)
+        }
+        result.data = course
+        result
+    }
+
+    /**
      * makes a Date for the current date
      * @return - returns a usable date
      */

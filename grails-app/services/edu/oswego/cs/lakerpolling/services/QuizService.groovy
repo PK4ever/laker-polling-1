@@ -15,6 +15,54 @@ class QuizService {
     CourseService courseService
 
     /**
+     * Gets a list of all of the quizzes for the course
+     * @param token - The access token of the requesting user
+     * @param courseIdString - the id of the course
+     * @return a QueryResult containing a list of all of the quizzes in the given course
+     */
+    QueryResult<List<Quiz>> getAllQuizzes(AuthToken token, String courseIdString) {
+        QueryResult<List<Quiz>> result = new QueryResult<>()
+        def courseResult = courseService.findCourse(courseIdString)
+        if (!courseResult.success) {
+            return QueryResult.copyError(courseResult)
+        }
+
+        Course course = courseResult.data
+        def accessCheck = verifyStudentAccess(token, course)
+        if (!accessCheck.success) {
+            return QueryResult.copyError(accessCheck)
+        }
+
+        result.data = Quiz.where {
+            course == course
+        }.list()
+        result
+    }
+
+    /**
+     * Gets the quiz with the given ID
+     * @param token - The access token of the requesting user
+     * @param quizIdString - the id of the quiz
+     * @return a QueryResult containing the Quiz
+     */
+    QueryResult<Quiz> getQuiz(AuthToken token, String quizIdString) {
+        QueryResult<Quiz> result = new QueryResult<>()
+        def quizResult = findQuiz(quizIdString)
+        if (!quizResult.success) {
+            return QueryResult.copyError(quizResult)
+        }
+
+        Quiz quiz = quizResult.data
+        def accessCheck = verifyStudentAccess(token, quiz.course)
+        if (!accessCheck.success) {
+            return QueryResult.copyError(accessCheck)
+        }
+
+        result.data = quiz
+        result
+    }
+
+    /**
      * Gets a list of all of the question IDs for a quiz.
      * @param token - The access token of the requesting user
      * @param quizIdString - the id of the quiz
@@ -28,7 +76,7 @@ class QuizService {
         }
 
         def quiz = quizResult.data
-        def accessCheck = verifyStudentAccess(token, quiz)
+        def accessCheck = verifyStudentAccess(token, quiz.course)
         if (!accessCheck.success) {
             return QueryResult.copyError(accessCheck)
         }
@@ -52,7 +100,7 @@ class QuizService {
         }
 
         def quiz = quizResult.data
-        def accessCheck = verifyStudentAccess(token, quiz)
+        def accessCheck = verifyStudentAccess(token, quiz.course)
         if (!accessCheck.success) {
             return QueryResult.copyError(accessCheck)
         }
@@ -82,7 +130,7 @@ class QuizService {
         }
 
         def quiz = quizResult.data
-        def accessCheck = verifyInstructorAccess(token, quiz)
+        def accessCheck = verifyInstructorAccess(token, quiz.course)
         if (!accessCheck.success) {
             return QueryResult.copyError(accessCheck)
         }
@@ -107,7 +155,7 @@ class QuizService {
         }
 
         def quiz = quizResult.data
-        def accessCheck = verifyInstructorAccess(token, quiz)
+        def accessCheck = verifyInstructorAccess(token, quiz.course)
         if (!accessCheck.success) {
             return QueryResult.copyError(accessCheck)
         }
@@ -124,21 +172,19 @@ class QuizService {
         new QueryResult(success: true)
     }
 
-
-        /**
-     * Returns a successfull Query Result if the user represented in token has student access to the given quiz
+    /**
+     * Returns a successfull Query Result if the user represented in token has student access to the given coursse
      * @param token - the Authtoken
-     * @param quiz - the quiz
+     * @param course- the course
      * @return a QueryResult representing the result of the check
      */
-    private QueryResult verifyStudentAccess(AuthToken token, Quiz quiz) {
+    private QueryResult verifyStudentAccess(AuthToken token, Course course) {
         def userResult = findUser(token)
         if (!userResult.success) {
             return QueryResult.fromHttpStatus(HttpStatus.BAD_REQUEST)
         }
 
         def user = userResult.data
-        def course = quiz.course
         if (!courseService.hasStudentAccess(user, course)) {
             return QueryResult.fromHttpStatus(HttpStatus.UNAUTHORIZED)
         }
@@ -146,19 +192,18 @@ class QuizService {
     }
 
     /**
-     * Returns a successful Query Result if the user represented in token has instructor access to the given quiz
+     * Returns a successful Query Result if the user represented in token has instructor access to the given course
      * @param token - the Authtoken
-     * @param quiz - the quiz
+     * @param course - the course
      * @return a QueryResult representing the result of the check
      */
-    private QueryResult verifyInstructorAccess(AuthToken token, Quiz quiz) {
+    private QueryResult verifyInstructorAccess(AuthToken token, Course course) {
         def userResult = findUser(token)
         if (!userResult.success) {
             return QueryResult.fromHttpStatus(HttpStatus.BAD_REQUEST)
         }
 
         def user = userResult.data
-        def course = quiz.course
         if (!courseService.hasInstructorAccess(user, course)) {
             return QueryResult.fromHttpStatus(HttpStatus.UNAUTHORIZED)
         }

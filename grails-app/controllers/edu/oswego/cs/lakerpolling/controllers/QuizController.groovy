@@ -13,6 +13,41 @@ class QuizController {
      * @param access_token - The access token of the requesting user
      * @param quiz_id - the id of the quiz
      */
+    def getQuizzes(String access_token, String course_id, String quiz_id) {
+        def require = preconditionService.notNull(params, ["access_token"])
+        def token = preconditionService.accessToken(access_token).data
+
+        if (require.success) {
+            if (quiz_id) {
+                def result = quizService.getQuiz(token, quiz_id)
+                if (result.success) {
+                    def quiz = result.data
+                    render(view: 'getQuiz', model: [token: token, courseID: quiz.course.id, quiz: quiz])
+                } else {
+                    render(view: '../failure', model: [errorCode: result.errorCode, message: result.message])
+                }
+            }
+            else if (course_id){
+                def result = quizService.getAllQuizzes(token, course_id)
+                if (result.success) {
+                    render(view: 'getQuizzes', model: [token: token, courseID: course_id.toLong(), quizzes: result.data])
+                } else {
+                    render(view: '../failure', model: [errorCode: result.errorCode, message: result.message])
+                }
+            }
+            else {
+                render(view: '../failure', model: [errorCode: 400, message: "Missing quiz_id or question_id parameter"])
+            }
+        } else {
+            render(view: '../failure', model: [errorCode: require.errorCode, message: require.message])
+        }
+    }
+
+    /**
+     * Endpoint to get a list of all of the question IDs for a quiz.
+     * @param access_token - The access token of the requesting user
+     * @param quiz_id - the id of the quiz
+     */
     def getQuizQuestions(String access_token, String quiz_id, String question_id) {
         def require = preconditionService.notNull(params, ["access_token", "quiz_id"])
         def token = preconditionService.accessToken(access_token).data
