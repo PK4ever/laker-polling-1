@@ -1,6 +1,7 @@
 package edu.oswego.cs.lakerpolling.services
 
 import edu.oswego.cs.lakerpolling.domains.AuthToken
+import edu.oswego.cs.lakerpolling.domains.Choice
 import edu.oswego.cs.lakerpolling.domains.Course
 import edu.oswego.cs.lakerpolling.domains.Question
 import edu.oswego.cs.lakerpolling.domains.Quiz
@@ -67,9 +68,12 @@ class QuizService {
             return QueryResult.fromHttpStatus(HttpStatus.UNAUTHORIZED)
         }
 
-        //TODO add choices to question
         Question question = new Question(course: course, question: text, answers: answers)
         quiz.addToQuestions(question)
+
+        for (int i = 0; i < choices.size(); i++) {
+            new Choice(question: question, number: i, text: choices.get(i)).save(flush:true, failOnError:true)
+        }
         result.data = question
         result
     }
