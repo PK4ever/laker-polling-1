@@ -283,6 +283,16 @@ class CourseService {
     }
 
     /**
+     * Checks if the user has student access for the given course
+     * @param user - the user to check for student access
+     * @param course - the course to check
+     * @return True if the user has student access to the course
+     */
+    public boolean hasStudentAccess(User user, Course course) {
+        hasInstructorAccess(user, course) || isStudentOf(user, course)
+    }
+
+    /**
      * Checks if the user is an instructor of the course
      * @param user - the user to check
      * @param course - the course to check
@@ -290,6 +300,16 @@ class CourseService {
      */
     boolean isInstructorOf(User user, Course course) {
         user != null && course != null && course.instructorId == user.id
+    }
+
+    /**
+     * Checks if the user is a student of the course
+     * @param user - the user to check
+     * @param course - the course to check
+     * @return true if the user is a student of the course
+     */
+    boolean isStudentOf(User user, Course course) {
+        course.students != null && course.students.find{x -> x.id == user.id}
     }
 
     /**

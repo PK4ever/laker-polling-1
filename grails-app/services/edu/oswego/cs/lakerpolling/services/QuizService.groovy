@@ -14,6 +14,32 @@ class QuizService {
     CourseService courseService
 
     /**
+     * Endpoint to get a list of all of the question IDs for a quiz.
+     * @param access_token - The access token of the requesting user
+     * @param quiz_id - the id of the quiz
+     * @return a list containing the IDs of all of the questions in the given quiz
+     */
+    QueryResult<List<Long>> getQuizQuestions(AuthToken token, String quizIdString) {
+        QueryResult<List<Long>> result = new QueryResult<>()
+        User requestingUser = token?.user
+        if (!requestingUser || !quizIdString.isLong()) {
+            return QueryResult.fromHttpStatus(HttpStatus.BAD_REQUEST)
+        }
+
+        Quiz quiz = Quiz.findById(quizIdString.toLong())
+        if (!quiz) {
+            return QueryResult.fromHttpStatus(HttpStatus.BAD_REQUEST)
+        }
+
+        Course course = quiz.course
+        if(!courseService.hasStudentAccess(requestingUser, course)) {
+            return QueryResult.fromHttpStatus(HttpStatus.UNAUTHORIZED)
+        }
+        result.data = quiz.questions.collect { question -> question.id }
+        result
+    }
+
+    /**
      * Creates a question and adds it to the quiz with the given ID
      * @param token - the token to use to retrieve the requesting user.
      * @param quizIdString - a String representing the id of the quiz

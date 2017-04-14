@@ -10,6 +10,27 @@ class QuizController {
     QuizService quizService
 
     /**
+     * Endpoint to get a list of all of the question IDs for a quiz.
+     * @param access_token - The access token of the requesting user
+     * @param quiz_id - the id of the quiz
+     */
+    def getQuizQuestions(String access_token, String quiz_id) {
+        def require = preconditionService.notNull(params, ["access_token", "quiz_id"])
+        def token = preconditionService.accessToken(access_token).data
+
+        if (require.success) {
+            def result = quizService.getQuizQuestions(token, quiz_id)
+            if (result.success) {
+                render(view: 'questionIdList', model: [token: token, quizId: quiz_id.toLong(), questionIds: result.data])
+            } else {
+                render(view: '../failure', model: [errorCode: result.errorCode, message: result.message])
+            }
+        } else {
+            render(view: '../failure', model: [errorCode: require.errorCode, message: require.message])
+        }
+    }
+
+    /**
      * Endpoint to add a question to an existing quiz.
      * @param access_token - The access token of the requesting user
      * @param quiz_id - the id of the quiz
