@@ -110,10 +110,18 @@ class CourseService {
             if (course != null) {
                 if (hasInstructorAccess(requestingUser, course)) {
                     List<User> users = new ArrayList<>()
+
                     for (email in emails) {
-                        User user = userService.getOrMakeByEmail(email)
-                        course.addToStudents(user)
-                        users.add(user)
+                        if(email.indexOf("oswego.edu") == -1) {
+                            QueryResult.fromHttpStatus(HttpStatus.BAD_REQUEST, result)
+                        }
+                    }
+
+                    for (email in emails) {
+                            User user = userService.getOrMakeByEmail(email)
+                            course.addToStudents(user)
+                            users.add(user)
+
                     }
                     result.data = users
                 } else {
