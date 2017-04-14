@@ -49,5 +49,10 @@ class UrlMappings {
             "/"(controller: 'user', action: 'postUser', method: 'post')
         }
 
+        group "/api/quiz", {
+
+            "/question"(controller: 'quiz', action: 'postQuestionToQuiz', method: 'post')
+        }
+
     }
 }

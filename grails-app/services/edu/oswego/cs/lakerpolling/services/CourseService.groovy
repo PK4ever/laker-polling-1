@@ -275,7 +275,7 @@ class CourseService {
      * @param course - the course to check
      * @return True if the user has instructor accss to the course
      */
-    private boolean hasInstructorAccess(User user, Course course) {
+    public boolean hasInstructorAccess(User user, Course course) {
         if (user.role.type == RoleType.ADMIN) {
             return true
         }
