@@ -39,7 +39,7 @@ class BootStrap {
         michael.save(flush: true, failOnError: true)
 
         User max = new User(firstName: "Max", lastName: "Sokolovsky", email: "msokolov@oswego.edu", imageUrl: "http://media.salon.com/2015/01/chrissy_teigen.jpg")
-        max.setRole(new Role(type: RoleType.STUDENT))
+        max.setRole(new Role(type: RoleType.INSTRUCTOR))
         max.save(flush: true, failOnError: true)
 
         User mike = new User(firstName: "Mike", lastName: "Mekker", email: "mmekker@oswego.edu", imageUrl: "http://media.salon.com/2015/01/chrissy_teigen.jpg")
