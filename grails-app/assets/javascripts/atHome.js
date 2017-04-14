@@ -41,7 +41,7 @@ $('#quiz-form').on('click', function(event) {
                     url: '/api/course/student?access_token=' + token + '&course_id=' + courseId + '&name=' + name + '&start_time=' + start + '&end_time=' + end,
                     type: 'POST',
                     success: function(data) {
-                        window.location.href = "/createQuiz?courseId=" + courseId + "&quizId=" + data.data.quiz.id;
+                        window.location.href = "/course/createQuiz?courseId=" + courseId + "&quizId=1";
                     },
                     error: function(jqXHR, textStatus, errorMessage) {
                         console.log(errorMessage)
