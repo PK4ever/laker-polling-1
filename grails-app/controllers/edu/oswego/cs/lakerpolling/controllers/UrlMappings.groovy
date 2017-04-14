@@ -51,6 +51,7 @@ class UrlMappings {
 
         group "/api/quiz", {
             "/"(controller: 'quiz', action: 'getQuizzes', method: 'get')
+            "/"(controller: 'quiz', action: 'deleteQuiz', method: 'delete')
 
             "/question"(controller: 'quiz', action: 'getQuizQuestions', method: 'get')
             "/question"(controller: 'quiz', action: 'postQuestionToQuiz', method: 'post')

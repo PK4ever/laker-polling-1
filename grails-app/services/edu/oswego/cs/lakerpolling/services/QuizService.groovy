@@ -63,6 +63,28 @@ class QuizService {
     }
 
     /**
+     * Deletes the quiz with the given ID
+     * @param token - The access token of the requesting user
+     * @param quizIdString - the id of the quiz
+     * @return a QueryResult containing the results of the operation
+     */
+    QueryResult deleteQuiz(AuthToken token, String quizIdString) {
+        def quizResult = findQuiz(quizIdString)
+        if (!quizResult.success) {
+            return QueryResult.copyError(quizResult)
+        }
+
+        Quiz quiz = quizResult.data
+        def accessCheck = verifyInstructorAccess(token, quiz.course)
+        if (!accessCheck.success) {
+            return QueryResult.copyError(accessCheck)
+        }
+
+        quiz.delete(flush: true, failOnError: true)
+        new QueryResult(success: true)
+    }
+
+    /**
      * Gets a list of all of the question IDs for a quiz.
      * @param token - The access token of the requesting user
      * @param quizIdString - the id of the quiz

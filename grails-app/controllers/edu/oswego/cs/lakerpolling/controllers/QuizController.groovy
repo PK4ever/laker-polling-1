@@ -44,6 +44,27 @@ class QuizController {
     }
 
     /**
+     * Endpoint to delete a quiz.
+     * @param access_token - The access token of the requesting user
+     * @param quiz_id - the id of the quiz
+     */
+    def deleteQuiz(String access_token, String quiz_id) {
+        def require = preconditionService.notNull(params, ["access_token", "quiz_id"])
+        def token = preconditionService.accessToken(access_token).data
+
+        if (require.success) {
+            def result = quizService.deleteQuiz(token, quiz_id)
+            if (result.success) {
+                render(view: 'deleteResult', model: [token: token])
+            } else {
+                render(view: '../failure', model: [errorCode: result.errorCode, message: result.message])
+            }
+        } else {
+            render(view: '../failure', model: [errorCode: require.errorCode, message: require.message])
+        }
+    }
+
+    /**
      * Endpoint to get a list of all of the question IDs for a quiz.
      * @param access_token - The access token of the requesting user
      * @param quiz_id - the id of the quiz
@@ -112,7 +133,7 @@ class QuizController {
         if(require.success) {
             def result = quizService.deleteQuestion(token, quiz_id, question_id)
             if(result.success) {
-                render(view: 'deleteQuestion', model: [token: token])
+                render(view: 'deleteResult', model: [token: token])
             } else render(view: '../failure', model: [errorCode: result.errorCode, message: result.message])
         } else render(view: '../failure', model: [errorCode: require.errorCode, message: require.message])
     }
