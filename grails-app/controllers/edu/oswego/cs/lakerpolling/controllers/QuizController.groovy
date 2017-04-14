@@ -2,7 +2,6 @@ package edu.oswego.cs.lakerpolling.controllers
 
 import edu.oswego.cs.lakerpolling.services.PreconditionService
 import edu.oswego.cs.lakerpolling.services.QuizService
-import edu.oswego.cs.lakerpolling.util.QueryResult
 
 class QuizController {
 
@@ -14,16 +13,26 @@ class QuizController {
      * @param access_token - The access token of the requesting user
      * @param quiz_id - the id of the quiz
      */
-    def getQuizQuestions(String access_token, String quiz_id) {
+    def getQuizQuestions(String access_token, String quiz_id, String question_id) {
         def require = preconditionService.notNull(params, ["access_token", "quiz_id"])
         def token = preconditionService.accessToken(access_token).data
 
         if (require.success) {
-            def result = quizService.getQuizQuestions(token, quiz_id)
-            if (result.success) {
-                render(view: 'questionIdList', model: [token: token, quizId: quiz_id.toLong(), questionIds: result.data])
-            } else {
-                render(view: '../failure', model: [errorCode: result.errorCode, message: result.message])
+            if (question_id) {
+                def result = quizService.getQuestion(token, quiz_id, question_id)
+                if (result.success) {
+                    render(view: 'quizQuestion', model: [token: token, question: result.data])
+                } else {
+                    render(view: '../failure', model: [errorCode: result.errorCode, message: result.message])
+                }
+            }
+            else {
+                def result = quizService.getAllQuestionIds(token, quiz_id)
+                if (result.success) {
+                    render(view: 'questionIdList', model: [token: token, quizId: quiz_id.toLong(), questionIds: result.data])
+                } else {
+                    render(view: '../failure', model: [errorCode: result.errorCode, message: result.message])
+                }
             }
         } else {
             render(view: '../failure', model: [errorCode: require.errorCode, message: require.message])

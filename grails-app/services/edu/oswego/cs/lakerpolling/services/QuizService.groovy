@@ -16,12 +16,55 @@ class QuizService {
 
     /**
      * Endpoint to get a list of all of the question IDs for a quiz.
-     * @param access_token - The access token of the requesting user
-     * @param quiz_id - the id of the quiz
-     * @return a list containing the IDs of all of the questions in the given quiz
+     * @param token - The access token of the requesting user
+     * @param quizIdString - the id of the quiz
+     * @return a QueryResult containing the IDs of all of the questions in the given quiz
      */
-    QueryResult<List<Long>> getQuizQuestions(AuthToken token, String quizIdString) {
+    QueryResult<List<Long>> getAllQuestionIds(AuthToken token, String quizIdString) {
         QueryResult<List<Long>> result = new QueryResult<>()
+        def questionsResult = getAllQuestions(token, quizIdString)
+        if (!questionsResult.success) {
+            return QueryResult.copyError(questionsResult)
+        }
+        result.data = questionsResult.data.collect { question -> question.id }
+        result
+    }
+
+    /**
+     * Endpoint to get the question with the given id of the specified quiz
+     * @param access_token - The access token of the requesting user
+     * @param quizIdString - the id of the quiz
+     * @param questionIdString - the id of the question
+     * @return a QueryResult containing the given question in the specified quiz
+     */
+    QueryResult<Question> getQuestion(AuthToken token, String quizIdString, String questionIdString) {
+        QueryResult<Question> result = new QueryResult<>()
+        if (!questionIdString.isLong()) {
+            return QueryResult.fromHttpStatus(HttpStatus.BAD_REQUEST)
+        }
+        def questionId = questionIdString.toLong()
+
+        def questionsResult = getAllQuestions(token, quizIdString)
+        if (!questionsResult.success) {
+            return QueryResult.copyError(questionsResult)
+        }
+
+        def question = questionsResult.data.find { question -> question.id == questionId }
+        if (!question) {
+            return QueryResult.fromHttpStatus(HttpStatus.BAD_REQUEST)
+        }
+        result.data = question
+        result
+    }
+
+    /**
+     * Gets all questions for the given quiz
+     * @param access_token - The access token of the requesting user
+     * @param quizIdString - the id of the quiz
+     * @return a QueryResult containing a list of all of the questions for the given quiz
+     */
+    private QueryResult<List<Question>> getAllQuestions(AuthToken token, String quizIdString) {
+        QueryResult<List<Question>> result = new QueryResult<>()
         User requestingUser = token?.user
         if (!requestingUser || !quizIdString.isLong()) {
             return QueryResult.fromHttpStatus(HttpStatus.BAD_REQUEST)
@@ -36,7 +79,7 @@ class QuizService {
         if(!courseService.hasStudentAccess(requestingUser, course)) {
             return QueryResult.fromHttpStatus(HttpStatus.UNAUTHORIZED)
         }
-        result.data = quiz.questions.collect { question -> question.id }
+        result.data = quiz.questions
         result
     }
 
