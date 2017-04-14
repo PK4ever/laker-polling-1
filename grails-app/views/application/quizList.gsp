@@ -6,6 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Instructor</title>
     <asset:stylesheet href="bootstrap.min.css"/>
+    <asset:stylesheet href="bootstrap.css"/>
+    <asset:stylesheet href="agency.min.css"/>
+    <asset:stylesheet href="agency.css"/>
+    <asset:stylesheet href="style.css"/>
     <!-- jQuery (necessary for Bootstrap"s JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <!-- Latest compiled and minified JavaScript -->
@@ -99,10 +103,6 @@
 <asset:javascript src="auth/logout.js"/>
 <asset:javascript src="instructor.js"/>
 <asset:javascript src="atHome.js"/>
-<asset:stylesheet href="bootstrap.css"/>
-<asset:stylesheet href="agency.min.css"/>
-<asset:stylesheet href="agency.css"/>
-<asset:stylesheet href="style.css"/>
 
 <script>
     window.onload=prepareClassTitle(${session.courseId});

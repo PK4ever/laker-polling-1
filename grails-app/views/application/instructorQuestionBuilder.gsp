@@ -3,6 +3,8 @@
 <head>
     <asset:stylesheet href="bootstrap.min.css"/>
     <asset:stylesheet href="style.css"/>
+    <asset:stylesheet href="agency.min.css"/>
+    <asset:stylesheet href="agency.css"/>
 
 <asset:javascript src="question.js"/>
     <meta charset="UTF-8">
@@ -88,8 +90,6 @@
 <asset:javascript src="question.js"/>
 <asset:javascript src="auth/config.js"/>
 <asset:javascript src="auth/logout.js"/>
-<asset:stylesheet href="agency.min.css"/>
-<asset:stylesheet href="agency.css"/>
 <script>
     window.onload=prepareClassTitle(${session.courseId});
 </script>

@@ -3,7 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
+    
+    <asset:stylesheet href="bootstrap.css"/>
+    <asset:stylesheet href="agency.min.css"/>
+    <asset:stylesheet href="agency.css"/>
+    <asset:stylesheet href="style.css"/>
     <title>Student</title>
 </head>
 
@@ -39,17 +43,6 @@
     </div>
     <!-- /.container-fluid -->
 </nav>
-%{--<div class="navbar navbar-default" role="navigation">--}%
-%{--<div class="navbar-header">--}%
-%{--<asset:image class="img-responsive navbar-brand" src="logo.png"/>--}%
-%{--<a class="navbar-brand">Student Dashboard</a>--}%
-%{--</div>--}%
-%{--<div class="navbar-collapse collapse">--}%
-%{--<ul class="nav navbar-nav">--}%
-%{--<button onclick="logout()" class="btn btn-default navbar-right navbar-btn">Logout</button>--}%
-%{--</ul>--}%
-%{--</div>--}%
-%{--</div>--}%
 
 <section id="portfolio">
     <div class="container">
@@ -75,29 +68,6 @@
     </div>
 </section>
 
-%{--<div class="container">--}%
-    %{--<div class="row">--}%
-        %{--<div class="col-sm-4"></div>--}%
-
-        %{--<div class="col-sm-4">--}%
-            %{--<div id="courses" class="table-responsive">--}%
-                %{--<table id="courseTable" class="table">--}%
-                    %{--<thead>--}%
-                    %{--<tr>--}%
-                        %{--<th class="col-md-3" data-field="name" data-formatter="identifierFormatter">Course Name</th>--}%
-                        %{--<th class="col-md-1" data-field="crn">CRN</th>--}%
-                        %{--<th class="col-md-1" data-field="students">Number of Students</th>--}%
-                    %{--</tr>--}%
-                    %{--</thead>--}%
-                %{--</table>--}%
-            %{--</div>--}%
-        %{--</div>--}%
-
-        %{--<div class="col-sm-4"></div>--}%
-    %{--</div>--}%
-
-</div>
-
 
 
 <asset:javascript src="jquery-3.2.0.min.js"/>
@@ -112,11 +82,7 @@
 <asset:javascript src="auth/config.js"/>
 <asset:javascript src="auth/logout.js"/>
 <asset:javascript src="bootstrap.min.js"/>
-<asset:stylesheet href="bootstrap.css"/>
 <asset:javascript src="student.js"/>
-<asset:stylesheet href="agency.min.css"/>
-<asset:stylesheet href="agency.css"/>
-<asset:stylesheet href="style.css"/>
 
 
 </body>
