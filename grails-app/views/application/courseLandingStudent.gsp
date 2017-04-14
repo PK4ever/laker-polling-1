@@ -41,6 +41,9 @@
 <div class="form-group" style="text-align: center;">
     <a href="course/answerquestion?courseId=${session.courseId}" class="btn btn-success" role="button">Answer Question</a>
 </div>
+<div class="form-group" style="text-align: center;">
+    <a href="course/quizList?courseId=${session.courseId}" class="btn btn-success" role="button">View At-Home Polls</a>
+</div>
 
 <asset:javascript src="jquery-3.2.0.min.js"/>
 <script src="https://apis.google.com/js/platform.js"></script>
