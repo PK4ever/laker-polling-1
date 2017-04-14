@@ -62,4 +62,23 @@ class QuizController {
             render(view: '../failure', model: [errorCode: require.errorCode, message: require.message])
         }
     }
+
+    /**
+     * Removes the given question.
+     * @param access_token - the access_token of the user
+     * @param quiz_id - the id of the quiz
+     * @param question_id - the id of the question to remove
+     * @return - returns a json view
+     */
+    def deleteQuestion(String access_token, String quiz_id, String question_id) {
+        def require = preconditionService.notNull(params, ["access_token", "question_id"])
+        def token = preconditionService.accessToken(access_token).data
+
+        if(require.success) {
+            def result = quizService.deleteQuestion(token, quiz_id, question_id)
+            if(result.success) {
+                render(view: 'deleteQuestion', model: [token: token])
+            } else render(view: '../failure', model: [errorCode: result.errorCode, message: result.message])
+        } else render(view: '../failure', model: [errorCode: require.errorCode, message: require.message])
+    }
 }

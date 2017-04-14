@@ -94,6 +94,38 @@ class QuizService {
     }
 
     /**
+     * Removes a question from a quiz
+     * @param token - the token of the requesting user
+     * @param quizIdString - a String representing the ID of the quiz
+     * @param questionIdString - A String representing the ID of the question
+     * @return the results of the operation
+     */
+    QueryResult deleteQuestion(AuthToken token, String quizIdString, String questionIdString) {
+        def quizResult = findQuiz(quizIdString)
+        if (!quizResult.success) {
+            return QueryResult.copyError(quizResult)
+        }
+
+        def quiz = quizResult.data
+        def accessCheck = verifyInstructorAccess(token, quiz)
+        if (!accessCheck.success) {
+            return QueryResult.copyError(accessCheck)
+        }
+
+        def questionResult = findQuestion(quiz, questionIdString)
+        if (!questionResult.success) {
+            return QueryResult.copyError(questionResult)
+        }
+
+        def question = questionResult.data
+        quiz.removeFromQuestions(question)
+        question.delete(flush:true, failOnError:true)
+
+        new QueryResult(success: true)
+    }
+
+
+        /**
      * Returns a successfull Query Result if the user represented in token has student access to the given quiz
      * @param token - the Authtoken
      * @param quiz - the quiz
@@ -139,7 +171,7 @@ class QuizService {
      * @return A QueryResult containing the associated user
      */
     private QueryResult<User> findUser(AuthToken token) {
-        QueryResult<Question> result = new QueryResult<>()
+        QueryResult<User> result = new QueryResult<>()
         User user = token?.user
         if (!user) {
             return QueryResult.fromHttpStatus(HttpStatus.BAD_REQUEST)

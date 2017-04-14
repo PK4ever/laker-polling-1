@@ -53,6 +53,7 @@ class UrlMappings {
 
             "/question"(controller: 'quiz', action: 'getQuizQuestions', method: 'get')
             "/question"(controller: 'quiz', action: 'postQuestionToQuiz', method: 'post')
+            "/question"(controller: 'quiz', action: 'deleteQuestion', method: 'delete')
         }
 
     }
