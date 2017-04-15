@@ -15,35 +15,43 @@ class QuizService {
     CourseService courseService
 
     /**
-     * Endpoint to create a quiz
+     * Creates a quiz
      * @param token - the access token of the requesting user
-     * @param course_id - the course that this quiz is related to
-     * @param n - (optional) the name of the quiz
-     * @param sd - the starting date of the quiz
-     * @param ed - the ending date of the quiz
-     * @return a quiz object
+     * @param courseIdString - a String representation of the course ID
+     * @param name - (optional) the name of the quiz
+     * @param startTimestamp - a String representation of a UNIX timestamp for the starting time of the quiz
+     * @param endTimestamp - a String representation of a UNIX timestamp for the ending time of the quiz
+     * @return a Query Result containing the created Quiz
      */
-    def createQuiz(AuthToken token, int course_id, String name, Date start_time, Date end_time) {
-        def user = token.user
-        if(user) {
-            if (user.role.type == RoleType.INSTRUCTOR) {
-                Course course = Course.findById(course_id.toLong())
-                if (course) {
-                    Quiz newQuiz
-                    if(name != null) {
-                        newQuiz = new Quiz(course: course, name: name, startDate: start_time, endDate: end_time)
-                    } else {
-                        newQuiz = new Quiz(course: course, startDate: start_time, endDate: end_time)
-                    }
-                    newQuiz.questions = new ArrayList<>()
-                    newQuiz.save(flush: true, failOnError: true)
-                    newQuiz
+    QueryResult<Quiz> createQuiz(AuthToken token, String courseIdString, String name, String startTimestamp, String endTimestamp) {
+        QueryResult<Quiz> result = new QueryResult<>()
 
-                }else null
-            }else null
-        }else null
+        Date startDate = parseTimestamp(startTimestamp)
+        Date endDate = parseTimestamp(endTimestamp)
+        def today = new Date().clearTime()
+        if (!startDate || !endDate || endDate < startDate || endDate < today) {
+            result = QueryResult.fromHttpStatus(HttpStatus.BAD_REQUEST)
+            result.message = "Invalid Start or End Date"
+            return result
+        }
 
+        def courseResult = courseService.findCourse(courseIdString)
+        if (!courseResult.success) {
+            return QueryResult.copyError(courseResult)
+        }
+
+        def course = courseResult.data
+        def accessCheck = verifyInstructorAccess(token, course)
+        if (!accessCheck.success) {
+            return QueryResult.copyError(accessCheck)
+        }
+
+        Quiz quiz = new Quiz(course: course, name: name, startDate: startDate, endDate: endDate )
+        quiz.save(flush: true, failOnError: true)
+        result.data = quiz
+        result
     }
+
     /**
      * Gets a list of all of the quizzes for the course
      * @param token - The access token of the requesting user
@@ -317,6 +325,13 @@ class QuizService {
 
         result.data = question
         result
+    }
+
+    private Date parseTimestamp(String unixTime) {
+        if (unixTime.isLong()) {
+            return new Date(unixTime.toLong() * 1000)
+        }
+        return null
     }
 
     private List<Boolean> toBooleanList(String commaSeparatedStr) {

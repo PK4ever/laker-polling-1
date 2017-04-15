@@ -9,27 +9,27 @@ class QuizController {
     QuizService quizService
 
     /**
-     *
+     * Endpoint to create a quiz for a given course
      * @param access_token - the access token of the user
      * @param course_id - the id of the course that this particular quiz with relate to
      * @param name -(optional) the name of the quiz
-     * @param start_time - The starting date students will be able to access this quiz
-     * @param endTime - The ending date that the students will be able to access this quiz.
+     * @param start_timestamp - The date this quiz will open in UNIX time
+     * @param end_timestamp - The date this quiz will close in UNIX time
      * @return
      */
-    def postQuiz(String access_token, String course_id, String name, String start_time, String end_time) {
-        def result = preconditionService.notNull(params, ["access_token", "course_id", "start_time", "endTime"])
+    def postQuiz(String access_token, String course_id, String name, String start_timestamp, String end_timestamp) {
+        def require = preconditionService.notNull(params, ["access_token", "course_id", "start_timestamp", "end_timestamp"])
         def token = preconditionService.accessToken(access_token).data
 
-        if(result.success) {
-            def newQuiz = quizService.createQuiz(token, course_id, name, start_time, end_time)
-            if(newQuiz) {
-                render(view: 'create', model: [quiz: newQuiz, token: token])
+        if(require.success) {
+            def result = quizService.createQuiz(token, course_id, name, start_timestamp, end_timestamp)
+            if(result.success) {
+                render(view: 'getQuiz', model: [quiz: result.data, courseID: course_id.toLong(), token: token])
             } else {
-                render(view: '../failure', model: [errorCode: 400, message: "Could not create Quiz"])
+                render(view: '../failure', model: [errorCode: result.errorCode, message: result.message])
             }
         } else {
-            render(view: '../failure', model: [errorCode: result.errorCode, message: result.message])
+            render(view: '../failure', model: [errorCode: require.errorCode, message: require.message])
         }
 
     }
