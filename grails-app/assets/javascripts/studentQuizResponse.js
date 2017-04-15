@@ -83,14 +83,14 @@ $("#submitAnswer").click(function() {
     console.log(selected)
     // see if there's an active question
     $.ajax({
-        url: '/api/question/answer?access_token=' + token + '&question_id=' + question_id + '&answer=' + answer,
+        url: '/api/quiz/question/answer?access_token=' + token + '&question_id=' + question_id + '&answer=' + answer,
         type: 'PUT',
         success: function() {
             question_index++
             alert("Answer accepted")
         },
         error: function() {
-            alert('This question is not ready, please wait for instructor and try again.');
+            alert('Error. Please try again.');
         }
     });
 });
