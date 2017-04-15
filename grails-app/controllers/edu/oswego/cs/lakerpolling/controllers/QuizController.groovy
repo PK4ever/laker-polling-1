@@ -9,6 +9,32 @@ class QuizController {
     QuizService quizService
 
     /**
+     * Endpoint to create a quiz for a given course
+     * @param access_token - the access token of the user
+     * @param course_id - the id of the course that this particular quiz with relate to
+     * @param name -(optional) the name of the quiz
+     * @param start_timestamp - The date this quiz will open in UNIX time
+     * @param end_timestamp - The date this quiz will close in UNIX time
+     * @return
+     */
+    def postQuiz(String access_token, String course_id, String name, String start_timestamp, String end_timestamp) {
+        def require = preconditionService.notNull(params, ["access_token", "course_id", "start_timestamp", "end_timestamp"])
+        def token = preconditionService.accessToken(access_token).data
+
+        if(require.success) {
+            def result = quizService.createQuiz(token, course_id, name, start_timestamp, end_timestamp)
+            if(result.success) {
+                render(view: 'getQuiz', model: [quiz: result.data, courseID: course_id.toLong(), token: token])
+            } else {
+                render(view: '../failure', model: [errorCode: result.errorCode, message: result.message])
+            }
+        } else {
+            render(view: '../failure', model: [errorCode: require.errorCode, message: require.message])
+        }
+
+    }
+
+    /**
      * Endpoint to get a list of all of the question IDs for a quiz.
      * @param access_token - The access token of the requesting user
      * @param quiz_id - the id of the quiz

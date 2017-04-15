@@ -15,6 +15,44 @@ class QuizService {
     CourseService courseService
 
     /**
+     * Creates a quiz
+     * @param token - the access token of the requesting user
+     * @param courseIdString - a String representation of the course ID
+     * @param name - (optional) the name of the quiz
+     * @param startTimestamp - a String representation of a UNIX timestamp for the starting time of the quiz
+     * @param endTimestamp - a String representation of a UNIX timestamp for the ending time of the quiz
+     * @return a Query Result containing the created Quiz
+     */
+    QueryResult<Quiz> createQuiz(AuthToken token, String courseIdString, String name, String startTimestamp, String endTimestamp) {
+        QueryResult<Quiz> result = new QueryResult<>()
+
+        Date startDate = parseTimestamp(startTimestamp)
+        Date endDate = parseTimestamp(endTimestamp)
+        def today = new Date().clearTime()
+        if (!startDate || !endDate || endDate < startDate || endDate < today) {
+            result = QueryResult.fromHttpStatus(HttpStatus.BAD_REQUEST)
+            result.message = "Invalid Start or End Date"
+            return result
+        }
+
+        def courseResult = courseService.findCourse(courseIdString)
+        if (!courseResult.success) {
+            return QueryResult.copyError(courseResult)
+        }
+
+        def course = courseResult.data
+        def accessCheck = verifyInstructorAccess(token, course)
+        if (!accessCheck.success) {
+            return QueryResult.copyError(accessCheck)
+        }
+
+        Quiz quiz = new Quiz(course: course, name: name, startDate: startDate, endDate: endDate )
+        quiz.save(flush: true, failOnError: true)
+        result.data = quiz
+        result
+    }
+
+    /**
      * Gets a list of all of the quizzes for the course
      * @param token - The access token of the requesting user
      * @param courseIdString - the id of the course
@@ -287,6 +325,13 @@ class QuizService {
 
         result.data = question
         result
+    }
+
+    private Date parseTimestamp(String unixTime) {
+        if (unixTime.isLong()) {
+            return new Date(unixTime.toLong() * 1000)
+        }
+        return null
     }
 
     private List<Boolean> toBooleanList(String commaSeparatedStr) {
