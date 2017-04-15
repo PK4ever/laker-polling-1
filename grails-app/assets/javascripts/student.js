@@ -40,6 +40,22 @@ $(function() {
 
             });
 
+            //Check role
+            $.ajax({
+                url: '/api/user/role?access_token='+token,
+                type: 'GET',
+                success: function(data) {
+                    if(data.data.role.master.equals("INSTRUCTOR"))
+                        document.getElementById('roleButtonDiv').style.visibility="visible";
+                    else  
+                        document.getElementById('roleButtonDiv').style.visibility="hidden";
+                },
+                error: function(jqXHR, textStatus, errorMessage) {
+                    console.log(errorMessage)
+                }
+
+            });
+
         }
     });
     //GET USER INFO AND DISPLAY ON THE PAGE
@@ -73,6 +89,26 @@ $(function() {
     });
 });
 
+$('#roleButton').on('click', function(event) {
+    $.ajax({
+        url: '/user/auth',
+        type: 'GET',
+        success: function(data) {
+            var token = data.data.token;
+            $.ajax({
+                url: '/api/user/role?access_token='+token+'current=INSTRUCTOR',
+                type: 'PUT',
+                success: function(data) {
+                    window.location.href = "/dashboard";
+                },
+                error: function(jqXHR, textStatus, errorMessage) {
+                    console.log(errorMessage)
+                }
+
+            });
+        }
+    });
+});
 
 
 function courseHTML(courseName, crn, id) {

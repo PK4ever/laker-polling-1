@@ -494,6 +494,27 @@ var courseId
     })
 })();
 
+$('#roleButton').on('click', function(event) {
+    $.ajax({
+        url: '/user/auth',
+        type: 'GET',
+        success: function(data) {
+            var token = data.data.token;
+            $.ajax({
+                url: '/api/user/role?access_token='+token+'current=STUDENT',
+                type: 'PUT',
+                success: function(data) {
+                    window.location.href = "/dashboard";
+                },
+                error: function(jqXHR, textStatus, errorMessage) {
+                    console.log(errorMessage)
+                }
+
+            });
+        }
+    });
+});
+
 function prepareClassTitle(cId) {
     courseId = cId;
 }

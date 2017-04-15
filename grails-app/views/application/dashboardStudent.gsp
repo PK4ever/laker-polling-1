@@ -56,9 +56,11 @@
                 <div id="profilePic"></div>
                 <h3 class="section-subheading text-muted">Welcome to your dashboard</h3>
 
+                <div id="roleButtonDiv" style="visibility: hidden">
+                    <button type="submit" class="btn btn-success" id="roleButton">Change role to Instructor</button>
+                </div>
             </div>
         </div>
-
         <h3 class="text-muted">Your Courses:</h3>
         <div class="row" id="courses">
             %{--courses are displayed here--}%

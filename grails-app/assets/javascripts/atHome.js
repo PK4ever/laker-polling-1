@@ -33,22 +33,15 @@ $('#newQuizButton').on('click', function(event) {
             var startTime = $("#startTime").val();
             var endDate = $("#endDate").val();
             var endTime = $("#endTime").val();
-
-            /*console.log(name);
-            console.log(startDate);
-            console.log(startTime);
-            console.log(endDate);
-            console.log(endTime);*/
+            
             var startTimestamp = Date.parse(startDate + ' ' + startTime)
             var endTimestamp = Date.parse(endDate + ' ' + endTime)
-            /*console.log(startTimestamp)
-            console.log(endTimestamp)*/
 
-            var urlStr = '/api/quiz?access_token=' + token + '&course_id=' + courseId + '&name=' + name + '&start_timestamp=' + startTimestamp + '&end_timestamp=' + endTimestamp
-            if(!name || !startTimestamp || !endTimestamp) alert("Please fill all fields for quiz creation.");return;
-
+            //var urlStr = '/api/quiz?access_token=' + token + '&course_id=' + courseId + '&name=' + name + '&start_timestamp=' + startTimestamp + '&end_timestamp=' + endTimestamp
+            if(!name || !startTimestamp || !endTimestamp) {alert("Please fill all fields for quiz creation.");return;}
+            
             $.ajax({
-                url: urlStr,
+                url: '/api/quiz?access_token=' + token + '&course_id=' + courseId + '&name=' + name + '&start_timestamp=' + startTimestamp + '&end_timestamp=' + endTimestamp,
                 type: 'POST',
                 success: function(data) {
                     window.location.href = "/course/createQuiz?courseId=" + courseId + "&quizId=" + data.data.students.id;
