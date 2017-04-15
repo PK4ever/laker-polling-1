@@ -29,18 +29,26 @@ $('#newQuizButton').on('click', function(event) {
         success: function(data) {
             var token = data.data.token;
             var name = $("#quizName").val();
-            var start = $("#startDate").val();
-            var end = $("#endDate").val();
+            var startDate = $("#startDate").val();
+            var startTime = $("#startTime").val();
+            var endDate = $("#endDate").val();
+            var endTime = $("#endTime").val();
 
             console.log(name);
-            console.log(start);
-            console.log(end);
+            console.log(startDate);
+            console.log(startTime);
+            console.log(endDate);
+            console.log(endTime);
+            var startTimestamp = Date.parse(startDate + ' ' + startTime)
+            var endTimestamp = Date.parse(endDate + ' ' + endTime)
+            console.log(startTimestamp)
+            console.log(endTimestamp)
 
             $.ajax({
-                url: '/api/course/quiz?access_token=' + token + '&course_id=' + courseId + '&name=' + name + '&start_time=' + start + '&end_time=' + end,
+                url: '/api/quiz?access_token=' + token + '&course_id=' + courseId + '&name=' + name + '&start_timestamp=' + startTimestamp + '&end_timestamp=' + endTimestamp,
                 type: 'POST',
                 success: function(data) {
-                    window.location.href = "/course/createQuiz?courseId=" + courseId + "&quizId=" + data.data.quiz.id;
+                    window.location.href = "/course/createQuiz?courseId=" + courseId + "&quizId=" + data.data.students.id;
                 },
                 error: function(jqXHR, textStatus, errorMessage) {
                     console.log(errorMessage)
