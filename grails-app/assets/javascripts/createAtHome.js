@@ -1,7 +1,7 @@
 var token = '';
 var quiz_id;
 var courseId;
-
+var deleteQuestionButtonFormatter;
 
 //get the instructor's token on load
 $(function() {
@@ -78,6 +78,40 @@ console.log("REFRESH")
         }
     });
 }
+
+var preparedDeleteQuestion = false
+function prepareDeleteQuestionButton() {
+    if(preparedDeleteQuestion) return;
+    $('.js-deleteQuestionButton').click(function () {
+        const clickedSButton = $(this)
+        const qId = clickedSButton.data('question-id');
+        $('#deleteQuestionModal').find('#confirmDeleteQuestion').data("question-id", qId);
+    })
+    prepareDeleteQuestion = true;
+}
+
+deleteQuestionButtonFormatter = function(_, question, index) {
+    var deleteQuestionButton = '<button class="btn btn-danger js-deleteQuestionButton" type="button" data-toggle="modal" data-target="#deleteQuestionModal" data-question-id="' + question.id + '">'
+    deleteQuestionButton += 'Delete'
+    deleteQuestionButton += '</button>'
+    setTimeout(() => {
+        prepareDeleteQuestionButton()
+    }, 500)
+    return deleteQuestionButton
+}
+
+$('.js-deleteQuestion').click(function () {
+    $.ajax({
+        url: '/api/quiz/question?access_token=' + token + '&quiz_id=' + quiz_id + '&question_id=' + $(this).data("question-id"),
+        method: "DELETE",
+        success: function(){
+            window.location.reload()
+        },
+        error: function(err){
+            alert(JSON.stringify(err))
+        }
+    });
+});
 
 function setTableData(questions) {
     console.log("SET TABLE DATA")
