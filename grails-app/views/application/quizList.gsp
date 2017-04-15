@@ -61,7 +61,8 @@
                 <table id="quizTable" class="table">
                     <thead>
                     <tr>
-                        <th class="col-md-1" data-field="name">Quiz Name</th>
+                        <th class="col-md-1" data-field="id">ID</th>
+                        <th class="col-md-1" data-field="name" data-formatter="identifierFormatter">Quiz Name</th>
                         <th class="col-md-1" data-field="startTime">Start Time</th>
                         <th class="col-md-1" data-field="endTime">End Time</th>
                     </tr>
@@ -77,12 +78,22 @@
         <div class="col-sm-6">
         <form id="quiz-form" method="post">
             <!-- TODO: Make the date pickers allow for time selection -->
-            Start Time:
+
+            <div class="form-group">
+                <label class="control-label" for="startDate">Start Date</label>
+                <input class="form-control" id="startDate" name="startDate" placeholder="YYYY-MM-DD" type="text"/>
+            </div>
+            <div class="form-group"> 
+                <label class="control-label" for="endDate">End Date</label>
+                <input class="form-control" id="endDate" name="endDate" placeholder="YYYY-MM-DD" type="text"/>
+            </div>
+            <!--Start Time:
             <input id="startDate" type="date" name="startdate" onchange="changeDate(this)" /> <br><br>
             End Time:
             <input id="endDate" type="date" name="enddate" onchange="changeDate(this)" /> <br><br>
+            -->
             Quiz Name:
-            <input type="text" name="quizName"><br><br>
+            <input type="text" name="quizName" id="quizName"><br><br>
             <input class="btn btn-success" type="button" data-course-id="${session.courseId}" id="newQuizButton" value="Create New Quiz">
         </form>
         </div>
@@ -103,9 +114,26 @@
 <asset:javascript src="auth/logout.js"/>
 <asset:javascript src="instructor.js"/>
 <asset:javascript src="atHome.js"/>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
 
 <script>
     window.onload=prepareClassTitle(${session.courseId});
+</script>
+
+<script>
+    var start_date_input;
+    var end_date_input;
+    $(document).ready(function() {
+      start_date_input = $('input[name="startDate"]');
+      end_date_input = $('input[name="endDate"]');
+      var options = {
+        format: 'yyyy-mm-dd',
+        todayHighlight: true,
+        autoclose: true,
+      };
+      start_date_input.datepicker(options);
+      end_date_input.datepicker(options);
+    });
 </script>
 
 </body>

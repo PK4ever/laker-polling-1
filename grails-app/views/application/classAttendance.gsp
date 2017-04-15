@@ -26,8 +26,6 @@
 
                 <asset:image src="logo2.png"
                              style="height: 80px !important; width: 120px !important; position: absolute; top: 0%"/>
-
-                %{--<img src="logo.png" style="height: 60px !important; width: 120px !important; position: absolute; top: 0%">--}%
             </a>
             <a id="coursePageTitle" class="navbar-brand" style="position: absolute; left: 45%; font-size: x-large"></a>
     
@@ -56,12 +54,6 @@
     <div class="row">
         <div class="col-sm-3"></div>
         <div class="col-sm-6">
-        <!-- <form>
-            Date:
-            <input id="datepicker" type="date" name="date" onchange="changeDate(this)" />
-        </form> -->
-
-
 
  <div class="container-fluid">
   <div class="row">
@@ -69,10 +61,7 @@
     <form>
       <div class="form-group"> <!-- Date input -->
         <label class="control-label" for="date">Date</label>
-        <input class="form-control" id="date" name="date" placeholder="MM/DD/YYY" type="text"/>
-      </div>
-      <div class="form-group"> <!-- Submit button -->
-        <button class="btn btn-primary" id="dateSubmitButton" name="submit">Submit</button>
+        <input class="form-control" id="date" name="date" placeholder="YYYY-MM-DD" type="text" onchange="changeDate(this)"/>
       </div>
      </form>
     </div>
@@ -93,6 +82,7 @@
                     <thead>
                     <tr>
                         <th class="col-md-1" data-field="email">Email</th>
+                        <th class="col-md-1" data-field="name">Name</th>
                         <th class="col-md-1" data-field="attended">Attended</th>
                     </tr>
                     </thead>
@@ -126,15 +116,12 @@
     $(document).ready(function() {
       date_input = $('input[name="date"]');
       var options = {
-        format: 'mm/dd/yyyy',
+        format: 'yyyy-mm-dd',
         todayHighlight: true,
         autoclose: true,
       };
       date_input.datepicker(options);
     });
-    $('#dateSubmitButton').click(function() {
-        changeDate(date_input.val());
-    })
 </script>
 
 </body>
