@@ -1,0 +1,6 @@
+import edu.oswego.cs.lakerpolling.domains.Quiz
+
+model {
+    Collection<Quiz> quizzes = []
+}
+json tmpl.'/templates/quiz'(quizzes)

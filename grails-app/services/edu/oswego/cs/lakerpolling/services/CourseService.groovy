@@ -110,10 +110,18 @@ class CourseService {
             if (course != null) {
                 if (hasInstructorAccess(requestingUser, course)) {
                     List<User> users = new ArrayList<>()
+
                     for (email in emails) {
-                        User user = userService.getOrMakeByEmail(email)
-                        course.addToStudents(user)
-                        users.add(user)
+                        if(email.indexOf("oswego.edu") == -1) {
+                            QueryResult.fromHttpStatus(HttpStatus.BAD_REQUEST, result)
+                        }
+                    }
+
+                    for (email in emails) {
+                            User user = userService.getOrMakeByEmail(email)
+                            course.addToStudents(user)
+                            users.add(user)
+
                     }
                     result.data = users
                 } else {
@@ -275,11 +283,21 @@ class CourseService {
      * @param course - the course to check
      * @return True if the user has instructor accss to the course
      */
-    private boolean hasInstructorAccess(User user, Course course) {
+    public boolean hasInstructorAccess(User user, Course course) {
         if (user.role.type == RoleType.ADMIN) {
             return true
         }
         return user.role.type == RoleType.INSTRUCTOR && isInstructorOf(user, course)
+    }
+
+    /**
+     * Checks if the user has student access for the given course
+     * @param user - the user to check for student access
+     * @param course - the course to check
+     * @return True if the user has student access to the course
+     */
+    public boolean hasStudentAccess(User user, Course course) {
+        hasInstructorAccess(user, course) || isStudentOf(user, course)
     }
 
     /**
@@ -290,6 +308,16 @@ class CourseService {
      */
     boolean isInstructorOf(User user, Course course) {
         user != null && course != null && course.instructorId == user.id
+    }
+
+    /**
+     * Checks if the user is a student of the course
+     * @param user - the user to check
+     * @param course - the course to check
+     * @return true if the user is a student of the course
+     */
+    boolean isStudentOf(User user, Course course) {
+        course.students != null && course.students.find{x -> x.id == user.id}
     }
 
     /**
@@ -348,64 +376,69 @@ class CourseService {
     }
 
     /**
-     * gets the attendance for all students in a selected course on a selected date
-     * @param course_id - the id of the selected course
-     * @param date - the selected date in the mm/dd/yyyy format
-     * @return - returns a QueryResult containing a list of all attendees related to the course and date
+     * gets the attendance for a selected student during the range of dates (inclusive) provided for the selected course
+     * @param studentID - the ID of the selected student
+     * @param courseID - the ID of the selected course
+     * @param dateRange - a range of dates to filter the attendance result by
+     * @return - returns a QueryResult containing the list of Attendee objects related to the student and date range
      */
-    QueryResult<List<Attendee>> getAllStudentAttendance(String course_id, String date) {
-        QueryResult<List<Attendee>> result = new QueryResult<>()
-        Date getDate = makeDate(date)
-        def course = Course.findById(course_id.toLong())
-        if(course) {
-            def attendance = Attendance.findAllByCourse(course)
-            if(attendance) {
-                def students = attendance.find { a ->
-                    a.date == getDate
-                }
-                if(students) {
-                    result.data = students.attendees.toList()
-                    result.success = true
-                    result
-                } else {
-                    QueryResult.fromHttpStatus(HttpStatus.BAD_REQUEST)
-                }
-            } else {
-                QueryResult.fromHttpStatus(HttpStatus.BAD_REQUEST)
-            }
-        } else {
-            QueryResult.fromHttpStatus(HttpStatus.BAD_REQUEST)
+    QueryResult<List<Attendee>> getStudentAttendance(AuthToken token, String studentID, String courseID, Range<Date> dateRange) {
+        User requestingUser = token.user
+        User student = User.findById(studentID.toLong())
+        Course course = Course.findById(courseID.toLong())
+
+        if (!course || !student) {
+            return QueryResult.fromHttpStatus(HttpStatus.BAD_REQUEST)
+        } else if (!hasInstructorAccess(requestingUser, course)) {
+            return QueryResult.fromHttpStatus(HttpStatus.UNAUTHORIZED)
         }
+
+        QueryResult result = new QueryResult()
+        result.data = Attendee.where {
+            student == student && attendance { course == course && date >= dateRange.from && date <= dateRange.to }
+        }.list()
+        result
     }
 
     /**
-     * gets the attendance for a selected student during the range of dates provided
-     * @param student_id - the id of the selected student
-     * @param start_date - the start date in the range of dates in the mm/dd/yyyy format
-     * @param end_date - the end date in the range of dates in the mm/dd/yyyy format
-     * @return - returns a QueryResult containing the list of Attendee objects related to the student
+     * gets the attendance for all students in a selected course during the range of dates (inclusive) provided for the selected course
+     * @param courseID - the ID of the selected course
+     * @param dateRange - a range of dates to filter the attendance result by
+     * @return - returns a QueryResult containing a list of all attendees related to the course and date range
      */
-    QueryResult<List<Attendee>> getStudentAttendance(String student_id, String start_date, String end_date) {
-        QueryResult<List<Attendee>> result = new QueryResult<>()
-        List<Attendee> attendeeList = new ArrayList<>()
-        Date getStart = new Date(start_date)
-        Date getEnd = new Date(end_date)
-        def student = User.findById(student_id.toLong())
-        if(student) {
-            def attendance = Attendee.findAllByStudent(student)
-            if(attendance) {
-                attendance.forEach({a ->
-                    if(a.attendance.date >= getStart || a.attendance.date <= getEnd) attendeeList.add(a)
-                })
-                result.data = attendeeList
-                result
-            } else {
-                QueryResult.fromHttpStatus(HttpStatus.BAD_REQUEST)
-            }
-        } else {
-            QueryResult.fromHttpStatus(HttpStatus.BAD_REQUEST)
+    QueryResult<List<Attendance>> getAllStudentAttendance(AuthToken token, String courseID, Range<Date> dateRange) {
+        User requestingUser = token.user
+        Course course = Course.findById(courseID.toLong())
+
+        if (!course) {
+            return QueryResult.fromHttpStatus(HttpStatus.BAD_REQUEST)
+        } else if (!hasInstructorAccess(requestingUser, course)) {
+            return QueryResult.fromHttpStatus(HttpStatus.UNAUTHORIZED)
         }
 
+        QueryResult result = new QueryResult()
+        result.data = Attendance.where {
+            course == course && date >= dateRange.from && date <= dateRange.to
+        }.list()
+        result
+    }
+
+    /**
+     * Attempts to find the Course associated with the given ID String
+     * @param courseIdString - A String representing a Course ID
+     * @return A QueryResult containing the associated Course
+     */
+    QueryResult<Course> findCourse(String courseIdString) {
+        QueryResult<Course> result = new QueryResult<>()
+        if (!courseIdString.isLong()) {
+            return QueryResult.fromHttpStatus(HttpStatus.BAD_REQUEST)
+        }
+        Course course = Course.findById(courseIdString.toLong())
+        if (!course) {
+            return QueryResult.fromHttpStatus(HttpStatus.BAD_REQUEST)
+        }
+        result.data = course
+        result
     }
 
     /**

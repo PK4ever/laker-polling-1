@@ -19,4 +19,10 @@ class QueryResult<T> {
         results
     }
 
+    static QueryResult copyError(QueryResult result, QueryResult copy = new QueryResult()) {
+        copy.success = result.success
+        copy.errorCode = result.errorCode
+        copy.message = result.message
+        copy
+    }
 }

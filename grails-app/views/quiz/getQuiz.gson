@@ -1,0 +1,18 @@
+import edu.oswego.cs.lakerpolling.domains.AuthToken
+import edu.oswego.cs.lakerpolling.domains.Quiz
+
+response.status OK.value()
+model {
+    AuthToken token
+    Long courseID
+    Quiz quiz = []
+}
+
+json {
+    status "success"
+    data {
+        accessToken token.accessToken
+        courseId courseID
+        students g.render(template: "/templates/quiz", model: [quiz: quiz])
+    }
+}

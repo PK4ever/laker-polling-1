@@ -1,0 +1,10 @@
+import edu.oswego.cs.lakerpolling.domains.Attendance
+
+model {
+    Attendance attendance
+}
+
+json {
+    date attendance.date
+    attendees g.render(template: "/templates/attendees", model: [attendees: attendance.attendees])
+}

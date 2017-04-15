@@ -45,5 +45,20 @@ class UrlMappings {
             "/answer"(controller: 'question', action: 'getAnswers', method: 'get')
             "/answer"(controller: 'question', action: 'answerQuestion', method: 'put')
         }
+
+        group "/api/user", {
+            "/"(controller: 'user', action: 'getUser', method: 'get')
+            "/"(controller: 'user', action: 'postUser', method: 'post')
+        }
+
+        group "/api/quiz", {
+            "/"(controller: 'quiz', action: 'getQuizzes', method: 'get')
+            "/"(controller: 'quiz', action: 'deleteQuiz', method: 'delete')
+
+            "/question"(controller: 'quiz', action: 'getQuizQuestions', method: 'get')
+            "/question"(controller: 'quiz', action: 'postQuestionToQuiz', method: 'post')
+            "/question"(controller: 'quiz', action: 'deleteQuestion', method: 'delete')
+        }
+
     }
 }
