@@ -57,7 +57,7 @@ $('#newQuizButton').on('click', function(event) {
 
 function identifierFormatter(value, row, index) {
     return [
-        '<a class="like" href="/course/quiz?courseId=' + courseId + '&quizId=' + row.id + '" title="Like">',
+        '<a class="like" href="/course/quiz?courseId=' + courseId + '&quizId=' + row.id + '&questionIndex=0" title="Like">',
         value,
         '</a>'].join('');
 }

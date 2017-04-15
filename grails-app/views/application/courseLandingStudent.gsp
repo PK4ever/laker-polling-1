@@ -63,6 +63,7 @@
 <asset:javascript src="studentCourseLanding.js"/>
 <script>
     window.onload=prepareClassTitle(${session.courseId});
+    window.onload=prepareQuizTitle(${session.quizId});
 </script>
 </body>
 </html>

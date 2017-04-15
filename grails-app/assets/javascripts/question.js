@@ -25,40 +25,42 @@ $(':checkbox').change(function() { // just for testing, can be removed
 
 // STUDENT - submit answer
 $("#submitAnswer").click(function() {
-    var courseId = $(this).data('course-id');
-    var selected = [];
-    $(':checkbox').each(function() {
-        if ($(this).is(':checked')) {
-            selected.push("true");
-        }
-        else {
-            selected.push("false");
-        }
-    });
-    // console.log(selected.toString());
+    if(location.pathname.substring(location.pathname.lastIndexOf("/") + 1) == "studentQuestionResponse") {
+        var courseId = $(this).data('course-id');
+        var selected = [];
+        $(':checkbox').each(function() {
+            if ($(this).is(':checked')) {
+                selected.push("true");
+            }
+            else {
+                selected.push("false");
+            }
+        });
+        // console.log(selected.toString());
 
-    var question_id;
-    var answer = selected.toString();
-    // see if there's an active question
-    $.ajax({
-        url: '/api/question/active?access_token=' + token + '&course_id=' + courseId,
-        type: 'GET',
-        success: function(data) {
-            console.log(data)
-            question_id = data.questionId; // get question_id
-            $.ajax({
-                url: '/api/question/answer?access_token=' + token + '&question_id='
-                + question_id + '&answer=' + answer,
-                type: 'PUT',
-                success: function() {
-                    console.log(question_id + 'is the q id')
-                }
-            });
-        },
-        error: function() {
-            alert('This question is not ready, please wait for instructor and try again.');
-        }
-    });
+        var question_id;
+        var answer = selected.toString();
+        // see if there's an active question
+        $.ajax({
+            url: '/api/question/active?access_token=' + token + '&course_id=' + courseId,
+            type: 'GET',
+            success: function(data) {
+                console.log(data)
+                question_id = data.questionId; // get question_id
+                $.ajax({
+                    url: '/api/question/answer?access_token=' + token + '&question_id='
+                    + question_id + '&answer=' + answer,
+                    type: 'PUT',
+                    success: function() {
+                        console.log(question_id + 'is the q id')
+                    }
+                });
+            },
+            error: function() {
+                alert('This question is not ready, please wait for instructor and try again.');
+            }
+        });
+    }
 });
 
 

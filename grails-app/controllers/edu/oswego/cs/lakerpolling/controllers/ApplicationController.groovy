@@ -159,13 +159,14 @@ class ApplicationController {
         }
     }
 
-    def quizStudentView(long courseId, long quizId) {
+    def quizStudentView(long courseId, long quizId, long questionIndex) {
         QueryResult<AuthToken> require = hasAccess()
         if(require.success) {
-            def preReq = preconditionService.notNull(params, ["courseId", "quizId"])
+            def preReq = preconditionService.notNull(params, ["courseId", "quizId", "questionIndex"])
             if(preReq.success) {
                 session.setAttribute("courseId", courseId)
                 session.setAttribute("quizId", quizId)
+                session.setAttribute("questionIndex", questionIndex)
                 render(view: 'studentQuizResponse')
             } else {
                 render(view: '../failure', model: [errorCode: preReq.errorCode, message: preReq.message])

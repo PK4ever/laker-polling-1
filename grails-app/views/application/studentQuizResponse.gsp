@@ -36,17 +36,22 @@
 
 <div class="form-group" style="text-align: center;">
     <h1 id="question-text"></h1>
+    <h2 id="answer0"></h2>
+    <h2 id="answer1"></h2>
+    <h2 id="answer2"></h2>
+    <h2 id="answer3"></h2>
+    <h2 id="answer4"></h2>
     <form id="answer-form" method="post">
         <div class="btn-group" data-toggle="buttons" >
-            <label class="btn btn-default answer-btn" id="answer0">
+            <label class="btn btn-default answer-btn" id="answer">
                 <input type="checkbox" autocomplete="off">A</label><br>
-            <label class="btn btn-default answer-btn" id="answer1">
+            <label class="btn btn-default answer-btn" id="answer">
                 <input type="checkbox" autocomplete="off">B</label><br>
-            <label class="btn btn-default answer-btn" id="answer2">
+            <label class="btn btn-default answer-btn" id="answer">
                 <input type="checkbox" autocomplete="off">C</label><br>
-            <label class="btn btn-default answer-btn" id="answer3">
+            <label class="btn btn-default answer-btn" id="answer">
                 <input type="checkbox" autocomplete="off">D</label><br>
-            <label class="btn btn-default answer-btn" id="answer4">
+            <label class="btn btn-default answer-btn" id="answer">
                 <input type="checkbox" autocomplete="off">E</label><br>
         </div>
         <div class="form-group">
@@ -54,14 +59,17 @@
         </div>
     </form>
 </div>
-<div class="form-group" style="text-align: center;">
-    <a href="/course/viewresults?courseId=${session.courseId}" class="btn btn-info" role="button">View Results</a>
-</div>
 
 <script src="https://apis.google.com/js/platform.js"></script>
 <asset:javascript src="auth/config.js"/>
 <asset:javascript src="auth/logout.js"/>
 <asset:javascript src="question.js"/>
 <asset:javascript src="studentQuizResponse.js"/>
+
+<script>
+    window.onload=prepareClassTitle(${session.courseId});
+    window.onload=prepareQuizTitle(${session.quizId});
+    window.onload=prepareQuestionIndex(${session.questionIndex});
+</script>
 </body>
 </html>
