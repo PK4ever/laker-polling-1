@@ -35,6 +35,7 @@
 </a>
 
 <div class="form-group" style="text-align: center;">
+    <h1 id="question-text"></h1>
     <form id="answer-form" method="post">
         <div class="btn-group" data-toggle="buttons" >
             <label class="btn btn-default answer-btn" id="answers">
@@ -61,5 +62,6 @@
 <asset:javascript src="auth/config.js"/>
 <asset:javascript src="auth/logout.js"/>
 <asset:javascript src="question.js"/>
+<asset:javascript src="studentQuizResponse.js"/>
 </body>
 </html>

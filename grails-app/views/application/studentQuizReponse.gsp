@@ -61,5 +61,6 @@
 <asset:javascript src="auth/config.js"/>
 <asset:javascript src="auth/logout.js"/>
 <asset:javascript src="question.js"/>
+<asset:javascript src="studentQuizResponse.js"/>
 </body>
 </html>
