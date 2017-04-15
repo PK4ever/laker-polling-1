@@ -38,15 +38,15 @@
     <h1 id="question-text"></h1>
     <form id="answer-form" method="post">
         <div class="btn-group" data-toggle="buttons" >
-            <label class="btn btn-default answer-btn" id="answers">
+            <label class="btn btn-default answer-btn" id="answer0">
                 <input type="checkbox" autocomplete="off">A</label><br>
-            <label class="btn btn-default answer-btn" id="answers">
+            <label class="btn btn-default answer-btn" id="answer1">
                 <input type="checkbox" autocomplete="off">B</label><br>
-            <label class="btn btn-default answer-btn" id="answers">
+            <label class="btn btn-default answer-btn" id="answer2">
                 <input type="checkbox" autocomplete="off">C</label><br>
-            <label class="btn btn-default answer-btn" id="answers">
+            <label class="btn btn-default answer-btn" id="answer3">
                 <input type="checkbox" autocomplete="off">D</label><br>
-            <label class="btn btn-default answer-btn" id="answers">
+            <label class="btn btn-default answer-btn" id="answer4">
                 <input type="checkbox" autocomplete="off">E</label><br>
         </div>
         <div class="form-group">

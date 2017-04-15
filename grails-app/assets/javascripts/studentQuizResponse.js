@@ -31,6 +31,12 @@ $(function() {
                             var question_text = data.data.text;
                             var choices = data.data.choices;
                             $('#question-text').html(question_text);
+                            $('#answer0').html(choices[0]);
+                            $('#answer1').html(choices[1]);
+                            $('#answer2').html(choices[2]);
+                            $('#answer3').html(choices[3]);
+                            $('#answer4').html(choices[4]);
+
                             //Not sure how to iterate through the answer buttons to replace the button labels with answers.
                             //Should we give each button a unique ID in the GSP and do it that way or will that mess something up?
                         }
