@@ -2,6 +2,7 @@ var token = '';
 var quiz_id;
 var courseId;
 
+
 //get the instructor's token on load
 $(function() {
     $.ajax({
@@ -26,36 +27,63 @@ $("#create-question-btn").click(function(){
             selected.push("false");
         }
     });
-    question = $("#question-box")
+    question = $("#question-text").val()
     answers.push($("#answer-a").val());
     answers.push($("#answer-b").val());
     answers.push($("#answer-c").val());
     answers.push($("#answer-d").val());
+    answers.push($("#answer-e").val());
+    //console.log(question)
+    var urlStr = '/api/quiz/question?access_token=' + token + '&quiz_id=' + quiz_id + '&text=' + question +'&choices=' + answers.toString() + '&answers=' + selected.toString()
+    //console.log(urlStr)
     $.ajax({
-        url: '/api/quiz/question?access_token=' + token + '&course_id=' + courseId + '&quiz_id=' + quiz_id + '&choices=' + answers.toString() + '&answers=' + selected.toString(),
+        url: urlStr,
         method: 'POST',
-        success: refreshQuestions()
+        success: function(data) {
+            console.log("POST question")
+            console.log(data)
+            refreshQuestions()
+        },
+        error: function(err){
+            alert(err)
+        }
     });
 });
 
 function refreshQuestions(){
+console.log("REFRESH")
     var questions = [];
     $.ajax({
         url: '/api/quiz/question?access_token=' + token + '&quiz_id=' + quiz_id,
         method: 'GET',
-        success: function(){
-            var question_ids = data.questionIds
+        success: function(data){
+            var question_ids = data.data.questionIds
+            console.log(question_ids)
             for (var i = 0; i < question_ids.length; i++){
+                console.log("i="+i)
                 $.ajax({
-                    url:'/api/question?access_token=' + token + '&course_id=' + courseId + '&question_id' + question_ids[i],
+                    url:'/api/quiz/question?access_token=' + token + '&quiz_id=' + quiz_id + '&question_id=' + question_ids[i],
                     method: 'GET',
-                    success: questions.push(data.data);
+                    success: function(data){
+                        console.log("Inside GET question")
+                        console.log(data)
+                        questions.push(data.data)
+                        if(questions.length == question_ids.length) {
+                            setTableData(questions)
+                        }
+                    }
                 });
             }
+
         }
     });
+}
+
+function setTableData(questions) {
+    console.log("SET TABLE DATA")
+    console.log(questions)
     $('#question-table').bootstrapTable ({
-        data: questions;
+       data: questions
     })
 }
    
