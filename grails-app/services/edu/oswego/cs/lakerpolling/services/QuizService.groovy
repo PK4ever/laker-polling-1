@@ -1,5 +1,6 @@
 package edu.oswego.cs.lakerpolling.services
 
+import edu.oswego.cs.lakerpolling.domains.Answer
 import edu.oswego.cs.lakerpolling.domains.AuthToken
 
 import edu.oswego.cs.lakerpolling.domains.Course
@@ -195,7 +196,12 @@ class QuizService {
             return QueryResult.copyError(accessCheck)
         }
 
-        Question question = new Question(course: quiz.course, question: text, choices: choices, answers: answers)
+        def studentAnswers = new ArrayList()
+        for (def answer : answers) {
+            studentAnswers.add(new Integer(0))
+        }
+
+        Question question = new Question(course: quiz.course, question: text, choices: choices, answers: answers, studentAnswers: studentAnswers)
         quiz.addToQuestions(question)
         result.data = question
         result
@@ -229,6 +235,50 @@ class QuizService {
         quiz.removeFromQuestions(question)
         question.delete(flush:true, failOnError:true)
 
+        new QueryResult(success: true)
+    }
+
+    /**
+     * Answers a question from a quiz
+     * @param token - the token of the requesting user
+     * @param quizIdString - a String representing the ID of the quiz
+     * @param questionIdString - A String representing the ID of the question
+     * @param responseString - A comma-separated string of Boolean values
+     * @return the results of the operation
+     */
+    QueryResult answerQuestion(AuthToken token, String quizIdString, String questionIdString, String responseString) {
+        def response = toBooleanList(responseString)
+        if (!response) {
+            return QueryResult.fromHttpStatus(HttpStatus.BAD_REQUEST)
+        }
+
+        def quizResult = findQuiz(quizIdString)
+        if (!quizResult.success) {
+            return QueryResult.copyError(quizResult)
+        }
+
+        def quiz = quizResult.data
+        if (!quizIsOpen(quiz)) {
+            def error = QueryResult.fromHttpStatus(HttpStatus.BAD_REQUEST)
+            error.message = "Quiz is not open"
+            return error
+        }
+
+        def accessCheck = verifyStudentAccess(token, quiz.course)
+        if (!accessCheck.success) {
+            return QueryResult.copyError(accessCheck)
+        }
+
+        def questionResult = findQuestion(quiz, questionIdString)
+        if (!questionResult.success) {
+            return QueryResult.copyError(questionResult)
+        }
+
+        def question = questionResult.data
+        def answers = question.answers
+
+        def isCorrect = questionResponseIsCorrect(response, question)
+        new Answer(correct: isCorrect, question: question, student: token.user).save(flush: true, failOnError: true)
         new QueryResult(success: true)
     }
 
@@ -325,6 +375,28 @@ class QuizService {
 
         result.data = question
         result
+    }
+
+    private boolean quizIsOpen(Quiz quiz) {
+        def now = new Date()
+        now >= quiz.startDate & now < quiz.endDate
+    }
+
+    private boolean questionResponseIsCorrect(List<Boolean> response, Question question) {
+        def answers = question.answers
+        def isCorrect = true
+        answers.eachWithIndex { a, i ->
+            // isCorrect if it is not already marked as incorrect and the next response is also correct
+            isCorrect = isCorrect && (a == response.get(i))
+            //TODO make this increment code thread-safe
+            if (response.get(i)) {
+                def num = question.studentAnswers.get(i)
+                num += 1
+                question.studentAnswers.remove(i)
+                question.studentAnswers.add(i, num)
+            }
+        }
+        isCorrect
     }
 
     private Date parseTimestamp(String unixTime) {
