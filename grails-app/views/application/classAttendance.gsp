@@ -1,15 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <asset:stylesheet href="agency.min.css"/>
+    <asset:stylesheet href="agency.css"/>
+    <asset:stylesheet href="style.css"/>
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
+
     <title>Instructor</title>
-    <asset:stylesheet href="bootstrap.min.css"/>
-    <!-- jQuery (necessary for Bootstrap"s JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-    <!-- Latest compiled and minified JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 </head>
 <body>
 <nav id="mainNav" class="navbar navbar-default navbar-custom navbar-fixed-top">
@@ -53,10 +56,31 @@
     <div class="row">
         <div class="col-sm-3"></div>
         <div class="col-sm-6">
-        <form>
+        <!-- <form>
             Date:
             <input id="datepicker" type="date" name="date" onchange="changeDate(this)" />
-        </form>
+        </form> -->
+
+
+
+ <div class="container-fluid">
+  <div class="row">
+   <div class="col-md-6 col-sm-6 col-xs-12">
+    <form>
+      <div class="form-group"> <!-- Date input -->
+        <label class="control-label" for="date">Date</label>
+        <input class="form-control" id="date" name="date" placeholder="MM/DD/YYY" type="text"/>
+      </div>
+      <div class="form-group"> <!-- Submit button -->
+        <button class="btn btn-primary" id="dateSubmitButton" name="submit">Submit</button>
+      </div>
+     </form>
+    </div>
+  </div>    
+ </div>
+</div>
+
+
         </div>
         <div class="col-sm-3"></div>
     </div><br>  
@@ -79,25 +103,38 @@
     </div>
 </section>
 
-<!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.css">
 
-<asset:javascript src="jquery-3.2.0.min.js"/>
 <script src="https://apis.google.com/js/platform.js"></script>
 
-<!-- Latest compiled and minified JavaScript -->
 <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.js"></script>
 
 <asset:javascript src="auth/config.js"/>
 <asset:javascript src="auth/logout.js"/>
 <asset:javascript src="instructor.js"/>
-<asset:stylesheet href="bootstrap.css"/>
-<asset:stylesheet href="agency.min.css"/>
-<asset:stylesheet href="agency.css"/>
-<asset:stylesheet href="style.css"/>
+
+<asset:stylesheet href="bootstrap.min.css"/>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
 
 <script>
     window.onload=prepareClassTitle(${session.courseId});
+</script>
+
+<script>
+    var date_input;
+    $(document).ready(function() {
+      date_input = $('input[name="date"]');
+      var options = {
+        format: 'mm/dd/yyyy',
+        todayHighlight: true,
+        autoclose: true,
+      };
+      date_input.datepicker(options);
+    });
+    $('#dateSubmitButton').click(function() {
+        changeDate(date_input.val());
+    })
 </script>
 
 </body>

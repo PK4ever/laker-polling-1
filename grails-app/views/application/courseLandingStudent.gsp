@@ -38,8 +38,14 @@
     </script>
 
 </h1> <!-- Class name here -->
-<div class="form-group" style="text-align: center;">
+<div id="livePollButton" class="form-group" style="text-align: center;">
     <a href="course/answerquestion?courseId=${session.courseId}" class="btn btn-success" role="button">Answer Question</a>
+</div>
+<div id="livePollMessage"style="text-align: center;">
+    <p>The are currently no active questions.</p>
+</div>
+<div class="form-group" style="text-align: center;">
+    <a href="course/quizList?courseId=${session.courseId}" class="btn btn-success" role="button">View At-Home Polls</a>
 </div>
 
 <asset:javascript src="jquery-3.2.0.min.js"/>
@@ -54,6 +60,7 @@
 <asset:javascript src="auth/config.js"/>
 <asset:javascript src="auth/logout.js"/>
 <asset:javascript src="student.js"/>
+<asset:javascript src="studentCourseLanding.js"/>
 <script>
     window.onload=prepareClassTitle(${session.courseId});
 </script>
