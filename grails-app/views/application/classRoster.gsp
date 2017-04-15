@@ -63,6 +63,7 @@
                     <thead>
                     <tr>
                         <th class="col-md-1" data-field="email">Email</th>
+                        <th class="col-md-1" data-field="name">Name</th>
                         <th class="col-md-1" data-field="button" data-formatter="studentDeleteButtonFormatter" id="deleteStudentButton">Remove</th>
                     </tr>
                     </thead>
