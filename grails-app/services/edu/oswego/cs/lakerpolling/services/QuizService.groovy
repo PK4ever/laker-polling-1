@@ -6,6 +6,7 @@ import edu.oswego.cs.lakerpolling.domains.Question
 import edu.oswego.cs.lakerpolling.domains.Quiz
 import edu.oswego.cs.lakerpolling.domains.User
 import edu.oswego.cs.lakerpolling.util.QueryResult
+import edu.oswego.cs.lakerpolling.util.RoleType
 import grails.transaction.Transactional
 import org.springframework.http.HttpStatus
 
@@ -13,6 +14,36 @@ import org.springframework.http.HttpStatus
 class QuizService {
     CourseService courseService
 
+    /**
+     * Endpoint to create a quiz
+     * @param token - the access token of the requesting user
+     * @param course_id - the course that this quiz is related to
+     * @param n - (optional) the name of the quiz
+     * @param sd - the starting date of the quiz
+     * @param ed - the ending date of the quiz
+     * @return a quiz object
+     */
+    def createQuiz(AuthToken token, int course_id, String name, Date start_time, Date end_time) {
+        def user = token.user
+        if(user) {
+            if (user.role.type == RoleType.INSTRUCTOR) {
+                Course course = Course.findById(course_id.toLong())
+                if (course) {
+                    Quiz newQuiz
+                    if(name != null) {
+                        newQuiz = new Quiz(course: course, name: name, startDate: start_time, endDate: end_time)
+                    } else {
+                        newQuiz = new Quiz(course: course, startDate: start_time, endDate: end_time)
+                    }
+                    newQuiz.questions = new ArrayList<>()
+                    newQuiz.save(flush: true, failOnError: true)
+                    newQuiz
+
+                }else null
+            }else null
+        }else null
+
+    }
     /**
      * Endpoint to get a list of all of the question IDs for a quiz.
      * @param access_token - The access token of the requesting user
