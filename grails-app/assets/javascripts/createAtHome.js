@@ -10,6 +10,7 @@ $(function() {
         method: "GET",
         success: function(data) {
             token = data.data.token;
+            refreshQuestions()
         }
     });
 });
@@ -39,19 +40,19 @@ $("#create-question-btn").click(function(){
     $.ajax({
         url: urlStr,
         method: 'POST',
-        success: function(data) {
-            console.log("POST question")
-            console.log(data)
-            refreshQuestions()
-        },
+        success: window.location.reload(),
         error: function(err){
             alert(err)
         }
     });
 });
 
+function setQuizId(id){
+    quiz_id = id
+}
+
 function refreshQuestions(){
-console.log("REFRESH")
+//console.log("REFRESH")4
     var questions = [];
     $.ajax({
         url: '/api/quiz/question?access_token=' + token + '&quiz_id=' + quiz_id,

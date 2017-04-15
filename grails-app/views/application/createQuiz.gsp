@@ -113,7 +113,7 @@
         <input type="submit" value="Add Question" data-course-id="${session.courseId}" data-quiz-id="${session.quizId}" class="btn btn-success" id="create-question-btn">
     </div>
     <div class="col-md-1 text-center">
-        <input type="submit" value="Submit Quiz" class="btn btn-success" id="submit-quiz-btn">
+        <a class="btn btn-success" href="/course/quizList?courseId=${session.courseId}">Submit Quiz</a>
     </div>
 </div>
 
@@ -154,6 +154,7 @@
 <asset:javascript src="createAtHome.js"/>
 <script>
     window.onload=prepareClassTitle(${session.courseId});
+    window.onload=setQuizId(${session.quizId});
 </script>
 
 </body>

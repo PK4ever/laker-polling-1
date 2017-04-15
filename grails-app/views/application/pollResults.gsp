@@ -28,8 +28,8 @@
         </ul>
     </div>
 </div>
-<a href="/course?courseId=${session.courseId}" style="margin-left: 60px; href="/course?courseId=${session.courseId}" class="btn btn-default btn-md">
-          <span class="glyphicon glyphicon-arrow-left"></span> Back to Course Page
+<a href="/course/createquestion?courseId=${session.courseId}" style="margin-left: 60px; href="/course/createquestion?courseId=${session.courseId}" class="btn btn-default btn-md">
+          <span class="glyphicon glyphicon-arrow-left"></span> Back to Question Page
 </a>
 		
 	
