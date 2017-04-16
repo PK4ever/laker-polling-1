@@ -11,8 +11,11 @@
     text-decoration: none !important;
 }
 #answers{
-    width: 200px !important;
+    width: 400px !important;
     padding: 15px !important;
+}
+#answers:hover {
+    background: lightgreen;
 }
 #submit-question-btn{
     width: 200px !important;

@@ -21,10 +21,10 @@
             </button>
             <a class="navbar-brand page-scroll" href="#page-top">
                 <asset:image src="logo2.png"
-                             style="height: 60px !important; width: 120px !important; position: absolute; top: 0%"/>
+                             style="height: 80px !important; width: 120px !important; position: absolute; top: 10%"/>
                 %{--<img src="logo.png" style="height: 60px !important; width: 120px !important; position: absolute; top: 0%">--}%
             </a>
-            <a id="pageName" class="navbar-brand" style="position: absolute; left: 45%; font-size: x-large">Student Dashboard</a>
+            <a id="pageName" class="navbar-brand" style="position: absolute; left: 45%; font-size: x-large; font-family: monospace;">Student Dashboard</a>
         %{--<a id="pageName" class="page-scroll navbar-brand" style="position: absolute; left: 40%; font-size: xx-large">Student Dashboard</a>--}%
 
         <!--<a class="navbar-brand page-scroll" href="#page-top">LOGO HERE</a>-->
@@ -33,7 +33,7 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav navbar-right">
-                <li>
+                <li style="border: 1.5px solid #fed136">
                     %{--<button onclick="logout()" class="btn btn-default navbar-right navbar-btn">Logout</button>--}%
                     <a style="cursor: pointer" onclick="logout()" >LogOut</a>
                 </li>
