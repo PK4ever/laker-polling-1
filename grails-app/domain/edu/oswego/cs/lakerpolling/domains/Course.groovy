@@ -1,7 +1,7 @@
 package edu.oswego.cs.lakerpolling.domains
 
 
-class Course implements Serializable{
+class Course {
     String name
     String crn
 

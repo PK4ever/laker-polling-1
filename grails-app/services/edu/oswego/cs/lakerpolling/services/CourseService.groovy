@@ -17,7 +17,6 @@ import org.springframework.http.HttpStatus
 @Transactional
 class CourseService {
     UserService userService
-    CourseListParserService courseListParserService
 
     /**
      * Lists students in a specified course
@@ -376,54 +375,6 @@ class CourseService {
     }
 
     /**
-     * gets the attendance for a selected student during the range of dates (inclusive) provided for the selected course
-     * @param studentID - the ID of the selected student
-     * @param courseID - the ID of the selected course
-     * @param dateRange - a range of dates to filter the attendance result by
-     * @return - returns a QueryResult containing the list of Attendee objects related to the student and date range
-     */
-    QueryResult<List<Attendee>> getStudentAttendance(AuthToken token, String studentID, String courseID, Range<Date> dateRange) {
-        User requestingUser = token.user
-        User student = User.findById(studentID.toLong())
-        Course course = Course.findById(courseID.toLong())
-
-        if (!course || !student) {
-            return QueryResult.fromHttpStatus(HttpStatus.BAD_REQUEST)
-        } else if (!hasInstructorAccess(requestingUser, course)) {
-            return QueryResult.fromHttpStatus(HttpStatus.UNAUTHORIZED)
-        }
-
-        QueryResult result = new QueryResult()
-        result.data = Attendee.where {
-            student == student && attendance { course == course && date >= dateRange.from && date <= dateRange.to }
-        }.list()
-        result
-    }
-
-    /**
-     * gets the attendance for all students in a selected course during the range of dates (inclusive) provided for the selected course
-     * @param courseID - the ID of the selected course
-     * @param dateRange - a range of dates to filter the attendance result by
-     * @return - returns a QueryResult containing a list of all attendees related to the course and date range
-     */
-    QueryResult<List<Attendance>> getAllStudentAttendance(AuthToken token, String courseID, Range<Date> dateRange) {
-        User requestingUser = token.user
-        Course course = Course.findById(courseID.toLong())
-
-        if (!course) {
-            return QueryResult.fromHttpStatus(HttpStatus.BAD_REQUEST)
-        } else if (!hasInstructorAccess(requestingUser, course)) {
-            return QueryResult.fromHttpStatus(HttpStatus.UNAUTHORIZED)
-        }
-
-        QueryResult result = new QueryResult()
-        result.data = Attendance.where {
-            course == course && date >= dateRange.from && date <= dateRange.to
-        }.list()
-        result
-    }
-
-    /**
      * Attempts to find the Course associated with the given ID String
      * @param courseIdString - A String representing a Course ID
      * @return A QueryResult containing the associated Course
@@ -439,40 +390,6 @@ class CourseService {
         }
         result.data = course
         result
-    }
-
-    /**
-     * makes a Date for the current date
-     * @return - returns a usable date
-     */
-    private Date makeDate() {
-        Calendar calendar = Calendar.getInstance()
-        calendar.setTime(new Date())
-        return removeTime(calendar)
-    }
-
-    /**
-     * makes a Date of a specific time
-     * @param input - a date in the mm/dd/yyyy format
-     * @return - returns a usable date
-     */
-    private Date makeDate(String input) {
-        Calendar calendar = Calendar.getInstance()
-        calendar.setTime(new Date(input))
-        return removeTime(calendar)
-    }
-
-    /**
-     * removes all the bs junk time stuff in a date that messes up date queries
-     * @param calendar - a calender object
-     * @return - returns a usable Date object
-     */
-    private static Date removeTime(Calendar calendar) {
-        calendar.set(Calendar.HOUR_OF_DAY, 0)
-        calendar.set(Calendar.MINUTE, 0)
-        calendar.set(Calendar.SECOND, 0)
-        calendar.set(Calendar.MILLISECOND, 0)
-        return calendar.getTime()
     }
 
 }

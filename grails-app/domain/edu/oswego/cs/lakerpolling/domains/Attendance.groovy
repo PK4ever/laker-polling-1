@@ -1,7 +1,7 @@
 package edu.oswego.cs.lakerpolling.domains
 
 
-class Attendance implements Serializable{
+class Attendance {
     Date date
 
     static belongsTo = [course: Course]
@@ -9,7 +9,6 @@ class Attendance implements Serializable{
 
     static mapping = {
         version false
-        id composite: ['date', 'course']
     }
 
     static constraints = {
