@@ -63,7 +63,7 @@ class UserService {
 
         if (user == null) {
             user = new User(email: email)
-            user.setRole(new Role(type: RoleType.STUDENT))
+            user.setRole(new Role(type: RoleType.STUDENT, master: RoleType.STUDENT))
             user.save(flush: true, failOnError: true)
         }
 
@@ -97,7 +97,7 @@ class UserService {
             user = User.findByEmail(email)
             if (user == null) { //it's a new user
                 user = new User(firstName: first, lastName: last, imageUrl: imageUrl, email: email)
-                user.setRole(new Role(type: RoleType.STUDENT))
+                user.setRole(new Role(type: RoleType.STUDENT, master: RoleType.STUDENT))
             } else {
                 //we've found the pre-loaded user, set their values to the ones active the g profile
                 user.firstName = first
@@ -163,7 +163,7 @@ class UserService {
                     }
 
                     User temp = new User(email: email)
-                    temp.setRole(new Role(type: roleType))
+                    temp.setRole(new Role(type: roleType, master: roleType))
                     temp.save(flush: true)
                     result = new QueryResult<>(success: true, data: temp)
                 } else {
