@@ -19,7 +19,7 @@ class RoleService {
 
     QueryResult<Role> getUserRole(AuthToken token, long userId) {
         RoleType requestingRole = token.user.role.type
-        if (requestingRole != RoleType.INSTRUCTOR || requestingRole != RoleType.ADMIN) {
+        if (requestingRole != RoleType.INSTRUCTOR && requestingRole != RoleType.ADMIN) {
             return QueryResult.fromHttpStatus(HttpStatus.UNAUTHORIZED)
         }
 
@@ -41,12 +41,12 @@ class RoleService {
 
     QueryResult<Role> updateMaster(AuthToken token, long userId, String master) {
         RoleType requestingRole = token.user.role.type
-        if (requestingRole != RoleType.INSTRUCTOR || requestingRole != RoleType.ADMIN) {
+        if (requestingRole != RoleType.INSTRUCTOR && requestingRole != RoleType.ADMIN) {
             return QueryResult.fromHttpStatus(HttpStatus.UNAUTHORIZED)
         }
 
         Optional<RoleType> optional = stringToRoleType(master)
-        if (optional.isPresent()) {
+        if (!optional.isPresent()) {
             return new QueryResult<Role>(success: false, message: "Role:$master does not exist")
         }
 
