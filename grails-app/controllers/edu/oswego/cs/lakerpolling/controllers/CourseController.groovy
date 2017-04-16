@@ -1,6 +1,7 @@
 package edu.oswego.cs.lakerpolling.controllers
 
 import edu.oswego.cs.lakerpolling.domains.Course
+import edu.oswego.cs.lakerpolling.services.AttendanceService
 import edu.oswego.cs.lakerpolling.services.CourseListParserService
 import edu.oswego.cs.lakerpolling.services.CourseService
 import edu.oswego.cs.lakerpolling.services.PreconditionService
@@ -14,6 +15,7 @@ class CourseController {
 
     PreconditionService preconditionService
     CourseService courseService
+    AttendanceService attendanceService
     CourseListParserService courseListParserService
 
     /**
@@ -199,14 +201,14 @@ class CourseController {
             def dateRange = getDateRange(date, start_date, end_date)
             if (dateRange) {
                 if (student_id) {
-                    def result = courseService.getStudentAttendance(token, student_id, course_id, dateRange)
+                    def result = attendanceService.getStudentAttendance(token, student_id, course_id, dateRange)
                     if (result.success) {
                         render(view: 'getAttendees', model: [token: token, courseID: course_id.toLong(), attendees: result.data])
                     } else {
                         render(view: '../failure', model: [errorCode: result.errorCode, message: result.message])
                     }
                 } else {
-                    def result = courseService.getAllStudentAttendance(token, course_id, dateRange)
+                    def result = attendanceService.getAllStudentAttendance(token, course_id, dateRange)
                     if (result.success) {
                         def attendanceList = result.data
                         if (attendanceList.size() == 1) {
