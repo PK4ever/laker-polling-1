@@ -55,7 +55,7 @@
                 <h3 class="section-subheading text-muted">Welcome to your dashboard</h3>
 
                 <div id="roleButtonDiv" visibility="visible">
-                    <button type="submit" class="btn btn-success" id="roleButton">Change role to Instructor</button>
+                    <button type="submit" class="btn btn-success" id="roleButton">Change role to Student</button>
                 </div>
             </div>
         </div>
