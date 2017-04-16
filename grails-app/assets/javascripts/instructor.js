@@ -500,8 +500,9 @@ $('#roleButton').on('click', function(event) {
         type: 'GET',
         success: function(data) {
             var token = data.data.token;
+            var userId = data.data.user.id
             $.ajax({
-                url: '/api/user/role?access_token='+token+'current=STUDENT',
+                url: '/api/user/role?access_token='+token+'&user='+userId+'&current=STUDENT&master=INSTRUCTOR',
                 type: 'PUT',
                 success: function(data) {
                     window.location.href = "/dashboard";

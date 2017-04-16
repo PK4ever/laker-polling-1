@@ -9,6 +9,7 @@ $(function() {
 
         success: function(data){
             token = data.data.token;
+            var type = data.data.user.type;
             //GET COURSES AND DISPLAY ON THE PAGE
             var urlstr = '/api/course?=' + token;
             $.ajax({
@@ -45,7 +46,14 @@ $(function() {
                 url: '/api/user/role?access_token='+token,
                 type: 'GET',
                 success: function(data) {
-                    if(data.data.role.master.equals("INSTRUCTOR"))
+                    var availableRoles = data.data.role.available;
+                    var isInstructor = false;
+                    type;
+                    debugger
+                    $.each(availableRoles, function(i,obj) {
+                      if (obj === 'INSTRUCTOR') { isInstructor = true; return false;}
+                    });
+                    if(isInstructor)
                         document.getElementById('roleButtonDiv').style.visibility="visible";
                     else  
                         document.getElementById('roleButtonDiv').style.visibility="hidden";
@@ -95,8 +103,9 @@ $('#roleButton').on('click', function(event) {
         type: 'GET',
         success: function(data) {
             var token = data.data.token;
+            var userId = data.data.user.id;
             $.ajax({
-                url: '/api/user/role?access_token='+token+'current=INSTRUCTOR',
+                url: '/api/user/role?access_token='+token+'&user_id='+ userId +'&current=INSTRUCTOR',
                 type: 'PUT',
                 success: function(data) {
                     window.location.href = "/dashboard";
