@@ -11,12 +11,23 @@ import org.springframework.http.HttpStatus
 @Transactional
 class RoleService {
 
-
+    /**
+     * Retrieves the role for the user attached to the token.
+     * @param token - The token for the requesting user.
+     * @return The query result describing the operation.
+     */
     QueryResult<Role> getUserRole(AuthToken token) {
         User user = token.user
         new QueryResult<Role>(success: true, data: user.role)
     }
 
+    /**
+     * Retrieves the role for the user identified by user_id. The user attached to the token must be of a role above
+     * {@link RoleType#STUDENT}.
+     * @param token - The token for the requesting user.
+     * @param userId - The id of the user to retrieve data for.
+     * @return The query result describing the operation.
+     */
     QueryResult<Role> getUserRole(AuthToken token, long userId) {
         RoleType requestingRole = token.user.role.type
         if (requestingRole != RoleType.INSTRUCTOR && requestingRole != RoleType.ADMIN) {
@@ -35,10 +46,24 @@ class RoleService {
         result
     }
 
+    /**
+     * Updates the current role of the user and returns the role object. The update role must be equivalent or below the
+     * user's master role.
+     * @param token - The token identifying the requesting user.
+     * @param current - The desired updated role.
+     * @return - The query result describing the operation.
+     */
     QueryResult<Role> updateCurrent(AuthToken token, String current) {
         doUpdateCurrent(token.user, current)
     }
 
+    /**
+     * Updates the master role for a user identified by user_id. The role of the requesting user must be above {@link RoleType#STUDENT}
+     * @param token - The token identifying the user making the request.
+     * @param userId - The id of the use to update data for.
+     * @param master - The new master role for the user. Refer to {@link RoleType}
+     * @return - The query result describing the operation.
+     */
     QueryResult<Role> updateMaster(AuthToken token, long userId, String master) {
         RoleType requestingRole = token.user.role.type
         if (requestingRole != RoleType.INSTRUCTOR && requestingRole != RoleType.ADMIN) {
