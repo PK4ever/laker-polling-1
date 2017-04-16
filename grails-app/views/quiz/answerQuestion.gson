@@ -1,0 +1,9 @@
+import edu.oswego.cs.lakerpolling.domains.AuthToken
+
+model {
+    AuthToken token
+}
+json {
+    status "success"
+    accessToken token.accessToken
+}

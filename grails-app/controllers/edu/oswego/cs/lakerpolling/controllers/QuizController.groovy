@@ -163,4 +163,28 @@ class QuizController {
             } else render(view: '../failure', model: [errorCode: result.errorCode, message: result.message])
         } else render(view: '../failure', model: [errorCode: require.errorCode, message: require.message])
     }
+
+    /**
+     * Endpoint to answer a selected question
+     * @param access_token - the access_token of the user
+     * @param quiz_id - the id of the quiz
+     * @param question_id - the id of the question
+     * @param answer - the collection of answers represented as a list of booleans
+     * @return - returns a json view
+     */
+    def answerQuestion(String access_token, String quiz_id, String question_id, String answer) {
+        def require = preconditionService.notNull(params, ["access_token", "quiz_id", "question_id", "answer"])
+        def token = preconditionService.accessToken(access_token).data
+
+        if(require.success) {
+            def result = quizService.answerQuestion(token, quiz_id, question_id, answer)
+            if(result.success) {
+                render(view: 'answerQuestion', model: [token: token])
+            } else {
+                render(view: '../failure', model: [errorCode: result.errorCode, message: result.message])
+            }
+        } else {
+            render(view: '../failure', model: [errorCode: require.errorCode, message: require.message])
+        }
+    }
 }
