@@ -94,8 +94,8 @@ class BootStrap {
         Course csc480 = new Course(name: "CSC 480", crn: 11111, instructor: inst1)
         csc480.addToStudents(a)
         csc480.addToStudents(b)
-        csc480.addToStudents(michael);
-        csc480.addToStudents(max);
+        csc480.addToStudents(michael)
+        csc480.addToStudents(max)
         csc480.save(flush: true)
 
         Course csc212 = new Course(name: "CSC 480", crn: 11111, instructor: tyler)
@@ -113,12 +113,33 @@ class BootStrap {
         /*End courses*/
 
         /*Attendance*/
-        Attendee brandon = new Attendee(attended: true, student: stu)
-        Date someDate = new Date("1/22/91")
-        Attendance something = new Attendance(date: someDate, course: csc480)
-        something.addToAttendees(brandon)
-        something.save(flush: true)
-        brandon.save(flusth: true)
+//        Attendee brandon = new Attendee(attended: true, student: stu)
+//        Date someDate = new Date("1/22/91")
+//        Attendance something = new Attendance(date: someDate, course: csc480)
+//        something.addToAttendees(brandon)
+//        something.save(flush: true)
+//        brandon.save(flusth: true)
+
+        Attendance at1 = new Attendance(date: new Date("2017/04/12"), course: csc480)
+        at1.addToAttendees(new Attendee(attended: true, student: a))
+        at1.addToAttendees(new Attendee(attended: true, student: b))
+        at1.addToAttendees(new Attendee(attended: false, student: michael))
+        at1.addToAttendees(new Attendee(attended: true, student: max))
+        at1.save(flush:true)
+
+        Attendance at2 = new Attendance(date: new Date("2017/04/13"), course: csc480)
+        at2.addToAttendees(new Attendee(attended: false, student: a))
+        at2.addToAttendees(new Attendee(attended: true, student: b))
+        at2.addToAttendees(new Attendee(attended: true, student: michael))
+        at2.addToAttendees(new Attendee(attended: true, student: max))
+        at2.save(flush:true)
+
+        Attendance at3 = new Attendance(date: new Date("2017/04/14"), course: csc480)
+        at3.addToAttendees(new Attendee(attended: false, student: a))
+        at3.addToAttendees(new Attendee(attended: true, student: b))
+        at3.addToAttendees(new Attendee(attended: true, student: michael))
+        at3.addToAttendees(new Attendee(attended: true, student: max))
+        at3.save(flush:true)
 
     }
 

@@ -34,6 +34,7 @@ class UrlMappings {
             "/student"(controller: 'course', action: 'deleteCourseStudent', method: 'delete')
 
             "/attendance"(controller: 'course', action: 'getAttendance', method: 'get')
+            "/file/attendance"(controller: 'course', action: 'downloadAttendance', method: 'get')
         }
 
         group "/api/question", {

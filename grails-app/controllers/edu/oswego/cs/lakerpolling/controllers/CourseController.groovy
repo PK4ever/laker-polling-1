@@ -1,5 +1,6 @@
 package edu.oswego.cs.lakerpolling.controllers
 
+import edu.oswego.cs.lakerpolling.domains.AuthToken
 import edu.oswego.cs.lakerpolling.domains.Course
 import edu.oswego.cs.lakerpolling.services.AttendanceService
 import edu.oswego.cs.lakerpolling.services.CourseListParserService
@@ -221,12 +222,31 @@ class CourseController {
                         render(view: '../failure', model: [errorCode: result.errorCode, message: result.message])
                     }
                 }
-            }
-            else {
+            } else {
                 render(view: '../failure', model: [errorCode: 400, message: "Missing Date parameters"])
             }
         } else {
             render(view: '../failure', model: [errorCode: require.errorCode, message: require.message])
+        }
+    }
+
+    def downloadAttendance(String access_token, String course_id) {
+        QueryResult<AuthToken> checks = new QueryResult<>()
+        preconditionService.notNull(params, ["access_token", "course_id"], checks)
+        preconditionService.accessToken(access_token, checks)
+
+        if (checks.success) {
+            QueryResult<Long> convert = preconditionService.convertToLong(course_id, 'course_id')
+            if (convert.success) {
+                QueryResult result = attendanceService.getCourseAttendanceCsv(checks.data, convert.data, response)
+                if(!result.success) {
+                    render(view: '../failure', model: [errorCode: result.errorCode, message: result.message])
+                }
+            } else {
+                render(view: '../failure', model: [errorCode: convert.errorCode, message: convert.message])
+            }
+        } else {
+            render(view: '../failure', model: [errorCode: checks.errorCode, message: checks.message])
         }
     }
 
@@ -248,7 +268,7 @@ class CourseController {
             null
         }
     }
-    
+
     static String formatDateString(String date) {
         if (!date) {
             return null

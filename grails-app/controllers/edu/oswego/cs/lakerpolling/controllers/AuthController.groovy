@@ -63,7 +63,7 @@ class AuthController {
             session.removeAttribute("access")
         }
         session.invalidate()
-        render(view: 'authUser')
+        render(view: 'logout')
     }
 
 }

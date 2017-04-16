@@ -9,6 +9,10 @@ import edu.oswego.cs.lakerpolling.util.QueryResult
 import grails.transaction.Transactional
 import org.springframework.http.HttpStatus
 
+import javax.servlet.ServletOutputStream
+import javax.servlet.http.HttpServletResponse
+import java.text.SimpleDateFormat
+
 @Transactional
 class AttendanceService {
 
@@ -62,6 +66,58 @@ class AttendanceService {
         result
     }
 
+    /**
+     * Outputs a csv file through the response if pre checks pass through.
+     * @param token - The token to identify the user making the request.
+     * @param courseId - The id of the course to get data for.
+     * @param response - The response object to send data through.
+     * @return A query result with success true or false based on the operation.
+     */
+    QueryResult getCourseAttendanceCsv(AuthToken token, long courseId, HttpServletResponse response) {
+        QueryResult result = new QueryResult(success: true)
+        Course course = Course.findById(courseId)
 
+        if (courseService.hasInstructorAccess(token.user, course)) {
+
+            ServletOutputStream outputStream = response.outputStream
+            List<Attendance> attendances = Attendance.createCriteria().list {
+                eq('course', course)
+
+                lt("date", new Date())
+                order("date", "asc")
+            } as List<Attendance>
+
+            Set<User> students = course.students
+            SimpleDateFormat formatter = new SimpleDateFormat("MMM dd yyyy")
+            response.setHeader("Content-disposition", "filename=attendance-${course.name}.csv")
+            response.contentType = "text/csv"
+            response.characterEncoding = "UTF-8"
+
+            outputStream << "Full Name"
+            attendances.each {
+                outputStream << ",${formatter.format(it.date)}"
+            }
+            outputStream << "\n"
+            outputStream.flush()
+
+            students.eachWithIndex { student, index ->
+                outputStream << "${student.firstName} ${student.lastName}"
+                attendances.each { attendance ->
+                    Attendee attendee = Attendee.findByAttendanceAndStudent(attendance, student)
+                    outputStream << ",${attendee.attended ? "v" : "x"}"
+                }
+                if (index < students.size() - 1) {
+                    outputStream << "\n"
+                }
+                outputStream.flush()
+            }
+        } else {
+            result.success = false
+            result.errorCode = HttpStatus.UNAUTHORIZED.value()
+            result.message = HttpStatus.UNAUTHORIZED.reasonPhrase
+        }
+
+        result
+    }
 
 }
