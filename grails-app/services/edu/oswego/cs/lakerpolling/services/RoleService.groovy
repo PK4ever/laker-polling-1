@@ -39,24 +39,6 @@ class RoleService {
         doUpdateCurrent(token.user, current)
     }
 
-    QueryResult<Role> updateCurrent(AuthToken token, long userId, String current) {
-        RoleType requestingRole = token.user.role.type
-        if (requestingRole != RoleType.INSTRUCTOR || requestingRole != RoleType.ADMIN) {
-            return QueryResult.fromHttpStatus(HttpStatus.UNAUTHORIZED)
-        }
-
-        User user = User.findById(userId)
-        QueryResult<Role> result
-
-        if (user != null) {
-            result = doUpdateCurrent(user, current)
-        } else {
-            result = new QueryResult<>(success: false, message: "No user with user_id:$userId exists.")
-        }
-
-        result
-    }
-
     QueryResult<Role> updateMaster(AuthToken token, long userId, String master) {
         RoleType requestingRole = token.user.role.type
         if (requestingRole != RoleType.INSTRUCTOR || requestingRole != RoleType.ADMIN) {
