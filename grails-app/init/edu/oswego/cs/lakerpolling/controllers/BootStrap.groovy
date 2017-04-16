@@ -34,32 +34,32 @@ class BootStrap {
         stu2.save(flush: true)
 
         User michael = new User(firstName: "Michael", lastName: "Cavataio", email: "mcavatai@oswego.edu", imageUrl: "http://media.salon.com/2015/01/chrissy_teigen.jpg")
-        michael.setRole(new Role(type: RoleType.INSTRUCTOR, master: RoleType.STUDENT))
+        michael.setRole(new Role(type: RoleType.INSTRUCTOR, master: RoleType.INSTRUCTOR))
 //        michael.setAuthToken(new AuthToken(subject: "michael-stu", accessToken: "ee"))
         michael.save(flush: true)
 
         User max = new User(firstName: "Max", lastName: "Sokolovsky", email: "msokolov@oswego.edu", imageUrl: "http://media.salon.com/2015/01/chrissy_teigen.jpg")
-        max.setRole(new Role(type: RoleType.STUDENT, master: RoleType.STUDENT))
+        max.setRole(new Role(type: RoleType.STUDENT, master: RoleType.INSTRUCTOR))
         max.save(flush: true)
 
         User mike = new User(firstName: "Mike", lastName: "Mekker", email: "mmekker@oswego.edu", imageUrl: "http://media.salon.com/2015/01/chrissy_teigen.jpg")
-        mike.setRole(new Role(type: RoleType.STUDENT, master: RoleType.STUDENT))
+        mike.setRole(new Role(type: RoleType.STUDENT, master: RoleType.INSTRUCTOR))
         mike.save(flush: true)
 
         User mike2 = new User(firstName: "Mike", lastName: "Other", email: "someemail222@oswego.edu", imageUrl: "http://media.salon.com/2015/01/chrissy_teigen.jpg")
-        mike2.setRole(new Role(type: RoleType.STUDENT, master: RoleType.STUDENT))
+        mike2.setRole(new Role(type: RoleType.STUDENT, master: RoleType.INSTRUCTOR))
         mike2.save(flush: true)
 
         User paul = new User(firstName: "Paul", lastName: "Kwoyelo", email: "pkwoyelo@oswego.edu", imageUrl: "http://media.salon.com/2015/01/chrissy_teigen.jpg")
-        paul.setRole(new Role(type: RoleType.INSTRUCTOR, master: RoleType.STUDENT))
+        paul.setRole(new Role(type: RoleType.INSTRUCTOR, master: RoleType.INSTRUCTOR))
         paul.save(flush: true)
 
         User brad = new User(firstName: "Brandon", lastName: "Lanthrip", email: "blanthri@oswego.edu", imageUrl: "http://media.salon.com/2015/01/chrissy_teigen.jpg")
-        brad.setRole(new Role(type: RoleType.INSTRUCTOR, master: RoleType.STUDENT))
+        brad.setRole(new Role(type: RoleType.INSTRUCTOR, master: RoleType.INSTRUCTOR))
         brad.save(flush: true)
 
         User jeff = new User(email: "jregistr@oswego.edu")
-        jeff.setRole(new Role(type: RoleType.STUDENT, master: RoleType.STUDENT))
+        jeff.setRole(new Role(type: RoleType.STUDENT, master: RoleType.INSTRUCTOR))
         jeff.save(flush: true)
 
         /* End students*/
