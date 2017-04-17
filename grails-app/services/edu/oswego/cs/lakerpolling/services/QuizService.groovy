@@ -401,7 +401,7 @@ class QuizService {
 
     private Date parseTimestamp(String unixTime) {
         if (unixTime.isLong()) {
-            return new Date(unixTime.toLong() * 1000)
+            return new Date(unixTime.toLong())
         }
         return null
     }
