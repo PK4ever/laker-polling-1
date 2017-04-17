@@ -88,6 +88,7 @@ $("#submitAnswer").click(function() {
         success: function() {
             question_index++
             alert("Answer accepted")
+            window.location.href = "/course/quiz?courseId=" + course_id + "&quizId=" + quiz_id + "&questionIndex=" + question_index;
         },
         error: authFailure
     });
