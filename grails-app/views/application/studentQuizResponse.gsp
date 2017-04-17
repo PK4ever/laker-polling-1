@@ -56,9 +56,9 @@
         </div>
         <div class="form-group">
         <br>
-        <button class="btn btn-success" id="submitAnswer" data-course-id="${session.courseId}">Submit answer</button>
         </div>
     </form>
+    <button class="btn btn-success" id="submitAnswer" data-course-id="${session.courseId}">Submit answer</button>
 </div>
 
 <script src="https://apis.google.com/js/platform.js"></script>

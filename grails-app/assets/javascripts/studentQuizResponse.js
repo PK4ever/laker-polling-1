@@ -22,7 +22,7 @@ function getQuestion() {
                     //questions by removing the first question from the list after the student answers it?
                     console.log(question_index)
                     console.log(quiz_question_list)
-                    if(question_index>quiz_question_list.length) {
+                    if(question_index>=quiz_question_list.length) {
                         window.location.href = "/course?courseId=" + course_id;
                     }
                     else {
