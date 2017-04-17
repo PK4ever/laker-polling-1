@@ -58,7 +58,7 @@
     <div class="row">
         <div class="col-sm-4"></div>
         <div class="col-sm-4">
-            <div id="courses" class="table-responsive">
+            <div id="courses" class="table-responsive" style="width: 500px; height: 350px; overflow: scroll;">
                 <table id="studentTable" class="table">
                     <thead>
                     <tr>
@@ -69,39 +69,34 @@
                     </thead>
                 </table>
             </div>
+            <!-- <div class="col-sm-4"></div> -->
+        <div class="col-sm-8">
+            <form id="csv-form-email" method="post" style="margin-top: 30px;">
+                <label>Add student by email</label>
+                <div class="form-group">
+                    <input id="email" type="email" placeholder="lakernetID@oswego.edu" required>
+                    <input style="margin-top: 5px" type="submit" value="Add student" class="btn btn-success" id="email-button">
+                </div>
+            </form>
+        </div>
+        <div class="col-sm-4">
+            <form id="csv-form" enctype="multipart/form-data" style="margin-top: 30px;" method="post">
+                <label>Add by CSV</label>
+                <div class="form-group">
+                    <input value="Choose a CSV file" id="csv-file" type="file" accept=".csv">
+                    <input style="margin-top: 10px;" type="submit" value="Send CSV" class="btn btn-success" id="file-button">
+                </div>
+            </form>
+        </div>
+
+
         </div>
         <div class="col-sm-4"></div>
     </div>
 </section>
-    <!-- add student by email -->
-    <div class="row">
         <div class="col-sm-4"></div>
         <div class="col-sm-4">
-            <form id="csv-form-email" method="post" style="margin-top: 30px;">
-                <label>Add student by email</label>
-                <div class="form-cotrol">
-                    <input id="email" type="email" placeholder="lakernetID@oswego.edu" required>
-                    <input type="submit" value="Add student" class="btn btn-success" id="email-button">
-                </div>
-
-            </form>
         </div>
-    </div>
-
-    <h3 style="text-align: center;">OR</h3>
-
-    <div class="row">
-        <div class="col-sm-4"></div>
-        <div class="col-sm-4">
-            <form id="csv-form" enctype="multipart/form-data" method="post">
-                <label>Add a CSV file</label>
-                <div class="form-group">
-                    <input id="csv-file" type="file" accept=".csv">
-                    <input style="margin-top: 5px;" type="submit" value="Send CSV" class="btn btn-success" id="file-button">
-                </div>
-            </form>
-        </div>
-    </div>
 
 </div>
 <!-- Modal -->
