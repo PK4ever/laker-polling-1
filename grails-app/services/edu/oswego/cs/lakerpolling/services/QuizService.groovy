@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus
 @Transactional
 class QuizService {
     CourseService courseService
+    QuestionService questionService
 
     /**
      * Creates a quiz
@@ -42,7 +43,7 @@ class QuizService {
         }
 
         def course = courseResult.data
-        def accessCheck = verifyInstructorAccess(token, course)
+        def accessCheck = courseService.verifyInstructorAccess(token, course)
         if (!accessCheck.success) {
             return QueryResult.copyError(accessCheck)
         }
@@ -67,7 +68,7 @@ class QuizService {
         }
 
         Course course = courseResult.data
-        def accessCheck = verifyStudentAccess(token, course)
+        def accessCheck = courseService.verifyStudentAccess(token, course)
         if (!accessCheck.success) {
             return QueryResult.copyError(accessCheck)
         }
@@ -92,7 +93,7 @@ class QuizService {
         }
 
         Quiz quiz = quizResult.data
-        def accessCheck = verifyStudentAccess(token, quiz.course)
+        def accessCheck = courseService.verifyStudentAccess(token, quiz.course)
         if (!accessCheck.success) {
             return QueryResult.copyError(accessCheck)
         }
@@ -114,7 +115,7 @@ class QuizService {
         }
 
         Quiz quiz = quizResult.data
-        def accessCheck = verifyInstructorAccess(token, quiz.course)
+        def accessCheck = courseService.verifyInstructorAccess(token, quiz.course)
         if (!accessCheck.success) {
             return QueryResult.copyError(accessCheck)
         }
@@ -137,7 +138,7 @@ class QuizService {
         }
 
         def quiz = quizResult.data
-        def accessCheck = verifyStudentAccess(token, quiz.course)
+        def accessCheck = courseService.verifyStudentAccess(token, quiz.course)
         if (!accessCheck.success) {
             return QueryResult.copyError(accessCheck)
         }
@@ -161,7 +162,7 @@ class QuizService {
         }
 
         def quiz = quizResult.data
-        def accessCheck = verifyStudentAccess(token, quiz.course)
+        def accessCheck = courseService.verifyStudentAccess(token, quiz.course)
         if (!accessCheck.success) {
             return QueryResult.copyError(accessCheck)
         }
@@ -191,17 +192,12 @@ class QuizService {
         }
 
         def quiz = quizResult.data
-        def accessCheck = verifyInstructorAccess(token, quiz.course)
+        def accessCheck = courseService.verifyInstructorAccess(token, quiz.course)
         if (!accessCheck.success) {
             return QueryResult.copyError(accessCheck)
         }
 
-        def studentAnswers = new ArrayList()
-        for (def answer : answers) {
-            studentAnswers.add(new Integer(0))
-        }
-
-        Question question = new Question(course: quiz.course, question: text, choices: choices, answers: answers, studentAnswers: studentAnswers)
+        Question question = new Question(course: quiz.course, question: text, choices: choices, answers: answers)
         quiz.addToQuestions(question)
         result.data = question
         result
@@ -221,7 +217,7 @@ class QuizService {
         }
 
         def quiz = quizResult.data
-        def accessCheck = verifyInstructorAccess(token, quiz.course)
+        def accessCheck = courseService.verifyInstructorAccess(token, quiz.course)
         if (!accessCheck.success) {
             return QueryResult.copyError(accessCheck)
         }
@@ -264,7 +260,7 @@ class QuizService {
             return error
         }
 
-        def accessCheck = verifyStudentAccess(token, quiz.course)
+        def accessCheck = courseService.verifyStudentAccess(token, quiz.course)
         if (!accessCheck.success) {
             return QueryResult.copyError(accessCheck)
         }
@@ -275,65 +271,11 @@ class QuizService {
         }
 
         def question = questionResult.data
-        def answers = question.answers
-
-        def isCorrect = questionResponseIsCorrect(response, question)
-        new Answer(correct: isCorrect, question: question, student: token.user).save(flush: true, failOnError: true)
+        def isCorrect = questionService.questionResponseIsCorrect(response, question)
+        new Answer(correct: isCorrect, question: question, student: token.user, answers: response).save(flush: true, failOnError: true)
         new QueryResult(success: true)
     }
 
-    /**
-     * Returns a successfull Query Result if the user represented in token has student access to the given coursse
-     * @param token - the Authtoken
-     * @param course- the course
-     * @return a QueryResult representing the result of the check
-     */
-    private QueryResult verifyStudentAccess(AuthToken token, Course course) {
-        def userResult = findUser(token)
-        if (!userResult.success) {
-            return QueryResult.fromHttpStatus(HttpStatus.BAD_REQUEST)
-        }
-
-        def user = userResult.data
-        if (!courseService.hasStudentAccess(user, course)) {
-            return QueryResult.fromHttpStatus(HttpStatus.UNAUTHORIZED)
-        }
-        new QueryResult(success:true)
-    }
-
-    /**
-     * Returns a successful Query Result if the user represented in token has instructor access to the given course
-     * @param token - the Authtoken
-     * @param course - the course
-     * @return a QueryResult representing the result of the check
-     */
-    private QueryResult verifyInstructorAccess(AuthToken token, Course course) {
-        def userResult = findUser(token)
-        if (!userResult.success) {
-            return QueryResult.fromHttpStatus(HttpStatus.BAD_REQUEST)
-        }
-
-        def user = userResult.data
-        if (!courseService.hasInstructorAccess(user, course)) {
-            return QueryResult.fromHttpStatus(HttpStatus.UNAUTHORIZED)
-        }
-        new QueryResult(success:true)
-    }
-
-    /**
-     * Attempts to find the user associated with the given AuthToken
-     * @param token - the AuthToken
-     * @return A QueryResult containing the associated user
-     */
-    private QueryResult<User> findUser(AuthToken token) {
-        QueryResult<User> result = new QueryResult<>()
-        User user = token?.user
-        if (!user) {
-            return QueryResult.fromHttpStatus(HttpStatus.BAD_REQUEST)
-        }
-        result.data = user
-        result
-    }
 
     /**
      * Attempts to find the Quiz associated with the given ID String
@@ -380,23 +322,6 @@ class QuizService {
     private boolean quizIsOpen(Quiz quiz) {
         def now = new Date()
         now >= quiz.startDate & now < quiz.endDate
-    }
-
-    private boolean questionResponseIsCorrect(List<Boolean> response, Question question) {
-        def answers = question.answers
-        def isCorrect = true
-        answers.eachWithIndex { a, i ->
-            // isCorrect if it is not already marked as incorrect and the next response is also correct
-            isCorrect = isCorrect && (a == response.get(i))
-            //TODO make this increment code thread-safe
-            if (response.get(i)) {
-                def num = question.studentAnswers.get(i)
-                num += 1
-                question.studentAnswers.remove(i)
-                question.studentAnswers.add(i, num)
-            }
-        }
-        isCorrect
     }
 
     private Date parseTimestamp(String unixTime) {

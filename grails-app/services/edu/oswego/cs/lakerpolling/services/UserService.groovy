@@ -178,4 +178,19 @@ class UserService {
         result
     }
 
+    /**
+     * Attempts to find the user associated with the given AuthToken
+     * @param token - the AuthToken
+     * @return A QueryResult containing the associated user
+     */
+   QueryResult<User> findUser(AuthToken token) {
+        QueryResult<User> result = new QueryResult<>()
+        User user = token?.user
+        if (!user) {
+            return QueryResult.fromHttpStatus(HttpStatus.BAD_REQUEST)
+        }
+        result.data = user
+        result
+    }
+
 }

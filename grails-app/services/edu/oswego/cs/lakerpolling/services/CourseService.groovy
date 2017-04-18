@@ -392,4 +392,42 @@ class CourseService {
         result
     }
 
+    /**
+     * Returns a successfull Query Result if the user represented in token has student access to the given coursse
+     * @param token - the Authtoken
+     * @param course- the course
+     * @return a QueryResult representing the result of the check
+     */
+    QueryResult verifyStudentAccess(AuthToken token, Course course) {
+        def userResult = userService.findUser(token)
+        if (!userResult.success) {
+            return QueryResult.fromHttpStatus(HttpStatus.BAD_REQUEST)
+        }
+
+        def user = userResult.data
+        if (!hasStudentAccess(user, course)) {
+            return QueryResult.fromHttpStatus(HttpStatus.UNAUTHORIZED)
+        }
+        new QueryResult(success:true)
+    }
+
+    /**
+     * Returns a successful Query Result if the user represented in token has instructor access to the given course
+     * @param token - the Authtoken
+     * @param course - the course
+     * @return a QueryResult representing the result of the check
+     */
+    QueryResult verifyInstructorAccess(AuthToken token, Course course) {
+        def userResult = userService.findUser(token)
+        if (!userResult.success) {
+            return QueryResult.fromHttpStatus(HttpStatus.BAD_REQUEST)
+        }
+
+        def user = userResult.data
+        if (!hasInstructorAccess(user, course)) {
+            return QueryResult.fromHttpStatus(HttpStatus.UNAUTHORIZED)
+        }
+        new QueryResult(success:true)
+    }
+
 }

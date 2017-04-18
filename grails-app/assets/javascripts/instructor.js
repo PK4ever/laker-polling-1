@@ -501,7 +501,7 @@ $('#roleButton').on('click', function(event) {
             var token = data.data.token;
             var userId = data.data.user.id
             $.ajax({
-                url: '/api/user/role?access_token='+token+'&user='+userId+'&current=STUDENT&master=INSTRUCTOR',
+                url: '/api/user/role?access_token='+token+'&current=STUDENT',
                 type: 'PUT',
                 success: function(data) {
                     window.location.href = "/dashboard";

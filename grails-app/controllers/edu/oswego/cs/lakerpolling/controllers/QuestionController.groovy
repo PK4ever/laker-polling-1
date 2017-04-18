@@ -41,19 +41,18 @@ class QuestionController {
      * @return - returns a json view
      */
     def getAnswers(String access_token, String question_id) {
-        def result = preconditionService.notNull(params, ["access_token",  "question_id"])
+        def require = preconditionService.notNull(params, ["access_token",  "question_id"])
         def token = preconditionService.accessToken(access_token).data
 
-        if(result.success) {
-            def question = Question.findById(question_id.toLong())
-            if(question) {
-                if(!question.active) render(view: 'getAnswer', model: [question: question, token: token])
-                else render(view: '../failure', model: [errorCode: 400, message: "question still enabled"])
+        if(require.success) {
+            def result = questionService.getAnswers(token, question_id)
+            if(result.success) {
+                render(view: 'getAnswer', model: [answers: result.data, questionId: question_id.toLong(), token: token])
             } else {
-                render(view: '../failure', model: [errorCode: 400, message: "could not find question!"])
+                render(view: '../failure', model: [errorCode: result.errorCode, message: result.message])
             }
-        } else {f
-            render(view: '../failure', model: [errorCode: result.errorCode, message: result.message])
+        } else {
+            render(view: '../failure', model: [errorCode: require.errorCode, message: require.message])
         }
     }
 
@@ -67,9 +66,7 @@ class QuestionController {
     def answerQuestion(String access_token, String question_id, String answer) {
         def result = preconditionService.notNull(params, ["access_token", "question_id", "answer"])
         def token = preconditionService.accessToken(access_token).data
-
         if(result.success) {
-            println("ANSWERING QUESTION")
             if(questionService.answerQuestion(token, question_id, answer)) {
                 render(view: 'answerQuestion', model: [token: token])
             } else {

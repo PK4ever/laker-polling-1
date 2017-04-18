@@ -57,6 +57,8 @@
 <a href="/course?courseId=${session.courseId}" style="margin-left: 60px; href="/course?courseId=${session.courseId}" class="btn btn-default btn-md">
           <span class="glyphicon glyphicon-arrow-left"></span> Back
 </a>
+<br><br>
+<a id="attn-btn" style="margin-left: 60px;" href="" class="btn btn-success btn-md">Download Attendance</a>
     <div class="row">
         <div class="col-sm-3"></div>
         <div class="col-sm-6">
@@ -113,7 +115,16 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 
 <script>
-    window.onload=prepareClassTitle(${session.courseId});
+    window.onload= function(){
+        prepareClassTitle(${session.courseId});
+        $.ajax({
+            url: '/user/auth',
+            method: "GET",
+            success: function(data){
+                $('#attn-btn').attr('href', '/api/course/file/attendance?access_token=' + data.data.token + '&course_id=' + ${session.courseId})
+            }
+        });
+    }
 </script>
 
 <script>

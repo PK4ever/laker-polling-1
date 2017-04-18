@@ -40,10 +40,7 @@ $("#create-question-btn").click(function(){
     $.ajax({
         url: urlStr,
         method: 'POST',
-        success: window.location.reload(),
-        error: function(err){
-            alert(err)
-        }
+        success: window.location.reload()
     });
 });
 
@@ -107,9 +104,6 @@ $('.js-deleteQuestion').click(function () {
         method: "DELETE",
         success: function(){
             window.location.reload()
-        },
-        error: function(err){
-            alert(JSON.stringify(err))
         }
     });
 });
