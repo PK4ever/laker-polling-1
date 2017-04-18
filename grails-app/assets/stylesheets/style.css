@@ -29,7 +29,7 @@
     width: 200px !important;
 }
 body{
-    background-image: url("/assets/LakerPolingBackground.png") !important;
+    background: url("/assets/LakerPolingBackground.png") !important;
 }
 @media (max-width: 414px) {
     .navbar-brand{
@@ -52,4 +52,14 @@ body{
 
 .logout {
     cursor: pointer;
+}
+
+.btn-success {
+    background: #227039;
+    border: 1px solid #1a481d;
+}
+
+[role="button"] {
+    cursor: pointer;
+    min-width: 150px;
 }

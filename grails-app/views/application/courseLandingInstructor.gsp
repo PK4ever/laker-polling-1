@@ -8,9 +8,7 @@
     <asset:stylesheet href="agency.min.css"/>
     <asset:stylesheet href="agency.css"/>
     <asset:stylesheet href="style.css"/>
-    <!-- jQuery (necessary for Bootstrap"s JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-    <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 </head>
 <body>
@@ -48,8 +46,8 @@
 </nav>
 <section>
 <!-- <a style="margin-left: 40px; font-weight: bold" href="/dashboard">Return to Dashboard</a> -->
-<a href="/dashboard" style="margin-left: 60px; href="/dashboard" class="btn btn-default btn-md">
-          <span class="glyphicon glyphicon-arrow-left"></span> Back to Dashboard
+<a href="/dashboard" style="margin-left: 60px;" class="btn btn-default btn-md">
+          <span class="glyphicon glyphicon-arrow-left"></span> Back
 </a>
 <h1 id="coursePageTitle" style="text-align: center;">
 
@@ -62,11 +60,12 @@
     <a href="/course/quizList?courseId=${session.courseId}" class="btn btn-success" role="button">At-Home Quizzes</a>
 </div>
 <div class="form-group" style="text-align: center;">
-    <a href="/course/roster" class="btn btn-success" role="button">Roster</a>
-</div>
-<div class="form-group" style="text-align: center;">
     <a href="/course/attendance" class="btn btn-success" role="button">Attendance</a>
 </div>
+<div class="form-group" style="text-align: center;">
+    <a href="/course/roster" class="btn btn-success" role="button">Roster</a>
+</div>
+
 </section>
 
 <asset:javascript src="jquery-3.2.0.min.js"/>
