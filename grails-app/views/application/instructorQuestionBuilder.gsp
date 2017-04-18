@@ -6,7 +6,6 @@
     <asset:stylesheet href="agency.min.css"/>
     <asset:stylesheet href="agency.css"/>
 
-<asset:javascript src="question.js"/>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Create a Question</title>
@@ -82,7 +81,6 @@
 </div>
 </section>
 
-<asset:javascript src="jquery-3.2.0.min.js"/>
 <script src="https://apis.google.com/js/platform.js"></script>
 
 
