@@ -170,7 +170,6 @@ var courseId
             method: "GET",
             success: function(data){
                 var token = data.data.token
-                console.log(token)
                 currentInstructor = new CurrentInstructor(token)
                 $.ajax({
                     url: '/api/course',
@@ -399,7 +398,7 @@ var courseId
     function prepareDeleteButton() {
         $('.js-deleteCourseButton').click(function () {
             const clickedButton = $(this);
-            debugger
+            // debugger
             const courseId = clickedButton.data('course-id');
             var course = currentInstructor.getCourseById(courseId);
 
@@ -412,7 +411,7 @@ var courseId
                 alert("Course not found by id " + courseId);
                 return
             }
-            debugger
+            // debugger
             $('#deleteCourseModal').find('#confirmDeleteButton').data("course-id",course.id);
             $('#deleteCourseModal').data("course-id",  course.id);
             $('#deleteCourseModal').find('#courseId').html(course.id);

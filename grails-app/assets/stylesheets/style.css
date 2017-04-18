@@ -15,7 +15,7 @@
     padding: 15px !important;
 }
 #answers:hover {
-    background: lightgreen;
+    background: #45db39;
 }
 #submit-question-btn{
     width: 200px !important;
