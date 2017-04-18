@@ -197,7 +197,7 @@ class QuizService {
             return QueryResult.copyError(accessCheck)
         }
 
-        Question question = new Question(course: quiz.course, question: text, choices: choices, answers: answers, studentAnswers: studentAnswers)
+        Question question = new Question(course: quiz.course, question: text, choices: choices, answers: answers)
         quiz.addToQuestions(question)
         result.data = question
         result
