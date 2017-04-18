@@ -5,7 +5,6 @@ class Question {
     boolean active
     List<Boolean> answers
     List<String> choices
-    List<Integer> studentAnswers
 
     static belongsTo = [course: Course]
     static hasMany = [responses: Answer]
