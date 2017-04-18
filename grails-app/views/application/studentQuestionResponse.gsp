@@ -31,7 +31,7 @@
 </div>
 
 <a href="/dashboard" style="margin-left: 60px; href="/dashboard" class="btn btn-default btn-md">
-          <span class="glyphicon glyphicon-arrow-left"></span> Back to Dashboard
+          <span class="glyphicon glyphicon-arrow-left"></span> Back
 </a>
 
 <div class="form-group" style="text-align: center;">

@@ -49,7 +49,6 @@ $(function() {
                     var availableRoles = data.data.role.available;
                     var isInstructor = false;
                     type;
-                    debugger
                     $.each(availableRoles, function(i,obj) {
                       if (obj === 'INSTRUCTOR') { isInstructor = true; return false;}
                     });

@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Instructor</title>
     <asset:javascript src="main.js"/>
-    <!--<asset:stylesheet href="bootstrap.min.css"/>
-    <asset:stylesheet href="bootstrap-theme.min.css"/>-->
     <!-- jQuery (necessary for Bootstrap"s JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <!-- Latest compiled and minified JavaScript -->
@@ -17,6 +15,7 @@
     <asset:stylesheet href="style.css"/>
 </head>
 <body class="bg-light-gray">
+
 <nav id="mainNav" class="navbar navbar-default navbar-custom navbar-fixed-top">
     <div class="container">
         <!-- Brand and toggle get grouped for better mobile display -->
@@ -28,16 +27,13 @@
                 <asset:image src="logo2.png"
                              style="height: 80px !important; width: 120px !important; position: absolute; top: 10%"/>
             </a>
-            <a id="pageName" class="navbar-brand" style="position: absolute; left: 40%; font-size: x-large; font-family: monospace;">Instructor's Dashboard</a>
-
-            <!--<a class="navbar-brand page-scroll" href="#page-top">LOGO HERE</a>-->
+            <a id="pageName" class="navbar-brand" style="position: absolute; left: 45%; font-size: x-large; font-family: monospace;">Instructor</a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav navbar-right">
                 <li style="border: 1.5px solid #fed136">
-                    %{--<button onclick="logout()" class="btn btn-default navbar-right navbar-btn">Logout</button>--}%
                     <a class="logout" onclick="logout()" >LogOut</a>
                 </li>
             </ul>
@@ -49,11 +45,9 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-12 text-center">
-
                 <div id="userName"></div>
                 <div id="profilePic"></div>
-                <h3 class="section-subheading text-muted">Welcome to your dashboard</h3>
-
+                <h3 class="section-subheading">Welcome to your dashboard</h3>
                 <div id="roleButtonDiv" visibility="visible">
                     <button type="submit" class="btn btn-success" id="roleButton">Change role to Student</button>
                 </div>
@@ -122,9 +116,6 @@
 
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.css">
-
-<!-- Latest compiled and minified JavaScript -->
-<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.js"></script>
 
 <asset:javascript src="auth/config.js"/>
 <asset:javascript src="auth/logout.js"/>

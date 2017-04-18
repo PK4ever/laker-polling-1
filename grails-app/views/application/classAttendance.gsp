@@ -26,11 +26,12 @@
 
                 <asset:image src="logo2.png"
                              style="height: 80px !important; width: 120px !important; position: absolute; top: 0%"/>
+                %{--<img src="logo.png" style="height: 60px !important; width: 120px !important; position: absolute; top: 0%">--}%
             </a>
             <a id="coursePageTitle" class="navbar-brand" style="position: absolute; left: 45%; font-size: x-large"></a>
-    
 
-        <!--<a class="navbar-brand page-scroll" href="#page-top">LOGO HERE</a>-->
+
+            <!--<a class="navbar-brand page-scroll" href="#page-top">LOGO HERE</a>-->
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
@@ -49,7 +50,7 @@
 <section>
 <div class="container">
 <a href="/course?courseId=${session.courseId}" style="margin-left: 60px; href="/course?courseId=${session.courseId}" class="btn btn-default btn-md">
-          <span class="glyphicon glyphicon-arrow-left"></span> Back to Course Page
+          <span class="glyphicon glyphicon-arrow-left"></span> Back
 </a>
     <div class="row">
         <div class="col-sm-3"></div>
@@ -105,7 +106,6 @@
 
 <asset:stylesheet href="bootstrap.min.css"/>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-
 
 <script>
     window.onload=prepareClassTitle(${session.courseId});
