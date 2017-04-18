@@ -26,7 +26,7 @@
             <a class="navbar-brand page-scroll" href="/dashboard">
 
                 <asset:image src="logo2.png"
-                             style="height: 80px !important; width: 120px !important; position: absolute; top: 0%"/>
+                             style="height: 80px !important; width: 120px !important; position: absolute; top: 10%"/>
 
                 %{--<img src="logo.png" style="height: 60px !important; width: 120px !important; position: absolute; top: 0%">--}%
             </a>
@@ -58,7 +58,7 @@
     <div class="row">
         <div class="col-sm-4"></div>
         <div class="col-sm-4">
-            <div id="courses" class="table-responsive" style="width: 500px; height: 350px; overflow: scroll;">
+            <div id="courses" class="table-responsive">
                 <table id="studentTable" class="table">
                     <thead>
                     <tr>
@@ -69,7 +69,8 @@
                     </thead>
                 </table>
             </div>
-            <!-- <div class="col-sm-4"></div> -->
+        <div class="col-sm-4"></div>
+
         <div class="col-sm-8">
             <form id="csv-form-email" method="post" style="margin-top: 30px;">
                 <label>Add student by email</label>

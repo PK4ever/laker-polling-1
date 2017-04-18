@@ -63,3 +63,7 @@ body{
     cursor: pointer;
     min-width: 150px;
 }
+
+.navbar-collapse > ul.navbar-nav > li {
+    border: 1.5px solid #fed136 ;
+}
