@@ -24,8 +24,7 @@ $(':checkbox').change(function() { // just for testing, can be removed
 
 
 // STUDENT - submit answer
-$("#submitAnswer").click(function() {
-    if(location.pathname.substring(location.pathname.lastIndexOf("/") + 1) == "studentQuestionResponse") {
+$("#submitAnswerLive").click(function() {
         var courseId = $(this).data('course-id');
         var selected = [];
         $(':checkbox').each(function() {
@@ -54,6 +53,7 @@ $("#submitAnswer").click(function() {
                 success: function() {
                     console.log(question_id + 'is the q id')
                     alert('Answer Submitted')
+                    window.location.href="/course/answerquestion?courseId=" + courseId
                 }
             });
         },
@@ -61,7 +61,6 @@ $("#submitAnswer").click(function() {
             alert('This question is not ready, please wait for instructor and try again.');
         }
     });
-    }
 });
 
 

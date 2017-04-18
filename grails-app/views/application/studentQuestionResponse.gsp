@@ -50,7 +50,7 @@
         </div>
         <div class="form-group">
         <br>
-        <button class="btn btn-success" id="submitAnswer" data-course-id="${session.courseId}">Submit answer</button>
+        <button class="btn" id="submitAnswerLive" data-course-id="${session.courseId}">Submit answer</button>
         </div>
     </form>
 </div>
