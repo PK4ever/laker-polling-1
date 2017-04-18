@@ -77,7 +77,7 @@
     <div class="col-sm-4"></div>
     <div class="col-sm-4">
         <form id="quiz-form" method="post" style="margin-top: 30px;">
-            <label>Add Quiz</label>
+            <label>Add Question</label>
             <div class="form-cotrol">
                 <textarea class="form-control" placeholder="Your question *" id="question-text" required data-validation-required-message="Please enter a message."></textarea>
                 %{--<input id="quiz" type="text" placeholder="what is your question?" required>--}%

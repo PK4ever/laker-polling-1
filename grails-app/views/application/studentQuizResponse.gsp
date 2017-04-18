@@ -43,21 +43,22 @@
     <h2 id="answer4"></h2>
     <form id="answer-form" method="post">
         <div class="btn-group" data-toggle="buttons" >
-            <label class="btn btn-default answer-btn" id="answer">
+            <label class="btn btn-default answer-btn" id="answers">
                 <input type="checkbox" autocomplete="off">A</label><br>
-            <label class="btn btn-default answer-btn" id="answer">
+            <label class="btn btn-default answer-btn" id="answers">
                 <input type="checkbox" autocomplete="off">B</label><br>
-            <label class="btn btn-default answer-btn" id="answer">
+            <label class="btn btn-default answer-btn" id="answers">
                 <input type="checkbox" autocomplete="off">C</label><br>
-            <label class="btn btn-default answer-btn" id="answer">
+            <label class="btn btn-default answer-btn" id="answers">
                 <input type="checkbox" autocomplete="off">D</label><br>
-            <label class="btn btn-default answer-btn" id="answer">
+            <label class="btn btn-default answer-btn" id="answers">
                 <input type="checkbox" autocomplete="off">E</label><br>
         </div>
         <div class="form-group">
-        <input class="btn btn-success" id="submitAnswer" data-course-id="${session.courseId}" value="Submit answer">
+        <br>
         </div>
     </form>
+    <button class="btn btn-success" id="submitAnswer" data-course-id="${session.courseId}">Submit answer</button>
 </div>
 
 <script src="https://apis.google.com/js/platform.js"></script>

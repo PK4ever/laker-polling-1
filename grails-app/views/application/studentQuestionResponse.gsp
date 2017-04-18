@@ -49,7 +49,8 @@
                 <input type="checkbox" autocomplete="off">E</label><br>
         </div>
         <div class="form-group">
-        <input class="btn btn-success" id="submitAnswer" data-course-id="${session.courseId}" value="Submit answer">
+        <br>
+        <button class="btn btn-success" id="submitAnswer" data-course-id="${session.courseId}">Submit answer</button>
         </div>
     </form>
 </div>

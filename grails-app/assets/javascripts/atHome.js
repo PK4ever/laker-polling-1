@@ -37,11 +37,11 @@ $('#newQuizButton').on('click', function(event) {
             var startTimestamp = Date.parse(startDate + ' ' + startTime)
             var endTimestamp = Date.parse(endDate + ' ' + endTime)
 
-            //var urlStr = '/api/quiz?access_token=' + token + '&course_id=' + courseId + '&name=' + name + '&start_timestamp=' + startTimestamp + '&end_timestamp=' + endTimestamp
+            var urlStr = '/api/quiz?access_token=' + token + '&course_id=' + courseId + '&name=' + name + '&start_timestamp=' + startTimestamp + '&end_timestamp=' + endTimestamp
             if(!name || !startTimestamp || !endTimestamp) {alert("Please fill all fields for quiz creation.");return;}
-            
+
             $.ajax({
-                url: '/api/quiz?access_token=' + token + '&course_id=' + courseId + '&name=' + name + '&start_timestamp=' + startTimestamp + '&end_timestamp=' + endTimestamp,
+                url: urlStr,
                 type: 'POST',
                 success: function(data) {
                     window.location.href = "/course/createQuiz?courseId=" + courseId + "&quizId=" + data.data.students.id;

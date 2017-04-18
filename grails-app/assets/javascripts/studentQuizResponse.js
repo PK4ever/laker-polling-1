@@ -16,13 +16,13 @@ function getQuestion() {
                 url: '/api/quiz/question?access_token=' + token + '&quiz_id=' + quiz_id,
                 type: 'GET',
                 success: function(data) {
-                    console.log(quiz_id + 'is the q id');
+                    console.log(quiz_id + 'is the quiz id');
                     var quiz_question_list = data.data.questionIds;
                     //Grab the first question in the list here. I'm assuming we still want to try and recurse through the
                     //questions by removing the first question from the list after the student answers it?
                     console.log(question_index)
                     console.log(quiz_question_list)
-                    if(question_index>quiz_question_list.length) {
+                    if(question_index>=quiz_question_list.length) {
                         window.location.href = "/course?courseId=" + course_id;
                     }
                     else {
@@ -83,17 +83,33 @@ $("#submitAnswer").click(function() {
     console.log(selected)
     // see if there's an active question
     $.ajax({
-        url: '/api/quiz/question/answer?access_token=' + token + '&question_id=' + question_id + '&answer=' + answer,
+        url: '/api/quiz/question/answer?access_token=' + token + '&quiz_id=' + quiz_id +'&question_id=' + question_id + '&answer=' + answer,
         type: 'PUT',
         success: function() {
             question_index++
             alert("Answer accepted")
+            window.location.href = "/course/quiz?courseId=" + course_id + "&quizId=" + quiz_id + "&questionIndex=" + question_index;
         },
-        error: function() {
-            alert('Error. Please try again.');
-        }
+        error: authFailure
     });
 });
+
+function authFailure(xhr, textStatus, errorThrown){
+    var responseText = xhr.responseText;
+    if(responseText != null) {
+        var status;
+        try {
+            status = JSON.parse(responseText);
+        }
+        catch(e) {
+            status = undefined;
+        }
+        if(status && status.message) {
+            alert(status.message);
+        }
+    }
+}
+
 
 function prepareClassTitle(cId) {
     course_id = cId;
