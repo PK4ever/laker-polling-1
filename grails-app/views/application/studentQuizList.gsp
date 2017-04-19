@@ -63,8 +63,8 @@
                     <tr>
                         <th class="col-md-1" data-field="id">ID</th>
                         <th class="col-md-1" data-field="name" data-formatter="identifierFormatter">Quiz Name</th>
-                        <th class="col-md-1" data-field="startTime">Start Time</th>
-                        <th class="col-md-1" data-field="endTime">End Time</th>
+                        <th class="col-md-1" data-field="startDate" data-formatter="dateFormatter">Start Time</th>
+                        <th class="col-md-1" data-field="endDate" data-formatter="dateFormatter">End Time</th>
                     </tr>
                     </thead>
                 </table>

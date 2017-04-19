@@ -13,6 +13,7 @@ $(function(){
                 method: "GET",
                 success: function(data) {
                 	var quizzes = data.data.quizzes
+                    console.log(quizzes)
                     $('#quizTable').bootstrapTable({
 		                data: quizzes
 		            });
@@ -61,6 +62,13 @@ function identifierFormatter(value, row, index) {
         '<a class="like" href="/course/quiz?courseId=' + courseId + '&quizId=' + row.id + '&questionIndex=0" title="Like">',
         value,
         '</a>'].join('');
+}
+
+function dateFormatter(value, row, index) {
+    var str = value.split('T')
+    var date = str[0]
+    var time = str[1].substring(0,str[1].length-1)
+    return date + ' :: ' + time;
 }
 
 function prepareClassTitle(cId) {
