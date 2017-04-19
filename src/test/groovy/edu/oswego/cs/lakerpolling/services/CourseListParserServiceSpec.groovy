@@ -38,6 +38,14 @@ class CourseListParserServiceSpec extends Specification {
         users.data.contains("user3@oswego.edu")
     }
 
+    def "Test Username Without Header"() {
+        when: "The CSV is loaded"
+        QueryResult<List<String>> users = service.parse(getFile("UsernameWithoutHeader.csv"))
+
+        then: "There should be no users"
+        !users.success
+    }
+
     def "Test Different Delimiter"() {
         when: "The CSV is loaded"
         QueryResult<List<String>> users = service.parse(getFile("DifferentDelimiter.csv"))
