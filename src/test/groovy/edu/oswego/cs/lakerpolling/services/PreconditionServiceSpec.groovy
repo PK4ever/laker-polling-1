@@ -6,7 +6,10 @@ import edu.oswego.cs.lakerpolling.domains.Role
 import edu.oswego.cs.lakerpolling.domains.User
 import edu.oswego.cs.lakerpolling.util.QueryResult
 import edu.oswego.cs.lakerpolling.util.RoleType
+import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
+import grails.test.mixin.integration.Integration
+import grails.transaction.Rollback
 import grails.web.servlet.mvc.GrailsParameterMap
 import spock.lang.Specification
 
@@ -15,7 +18,10 @@ import javax.servlet.http.HttpServletRequest
 /**
  * See the API for {@link grails.test.mixin.services.ServiceUnitTestMixin} for usage instructions
  */
+@Integration
+@Rollback
 @TestFor(PreconditionService)
+@Mock(User)
 class PreconditionServiceSpec extends Specification {
     PreconditionService preconditionService = new PreconditionService()
     User inst1
