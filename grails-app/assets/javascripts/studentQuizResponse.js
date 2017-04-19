@@ -17,7 +17,7 @@ function getQuestion() {
                 type: 'GET',
                 success: function(data) {
                     console.log(quiz_id + 'is the quiz id');
-                    var quiz_question_list = data.data.questionIds;
+                    var quiz_question_list = data.data.questionIds.sort();
                     //Grab the first question in the list here. I'm assuming we still want to try and recurse through the
                     //questions by removing the first question from the list after the student answers it?
                     console.log(question_index)
