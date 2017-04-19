@@ -4,6 +4,7 @@ var course_id;
 var quiz_id;
 var answer;
 var question_index;
+var quiz_question_list;
 
 // get student's access token on load
 function getQuestion() {
@@ -17,7 +18,7 @@ function getQuestion() {
                 type: 'GET',
                 success: function(data) {
                     console.log(quiz_id + 'is the quiz id');
-                    var quiz_question_list = data.data.questionIds.sort();
+                    quiz_question_list = data.data.questionIds.sort();
                     //Grab the first question in the list here. I'm assuming we still want to try and recurse through the
                     //questions by removing the first question from the list after the student answers it?
                     console.log(question_index)
@@ -88,7 +89,12 @@ $("#submitAnswer").click(function() {
         success: function() {
             question_index++
             alert("Answer accepted")
-            window.location.href = "/course/quiz?courseId=" + course_id + "&quizId=" + quiz_id + "&questionIndex=" + question_index;
+            if(question_index < quiz_question_list.length) {
+                window.location.href = "/course/quiz?courseId=" + course_id + "&quizId=" + quiz_id + "&questionIndex=" + question_index;
+            }
+            else {
+                window.location.href = "/course?courseId=" + course_id
+            }
         },
         error: authFailure
     });
