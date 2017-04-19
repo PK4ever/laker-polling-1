@@ -10,6 +10,7 @@ import spock.lang.Specification
 class AuthControllerSpec extends Specification {
 
     def setup() {
+
     }
 
     def cleanup() {
