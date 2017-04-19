@@ -54,18 +54,6 @@ class CourseListParserServiceSpec extends Specification {
         !users.success
     }
 
-    def "Test Bad Email"() {
-        when: "The CSV is loaded"
-        QueryResult<List<String>> users = service.parse(getFile("BadEmailWithHeader.csv"))
-
-        then: "There should be the following users"
-        users.data.contains("user1@oswego.edu")
-        users.data.contains("user3@oswego.edu")
-
-        then: "And not the following user"
-        !users.data.contains("user2@gmail.com")
-    }
-
     private MockMultipartFile getFile(String name) {
         return new MockMultipartFile(name,this.getClass().getClassLoader().getResourceAsStream("courseListParserServiceSpec/$name"))
     }
