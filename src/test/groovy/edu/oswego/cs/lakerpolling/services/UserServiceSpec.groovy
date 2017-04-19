@@ -91,10 +91,10 @@ class UserServiceSpec extends Specification {
         when:
         prepareData()
         then:
-        def user = service.getUser("kajhdfkjhkf23")
+        def user = service.getUser("")
 
-        if (user != null) {
-            print("User should not be found with invalid token")
+        if (user.message != UserService.UserErrors.INVALID_ACCESS_TOKEN) {
+            print("User should show it has a invalid access token")
             assert false
         }
     }
@@ -105,8 +105,8 @@ class UserServiceSpec extends Specification {
         then:
         def user = service.getUser(null)
 
-        if (user != null) {
-            print("User should not be found with null token")
+        if (user.message != UserService.UserErrors.INVALID_ACCESS_TOKEN) {
+            print("User should show it has a invalid access token")
             assert false
         }
     }
@@ -117,8 +117,8 @@ class UserServiceSpec extends Specification {
         then:
         def user = service.getUser("aa-1000")
 
-        if (user != null) {
-            print("User should not be found valid token")
+        if (user == null) {
+            print("User should be found with a valid token")
             assert false
         }
     }
