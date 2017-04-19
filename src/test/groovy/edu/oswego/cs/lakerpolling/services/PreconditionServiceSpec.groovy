@@ -44,29 +44,29 @@ class PreconditionServiceSpec extends Specification {
         inst1.save(flush: true, failOnError: true)
 
         /* TEST STUDENTS - IN A COURSE */
-        a = new User(firstName: "Jason", lastName: "Parker", email: "a@oswego.edu", imageUrl: "Some image")
+        def a = new User(firstName: "Jason", lastName: "Parker", email: "a@oswego.edu", imageUrl: "Some image")
         a.setRole(new Role(type: RoleType.STUDENT))
         a.setAuthToken(new AuthToken(subject: 'sub-a-1000', accessToken: 'aa-1000'))
         a.save(flush: true, failOnError: true)
 
-        b = new User(firstName: "Peter", lastName: "Swanson", email: "b@oswego.edu", imageUrl: "coolest")
+        def b = new User(firstName: "Peter", lastName: "Swanson", email: "b@oswego.edu", imageUrl: "coolest")
         b.setRole(new Role(type: RoleType.STUDENT))
         b.setAuthToken(new AuthToken(subject: 'sub-b-1000', accessToken: 'bb-1000'))
         b.save(flush: true, failOnError: true)
 
         /* TEST STUDENTS - NOT IN A COURSE */
-        c = new User(firstName: "John", lastName: "Johnson", email: "c@oswego.edu", imageUrl: "Other image")
+        def c = new User(firstName: "John", lastName: "Johnson", email: "c@oswego.edu", imageUrl: "Other image")
         c.setRole(new Role(type: RoleType.STUDENT))
         c.setAuthToken(new AuthToken(subject: 'sub-c-1000', accessToken: 'cc-1000'))
         c.save(flush: true, failOnError: true)
 
-        d = new User(firstName: "Jack", lastName: "Jackson", email: "d@oswego.edu", imageUrl: "Other coolest")
+        def d = new User(firstName: "Jack", lastName: "Jackson", email: "d@oswego.edu", imageUrl: "Other coolest")
         d.setRole(new Role(type: RoleType.STUDENT))
         d.setAuthToken(new AuthToken(subject: 'sub-d-1000', accessToken: 'dd-1000'))
         d.save(flush: true, failOnError: true)
 
         /* TEST COURSE */
-        course1 = new Course(name: "CSC 480", crn: 11111, instructor: inst1)
+        def course1 = new Course(name: "CSC 480", crn: 11111, instructor: inst1)
         course1.addToStudents(a)
         course1.addToStudents(b)
         course1.save(flush: true, failOnError: true)

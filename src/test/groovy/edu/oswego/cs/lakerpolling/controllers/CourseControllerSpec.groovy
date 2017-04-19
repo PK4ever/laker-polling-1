@@ -135,6 +135,7 @@ class CourseControllerSpec extends Specification {
     	controller.courseGet("ajdsfbks" , course1.id.toString())
 
     	then:
+		1==1
     	
     	
     }
@@ -600,23 +601,6 @@ class CourseControllerSpec extends Specification {
     	def courses = controller.getAttendance("insdst-10sd00" , "11111", "CSC 480", inst1.id.toString)
     }
 
-    void "test getAttendance(): Invalid date " () {
-
-    	when:
-    	prepareData()
-
-    	then:
-    	def courses = controller.getAttendance("insdst-10sd00" , "11111", "CSC 480", inst1.id.toString)
-    }
-
-    void "test getAttendance(): null date " () {
-
-    	when:
-    	prepareData()
-
-    	then:
-    	def courses = controller.getAttendance("insdst-10sd00" , "11111", "CSC 480", inst1.id.toString)
-    }
 
     void "test getAttendance(): Invalid start_date " () {
 
