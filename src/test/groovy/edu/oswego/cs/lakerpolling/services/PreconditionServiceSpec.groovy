@@ -21,7 +21,6 @@ import javax.servlet.http.HttpServletRequest
 @Integration
 @Rollback
 @TestFor(PreconditionService)
-@Mock(User)
 class PreconditionServiceSpec extends Specification {
     PreconditionService preconditionService = new PreconditionService()
     User inst1

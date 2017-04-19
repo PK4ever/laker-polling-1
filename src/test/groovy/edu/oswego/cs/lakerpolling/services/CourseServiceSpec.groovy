@@ -365,7 +365,7 @@ class CourseServiceSpec extends Specification {
         service.getAllStudents(inst1.getAuthToken(), course1.getId().toString()).data.size() == 2
     }
 
-    void "test deleteStudentCourse(): Invalid list of ids"() {
+    void "test deleteStudentCourse(): Invalid list of user ids"() {
         when:
         prepareData()
 
@@ -382,7 +382,7 @@ class CourseServiceSpec extends Specification {
         error
     }
 
-    void "test deleteStudentCourse(): Null list of emails"() {
+    void "test deleteStudentCourse(): Null list of user ids"() {
         when:
         prepareData()
 
@@ -391,12 +391,88 @@ class CourseServiceSpec extends Specification {
         service.getAllStudents(inst1.getAuthToken(), course1.getId().toString()).data.size() == 2
     }
 
-    void "test deleteStudentCourse(): Empty list of emails"() {
+    void "test deleteStudentCourse(): Empty list of user ids"() {
         when:
         prepareData()
 
         then:
         service.deleteStudentCourse(inst1.getAuthToken(), course1.getId(), [])
         service.getAllStudents(inst1.getAuthToken(), course1.getId().toString()).data.size() == 2
+    }
+
+    void "test instructorCreateCourse(): All Valid EQ Classes"() {
+        when:
+        prepareData()
+
+        then:
+        def new_course = service.instructorCreateCourse(inst1.getAuthToken(), "123456", "test_course").data
+        new_course.getCrn() == "123456"
+        new_course.getInstructor() == inst1
+        new_course.getName() == "test_course"
+        new_course.getStudents() == null
+        new_course.getQuestions() == null
+    }
+
+    void "test instructorCreateCourse(): Invalid AuthToken"() {
+        when:
+        prepareData()
+
+        then:
+        def error = false
+        try {
+            service.instructorCreateCourse(new AuthToken(accessToken: "fail", subject: "fail-subj"), "123456", "test_course")
+        }
+        catch(NullPointerException npe) {
+            error = true
+        }
+        error
+    }
+
+    void "test instructorCreateCourse(): Null AuthToken"() {
+        when:
+        prepareData()
+
+        then:
+        def error = false
+        try {
+            service.instructorCreateCourse(null, "123456", "test_course")
+        }
+        catch(NullPointerException npe) {
+            error = true
+        }
+        error
+    }
+
+    void "test instructorCreateCourse(): Invalid courseId"() {
+        when:
+        prepareData()
+
+        then:
+        def users = service.getAllStudents(inst1.getAuthToken(), "asdf").data
+        if(users != null) {
+            println "Course shouldn't be findable"
+            assert false
+        }
+        else println "Null list, pass"
+    }
+
+    void "test instructorCreateCourse(): Null courseId"() {
+        when:
+        prepareData()
+
+        then:
+        def error = false
+        try {
+            service.getAllStudents(inst1.getAuthToken(), null).data
+        }
+        catch(NullPointerException npe) {
+            println "Error caught, pass"
+            error = true
+        }
+
+        if(!error) {
+            println "Null courseId shouldn't be able to have methods invoked on it"
+            assert false
+        }
     }
 }
