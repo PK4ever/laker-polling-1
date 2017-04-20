@@ -51,7 +51,8 @@ class PreconditionService {
         if(!results.success) {
             return results
         }
-
+        if(accessTokenString == null)
+            throw IllegalArgumentException
         AuthToken token = AuthToken.findByAccessToken(accessTokenString)
 
         if (token != null) {

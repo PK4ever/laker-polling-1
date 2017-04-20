@@ -1,5 +1,6 @@
 package edu.oswego.cs.lakerpolling.services
 
+import com.sun.javaws.exceptions.InvalidArgumentException
 import edu.oswego.cs.lakerpolling.domains.AuthToken
 import edu.oswego.cs.lakerpolling.domains.Course
 import edu.oswego.cs.lakerpolling.domains.Role
@@ -71,7 +72,7 @@ class PreconditionServiceSpec extends Specification {
         course1.save(flush: true, failOnError: true)
     }
 
-    void "notNull(): null objects"(){
+    void "test notNull(): null objects"(){
 
         given:
 
@@ -83,14 +84,14 @@ class PreconditionServiceSpec extends Specification {
         QueryResult result = preconditionService.notNull(nullMap,nullParameters)
 
         then:
-        thrown NullPointerException
+        thrown InvalidArgumentException
 
 
 
 
     }
 
-    void "notNull(): invalid objects"(){
+    void "test notNull(): invalid objects"(){
         given:
         Map<String, String> invalidMap = new HashMap<String,String>()
         invalidMap.put("a","stuff")
@@ -110,11 +111,11 @@ class PreconditionServiceSpec extends Specification {
         QueryResult result = preconditionService.notNull(invalidParamMap,invalidParameters)
 
         then:
-        results != null
+        result != null
 
 
     }
-    void "notNull(): valid objects"(){
+    void "test notNull(): valid objects"(){
         given:
         Map<String, String> validMap = new HashMap<String,String>()
         validMap.put("adult","adult user")
@@ -124,19 +125,19 @@ class PreconditionServiceSpec extends Specification {
         validMap.put("super","super user")
         HttpServletRequest request = Mock()
         GrailsParameterMap validParamMap = new GrailsParameterMap(validMap, request)
-        List<String> validParameters = validParamMap.keySet()
+        List<String> validParameters = validParamMap.keySet().toList()
 
         when:
         QueryResult result = preconditionService.notNull(validParamMap,validParameters)
 
         then:
-        results!=null
+        result!=null
 
 
 
     }
 
-    void "accessToken() : null objects"(){
+    void "test accessToken() : null objects"(){
         given:
         String accessToeknString = null
 
@@ -144,11 +145,11 @@ class PreconditionServiceSpec extends Specification {
         QueryResult result = preconditionService.accessToken(accessToeknString)
 
         then:
-        thrown MissingMethodException
+        thrown InvalidArgumentException
 
     }
 
-    void "accessToken() : invalid objects"(){
+    void "test accessToken() : invalid objects"(){
         given:
         prepareData()
         String accessToeknString = "jklol"
@@ -161,7 +162,7 @@ class PreconditionServiceSpec extends Specification {
 
     }
 
-    void "accessToken() : valid objects"(){
+    void "test accessToken() : valid objects"(){
         given:
         prepareData()
         String accessTokenString = "aa-1000"
