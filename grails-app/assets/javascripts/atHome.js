@@ -34,13 +34,22 @@ $('#newQuizButton').on('click', function(event) {
             var startTime = $("#startTime").val();
             var endDate = $("#endDate").val();
             var endTime = $("#endTime").val();
-            
-            var startTimestamp = Date.parse(startDate + ' ' + startTime)
-            var endTimestamp = Date.parse(endDate + ' ' + endTime)
+
+
+            // Moment.js takes care of setting dates and converting them to Unix milliseconds
+            var startTimestamp = moment().valueOf(startDate + ' ' + startTime)
+            var endTimestamp = moment().valueOf(endDate + ' ' + endTime)
 
             var urlStr = '/api/quiz?access_token=' + token + '&course_id=' + courseId + '&name=' + name + '&start_timestamp=' + startTimestamp + '&end_timestamp=' + endTimestamp
-            if(!name || !startTimestamp || !endTimestamp) {alert("Please fill all fields for quiz creation.");return;}
-            if(startTimestamp > endTimestamp) {alert("End time must be after start time.");return;}
+            if(!name || !startTimestamp || !endTimestamp) {
+                alert("Please fill all fields for quiz creation.");
+                return;
+            }
+
+            if(startTimestamp > endTimestamp) {
+                alert("End time must be after start time.");
+                return;
+            }
             $.ajax({
                 url: urlStr,
                 type: 'POST',
@@ -48,6 +57,8 @@ $('#newQuizButton').on('click', function(event) {
                     window.location.href = "/course/createQuiz?courseId=" + courseId + "&quizId=" + data.data.students.id;
                 },
                 error: function(jqXHR, textStatus, errorMessage) {
+                console.log(startTimestamp);
+
                     alert("An error occurred while making the quiz. Make sure you did not set your start/end dates in the past!")
                     console.log(errorMessage)
                 }
