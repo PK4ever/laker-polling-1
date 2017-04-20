@@ -22,10 +22,10 @@
             <a class="navbar-brand page-scroll" href="/dashboard">
 
                 <asset:image src="logo2.png"
-                             style="height: 80px !important; width: 120px !important; position: absolute; top: 10%"/>
+                             style="height: 40px !important; width: 60px !important; position: absolute; top: 10%"/>
                 %{--<img src="logo.png" style="height: 60px !important; width: 120px !important; position: absolute; top: 0%">--}%
             </a>
-            <a id="coursePageTitle" class="navbar-brand" style="position: absolute; left: 45%; font-size: x-large"></a>
+            <a id="coursePageTitle" class="navbar-brand" style="position: relative; text-align: center; font-size: x-large"></a>
     
 
         <!--<a class="navbar-brand page-scroll" href="#page-top">LOGO HERE</a>-->

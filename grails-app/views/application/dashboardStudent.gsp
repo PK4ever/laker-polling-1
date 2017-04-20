@@ -24,7 +24,7 @@
                              style="height: 80px !important; width: 120px !important; position: absolute; top: 10%"/>
                 %{--<img src="logo.png" style="height: 60px !important; width: 120px !important; position: absolute; top: 0%">--}%
             </a>
-            <a id="pageName" class="navbar-brand" style="position: absolute; left: 45%; font-size: x-large; font-family: monospace;">Student Dashboard</a>
+            <a id="pageName" class="navbar-brand" style="position: relative; text-align: center; font-size: x-large; font-family: monospace;">Student</a>
         %{--<a id="pageName" class="page-scroll navbar-brand" style="position: absolute; left: 40%; font-size: xx-large">Student Dashboard</a>--}%
 
         <!--<a class="navbar-brand page-scroll" href="#page-top">LOGO HERE</a>-->

@@ -62,11 +62,6 @@ class BootStrap {
         jeff.setRole(new Role(type: RoleType.STUDENT, master: RoleType.STUDENT))
         jeff.save(flush: true, failOnError:true)
 
-        User jolanda = new User(firstName: "Jolanda", lastName: "Tromp", email: "jolanda.tromp@oswego.edu", imageUrl: "http://media.salon.com/2015/01/chrissy_teigen.jpg")
-        jolanda.setRole(new Role(type: RoleType.INSTRUCTOR, master: RoleType.INSTRUCTOR))
-        jolanda.save(flush: true)
-
-
         /* End students*/
 
         /* instructors */
