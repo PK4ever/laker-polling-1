@@ -12,6 +12,7 @@
     <asset:stylesheet href="bootstrap.css"/>
     <asset:stylesheet href="agency.min.css"/>
     <asset:stylesheet href="agency.css"/>
+    <asset:stylesheet href="style.css"/>
 </head>
 <body class="bg-light-gray">
 

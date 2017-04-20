@@ -66,6 +66,7 @@
                         <th class="col-md-1" data-field="name" data-formatter="identifierFormatter">Quiz Name</th>
                         <th class="col-md-1" data-field="startDate" data-formatter="dateFormatter">Start Time</th>
                         <th class="col-md-1" data-field="endDate" data-formatter="dateFormatter">End Time</th>
+                        <th class="col-md-1" data-field="id" id="delete-quiz-btn" data-formatter="deleteQuizFormatter">Delete</th>
                     </tr>
                     </thead>
                 </table>
@@ -119,6 +120,25 @@
         </div>
         <div class="col-sm-3"></div>
     </div><br>
+
+    <div id="deleteQuizModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content clean-container">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title heading">Delete Quiz?</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete this quiz?</p>
+                </div>
+                <div class="modal-footer">
+                    <button id="confirmDeleteQuiz" type="button" class="btn btn-danger btn-ok js-deleteQuiz" data-dismiss="modal" data-quiz-id="">Yes</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
 
 <!-- Latest compiled and minified CSS -->
