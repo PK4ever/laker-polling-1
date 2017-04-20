@@ -98,7 +98,7 @@
                                         <input type="submit" value="Add Question" data-course-id="${session.courseId}" data-quiz-id="${session.quizId}" class="btn btn-success" id="create-question-btn">
                                     </div>
                                    <div class="col-md-1 col-md-offset-3 text-center">
-                                        <a class="btn btn-success" href="/course/quizList?courseId=${session.courseId}">Submit Quiz</a>
+                                        <a class="btn btn-success" href="/course/quizList?courseId=${session.courseId}">Activate Quiz</a>
                                     </div>
 
                          </div>
