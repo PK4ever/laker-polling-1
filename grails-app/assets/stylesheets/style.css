@@ -1,6 +1,20 @@
-#logo {
-    width: 504px;
-    height: 366px;
+.logo {
+    height: 80px;
+    width: 120px;
+    position: absolute;
+    top: 10%;
+}
+
+@media (max-width: 767px) {
+    .logo{
+        height: 40px;
+        width: 70px;
+        position: absolute;
+        top: 10%;
+    }
+    .navbar{
+        background-color: gray;
+    }
 }
 
 #sign-in-btn {
