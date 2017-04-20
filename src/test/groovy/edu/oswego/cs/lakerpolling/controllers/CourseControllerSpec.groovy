@@ -161,7 +161,6 @@ class CourseControllerSpec extends Specification {
     		assert false 
     	}
 
-    	
     }
 
     void "test courseGet: Null access_token " () {

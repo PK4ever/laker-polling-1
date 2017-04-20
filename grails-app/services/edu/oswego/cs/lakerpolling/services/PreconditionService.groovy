@@ -23,7 +23,7 @@ class PreconditionService {
             return results
         }
 
-        if (parameters.size() > 0) {
+        if (parameters.size() > 0)   {
 
             for (String param in parameters) {
                 if (!paramsMap.containsKey(param)) {

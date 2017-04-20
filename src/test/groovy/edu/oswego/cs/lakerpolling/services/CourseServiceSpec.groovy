@@ -18,8 +18,8 @@ import spock.lang.Specification
 @TestFor(CourseService)
 class CourseServiceSpec extends Specification {
 
-    User inst1, a, b, c, d
-    Course course1
+    User admn, inst1, inst2, a, b, c, d
+    Course course1, course2
 
     def setup() {
         println "Starting CourseService Tests"
@@ -35,11 +35,22 @@ class CourseServiceSpec extends Specification {
     this annotation).  This method allows you to just call it at the start of every test under the when: tag, and
     populate the db on each trial. */
     def prepareData() {
+        /* TEST ADMIN */
+        admn = new User(email: "test.admin@oswego.edu")
+        admn.setRole(new Role(type: RoleType.ADMIN))
+        admn.setAuthToken(new AuthToken(accessToken: "admn-1000", subject: "admn-1000-subj"))
+        admn.save(flush:true, failOnError: true)
+
         /* TEST INSTRUCTOR */
         inst1 = new User(email: "test.email@oswego.edu")
         inst1.setRole(new Role(type: RoleType.INSTRUCTOR))
         inst1.setAuthToken(new AuthToken(accessToken: "inst-1000", subject: "inst-1000-subj"))
         inst1.save(flush: true, failOnError: true)
+
+        inst2 = new User(email: "test.email2@oswego.edu")
+        inst2.setRole(new Role(type: RoleType.INSTRUCTOR))
+        inst2.setAuthToken(new AuthToken(accessToken: "inst2-1000", subject: "inst2-1000-subj"))
+        inst2.save(flush: true, failOnError: true)
 
         /* TEST STUDENTS - IN A COURSE */
         a = new User(firstName: "Jason", lastName: "Parker", email: "a@oswego.edu", imageUrl: "Some image")
@@ -68,6 +79,9 @@ class CourseServiceSpec extends Specification {
         course1.addToStudents(a)
         course1.addToStudents(b)
         course1.save(flush: true, failOnError: true)
+
+        course2 = new Course(name: "CSC 212", crn: 22222, instructor: inst2)
+        course2.save(flush: true, failOnError: true)
     }
 
     void "test getAllStudents(): All Valid EQ Classes"() {
@@ -365,7 +379,7 @@ class CourseServiceSpec extends Specification {
         service.getAllStudents(inst1.getAuthToken(), course1.getId().toString()).data.size() == 2
     }
 
-    void "test deleteStudentCourse(): Invalid list of ids"() {
+    void "test deleteStudentCourse(): Invalid list of user ids"() {
         when:
         prepareData()
 
@@ -382,7 +396,7 @@ class CourseServiceSpec extends Specification {
         error
     }
 
-    void "test deleteStudentCourse(): Null list of emails"() {
+    void "test deleteStudentCourse(): Null list of user ids"() {
         when:
         prepareData()
 
@@ -391,12 +405,302 @@ class CourseServiceSpec extends Specification {
         service.getAllStudents(inst1.getAuthToken(), course1.getId().toString()).data.size() == 2
     }
 
-    void "test deleteStudentCourse(): Empty list of emails"() {
+    void "test deleteStudentCourse(): Empty list of user ids"() {
         when:
         prepareData()
 
         then:
         service.deleteStudentCourse(inst1.getAuthToken(), course1.getId(), [])
         service.getAllStudents(inst1.getAuthToken(), course1.getId().toString()).data.size() == 2
+    }
+
+    void "test instructorCreateCourse(): All Valid EQ Classes"() {
+        when:
+        prepareData()
+
+        then:
+        def new_course = service.instructorCreateCourse(inst1.getAuthToken(), "123456", "test_course").data
+        new_course.getCrn() == "123456"
+        new_course.getInstructor() == inst1
+        new_course.getName() == "test_course"
+        new_course.getStudents() == null
+        new_course.getQuestions() == null
+    }
+
+    void "test instructorCreateCourse(): Invalid AuthToken"() {
+        when:
+        prepareData()
+
+        then:
+        def error = false
+        try {
+            service.instructorCreateCourse(new AuthToken(accessToken: "fail", subject: "fail-subj"), "123456", "test_course")
+        }
+        catch(NullPointerException npe) {
+            error = true
+        }
+        error
+    }
+
+    void "test instructorCreateCourse(): Null AuthToken"() {
+        when:
+        prepareData()
+
+        then:
+        def error = false
+        try {
+            service.instructorCreateCourse(null, "123456", "test_course")
+        }
+        catch(NullPointerException npe) {
+            error = true
+        }
+        error
+    }
+
+    void "test instructorCreateCourse(): Invalid crn"() {
+        when:
+        prepareData()
+
+        then:
+        def new_course = service.instructorCreateCourse(inst1.getAuthToken(), "asdf", "test_course").data
+        new_course.crn == "asdf"
+    }
+
+    void "test instructorCreateCourse(): Empty crn"() {
+        when:
+        prepareData()
+
+        then:
+        def new_course = service.instructorCreateCourse(inst1.getAuthToken(), "", "test_course").data
+        new_course.crn == ""
+    }
+
+    void "test instructorCreateCourse(): Empty course name"() {
+        when:
+        prepareData()
+
+        then:
+        def new_course = service.instructorCreateCourse(inst1.getAuthToken(), "123456", "").data
+        new_course.name == ""
+    }
+
+
+
+    void "test adminCreateCourse(): All Valid EQ Classes"() {
+        when:
+        prepareData()
+
+        then:
+        def new_course = service.adminCreateCourse(admn.getAuthToken(), "123456", "test_course", inst1.getId().toString()).data
+        new_course.getCrn() == "123456"
+        new_course.getInstructor() == inst1
+        new_course.getName() == "test_course"
+        new_course.getStudents() == null
+        new_course.getQuestions() == null
+    }
+
+    void "test adminCreateCourse(): Invalid AuthToken"() {
+        when:
+        prepareData()
+
+        then:
+        def new_course = service.adminCreateCourse(new AuthToken(accessToken: "fail", subject: "fail-subj"), "123456", "test_course", inst1.getId().toString()).data
+        new_course == null
+    }
+
+    void "test adminCreateCourse(): Null AuthToken"() {
+        when:
+        prepareData()
+
+        then:
+        def new_course = service.adminCreateCourse(null, "123456", "test_course", inst1.getId().toString()).data
+        new_course == null
+    }
+
+    void "test adminCreateCourse(): Invalid crn"() {
+        when:
+        prepareData()
+
+        then:
+        def new_course = service.adminCreateCourse(admn.getAuthToken(), "asdf", "test_course", inst1.getId().toString()).data
+        new_course.crn == "asdf"
+    }
+
+    void "test adminCreateCourse(): Empty crn"() {
+        when:
+        prepareData()
+
+        then:
+        def new_course = service.adminCreateCourse(admn.getAuthToken(), "", "test_course", inst1.getId().toString()).data
+        new_course.crn == ""
+    }
+
+    void "test adminCreateCourse(): Invalid instructor id"() {
+        when:
+        prepareData()
+
+        then:
+        def new_course = service.adminCreateCourse(admn.getAuthToken(), "asdf", "test_course", "123141389273").data
+        new_course == null
+    }
+
+    void "test adminCreateCourse(): Empty instructor id"() {
+        when:
+        prepareData()
+
+        then:
+        def error = false
+        try {
+            service.adminCreateCourse(admn.getAuthToken(), "asdf", "test_course", "")
+        }
+        catch(NumberFormatException nfe) {
+            error = true
+        }
+        error
+    }
+
+    void "test adminCreateCourse(): Empty course name"() {
+        when:
+        prepareData()
+
+        then:
+        def new_course = service.adminCreateCourse(admn.getAuthToken(), "asdf", "", inst1.getId().toString()).data
+        new_course.name == ""
+    }
+
+    void "test delete(): All Valid EQ Classes"() {
+        when:
+        prepareData()
+
+        then:
+        def old_courses = service.getAllCourses(inst1.getAuthToken()).data
+        old_courses == [course1]
+        service.delete(course1.getId().toInteger().intValue())
+        def new_courses = service.getAllCourses(inst1.getAuthToken()).data
+        new_courses == []
+    }
+
+    void "test delete(): Invalid course id"() {
+        when:
+        prepareData()
+
+        then:
+        def old_courses = service.getAllCourses(inst1.getAuthToken()).data
+        old_courses == [course1]
+        service.delete(1231521313)
+        def new_courses = service.getAllCourses(inst1.getAuthToken()).data
+        new_courses == [course1]
+    }
+
+    void "test isInstructorOf(): All Valid EQ Classes"() {
+        when:
+        prepareData()
+
+        then:
+        service.isInstructorOf(inst1, course1)
+    }
+
+    void "test isInstructorOf(): Invalid Instructor"() {
+        when:
+        prepareData()
+
+        then:
+        !service.isInstructorOf(inst2, course1)
+    }
+
+    void "test isInstructorOf(): Null Instructor"() {
+        when:
+        prepareData()
+
+        then:
+        !service.isInstructorOf(null, course1)
+    }
+
+    void "test isInstructorOf(): Invalid Course"() {
+        when:
+        prepareData()
+
+        then:
+        !service.isInstructorOf(inst1, course2)
+    }
+
+    void "test isInstructorOf(): Null Course"() {
+        when:
+        prepareData()
+
+        then:
+        !service.isInstructorOf(inst1, null)
+    }
+
+    void "test getAllCourses(): All Valid EQ Classes"() {
+        when:
+        prepareData()
+
+        then:
+        def courses = service.getAllCourses(inst1.getAuthToken()).data
+        courses == [course1]
+    }
+
+    void "test getAllCourses(): Invalid AuthToken"() {
+        when:
+        prepareData()
+
+        then:
+        def courses = service.getAllCourses(new AuthToken(accessToken: "fail", subject: "fail-subj")).data
+        courses == null
+    }
+
+    void "test getAllCourses(): Null AuthToken"() {
+        when:
+        prepareData()
+
+        then:
+        def courses = service.getAllCourses(null).data
+        courses == null
+    }
+
+    void "test getAllCourses(2): All Valid EQ Classes"() {
+        when:
+        prepareData()
+
+        then:
+        def courses = service.getAllCourses(inst1.getAuthToken(), course1.getId().toString()).data
+        courses == [course1]
+    }
+
+    void "test getAllCourses(2): Invalid AuthToken"() {
+        when:
+        prepareData()
+
+        then:
+        def courses = service.getAllCourses(new AuthToken(accessToken: "fail", subject: "fail-subj"), course1.getId().toString()).data
+        courses == null
+    }
+
+    void "test getAllCourses(2): Null AuthToken"() {
+        when:
+        prepareData()
+
+        then:
+        def courses = service.getAllCourses(null, course1.getId().toString()).data
+        courses == null
+    }
+
+    void "test getAllCourses(2): Invalid course id"() {
+        when:
+        prepareData()
+
+        then:
+        def courses = service.getAllCourses(inst1.getAuthToken(), "12340189273").data
+        courses == [null]
+    }
+
+    void "test getAllCourses(2): Null course id"() {
+        when:
+        prepareData()
+
+        then:
+        def courses = service.getAllCourses(inst1.getAuthToken(), null).data
+        courses == null
     }
 }
