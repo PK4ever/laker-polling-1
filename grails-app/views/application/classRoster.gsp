@@ -68,7 +68,6 @@
                     </thead>
                 </table>
             </div>
-        <div class="col-sm-4"></div>
 
         <div class="col-sm-8">
             <form id="csv-form-email" method="post" style="margin-top: 30px;">

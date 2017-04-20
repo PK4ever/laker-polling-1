@@ -47,15 +47,64 @@
 <!-- /.container-fluid -->
 </nav>
 
-<section>
-    <div class="container">
-        <a href="/course?courseId=${session.courseId}" style="margin-left: 60px; href="/course?courseId=${session.courseId}" class="btn btn-default btn-md">
-        <span class="glyphicon glyphicon-arrow-left"></span> Back
-    </a>
 
+
+<section>
+  <div class="row">
+           <button style="margin-left: 60px;class="btn btn-default btn-md" id="backButton">
+                   <span class="glyphicon glyphicon-arrow-left" ></span> Back
+               </button>
+           </div>
+    <div class="container">
         <div class="row">
-            <div class="col-sm-1"></div>
-            <div class="col-sm-10">
+
+                    <div class="col-sm-4">
+                        <form id="quiz-form" method="post" style="margin-top: 30px;">
+                            <label>Add Question</label>
+                            <div class="form-cotrol">
+                                <textarea class="form-control" placeholder="Your question *" id="question-text" required data-validation-required-message="Please enter a message."></textarea>
+                                %{--<input id="quiz" type="text" placeholder="what is your question?" required>--}%
+                                %{--<input type="submit" value="Add Quiz" class="btn btn-success" id="email-button">--}%
+
+                                <br>
+                                <label>Answer Details</label>
+                                <br>
+                                <label>A</label>
+                                <input id="answer-a" type="text" placeholder="Answer option A?" required>  <input type="checkbox" name="A" value="">
+                                <label>Correct?</label>
+                                <br>
+                                <br>
+                                <label>B</label>
+                                <input id="answer-b" type="text" placeholder="Answer option B?" required>  <input type="checkbox" name="B" value="">
+                                <label>Correct?</label>
+                                <br>
+                                <br>
+                                <label>C</label>
+                                <input id="answer-c" type="text" placeholder="Answer option C?" required> <input type="checkbox" name="C" value="">
+                                <label>Correct?</label>
+                                <br>
+                                <br>
+                                <label>D</label>
+                                <input id="answer-d" type="text" placeholder="Answer option D?" required> <input type="checkbox" name="D" value="">
+                                <label>Correct?</label>
+                                <br>
+                                <br>
+                                <label>E</label>
+                                <input id="answer-e" type="text" placeholder="Answer option E?" required> <input type="checkbox" name="E" value="">
+                                <label>Correct?</label>
+                            </div>
+                        </form>
+                          <div class="col-md-4 col-lg-offset-3 text-center">
+                                        <input type="submit" value="Add Question" data-course-id="${session.courseId}" data-quiz-id="${session.quizId}" class="btn btn-success" id="create-question-btn">
+                                    </div>
+                                   <div class="col-md-1 col-md-offset-3 text-center">
+                                        <a class="btn btn-success" href="/course/quizList?courseId=${session.courseId}">Activate Quiz</a>
+                                    </div>
+
+                         </div>
+
+            <!--<div class="col-sm-1"></div>-->
+            <div class="col-md-6 col-md-offset-2">
                 <div id="quizes" class="table-responsive">
                     <table id="question-table" class="table">
                         <thead>
@@ -69,53 +118,10 @@
                     </table>
                 </div>
             </div>
-            <div class="col-sm-1"></div>
         </div>
 </section>
 <!-- add student by email -->
-<div class="row">
-    <div class="col-sm-4"></div>
-    <div class="col-sm-4">
-        <form id="quiz-form" method="post" style="margin-top: 30px;">
-            <label>Add Question</label>
-            <div class="form-cotrol">
-                <textarea class="form-control" placeholder="Your question *" id="question-text" required data-validation-required-message="Please enter a message."></textarea>
-                %{--<input id="quiz" type="text" placeholder="what is your question?" required>--}%
-                %{--<input type="submit" value="Add Quiz" class="btn btn-success" id="email-button">--}%
 
-                <br>
-                <br>
-                <label>A</label>
-                <input id="answer-a" type="text" placeholder="Answer option A?" required>  <input type="checkbox" name="A" value="">
-                <br>
-                <br>
-                <label>B</label>
-                <input id="answer-b" type="text" placeholder="Answer option B?" required>  <input type="checkbox" name="B" value="">
-                <br>
-                <br>
-                <label>C</label>
-                <input id="answer-c" type="text" placeholder="Answer option C?" required> <input type="checkbox" name="C" value="">
-                <br>
-                <br>
-                <label>D</label>
-                <input id="answer-d" type="text" placeholder="Answer option D?" required> <input type="checkbox" name="D" value="">
-                <br>
-                <br>
-                <label>E</label>
-                <input id="answer-e" type="text" placeholder="Answer option E?" required> <input type="checkbox" name="E" value="">
-            </div>
-        </form>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-md-4 col-lg-offset-3 text-center">
-        <input type="submit" value="Add Question" data-course-id="${session.courseId}" data-quiz-id="${session.quizId}" class="btn btn-success" id="create-question-btn">
-    </div>
-    <div class="col-md-1 text-center">
-        <a class="btn btn-success" href="/course/quizList?courseId=${session.courseId}">Submit Quiz</a>
-    </div>
-</div>
 
 <!-- Modal -->
 <div id="deleteQuestionModal" class="modal fade" role="dialog">

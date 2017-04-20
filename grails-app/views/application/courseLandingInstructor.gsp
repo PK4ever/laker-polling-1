@@ -22,9 +22,11 @@
             <a class="navbar-brand page-scroll" href="/dashboard">
 
                 <asset:image src="logo2.png" class="logo"/></a>
+
+
                 %{--<img src="logo.png" style="height: 60px !important; width: 120px !important; position: absolute; top: 0%">--}%
             </a>
-            <a id="coursePageTitle" class="navbar-brand" style="position: absolute; left: 45%; font-size: x-large"></a>
+            <a id="coursePageTitle" class="navbar-brand" style="position: relative; text-align: center; font-size: x-large"></a>
     
 
         <!--<a class="navbar-brand page-scroll" href="#page-top">LOGO HERE</a>-->

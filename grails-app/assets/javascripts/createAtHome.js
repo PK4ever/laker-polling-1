@@ -108,6 +108,34 @@ $('.js-deleteQuestion').click(function () {
     });
 });
 
+
+$('#backButton').on('click', function(event) {
+    debugger
+    $.ajax({
+        url: '/user/auth',
+        type: 'GET',
+        success: function(data) {
+            var token = data.data.token;
+            debugger
+            if (confirm('You are about to return to the quiz list. This quiz will be deleted if you proceed. Are you sure you wish to continue?')) {
+                $.ajax({
+                    url: '/api/quiz/?access_token=' + token + '&quiz_id=' + quiz_id,
+                    type: 'DELETE',
+                    success: function(data) {
+                        window.location.href = "/course/quizList?courseId=" + courseId;
+                    },
+                    error: function(jqXHR, textStatus, errorMessage) {
+                        console.log(errorMessage)
+                    }
+
+                });
+            } else {
+                return;
+            }
+        }
+    });
+});
+
 function setTableData(questions) {
     console.log("SET TABLE DATA")
     console.log(questions)
