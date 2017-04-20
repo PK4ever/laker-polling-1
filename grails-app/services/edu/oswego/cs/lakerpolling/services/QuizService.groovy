@@ -155,17 +155,23 @@ class QuizService {
      * @return a QueryResult containing the given question in the specified quiz
      */
     QueryResult<Question> getQuestion(AuthToken token, String quizIdString, String questionIdString) {
-        QueryResult<List<Long>> result = new QueryResult<>()
         def quizResult = findQuiz(quizIdString)
         if (!quizResult.success) {
             return QueryResult.copyError(quizResult)
         }
 
         def quiz = quizResult.data
-        def accessCheck = courseService.verifyStudentAccess(token, quiz.course)
+        def course = quiz.course
+        def accessCheck = courseService.verifyStudentAccess(token, course)
         if (!accessCheck.success) {
             return QueryResult.copyError(accessCheck)
         }
+
+        // Prevent Students from viewing question while the quiz is closed
+        if(!quizIsOpen(quiz) && !courseService.verifyInstructorAccess(token, course).success) {
+            return QueryResult.fromHttpStatus(HttpStatus.UNAUTHORIZED)
+        }
+
         findQuestion(quiz, questionIdString)
     }
 
