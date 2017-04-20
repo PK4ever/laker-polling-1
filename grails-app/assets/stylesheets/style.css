@@ -2,7 +2,9 @@
     width: 504px;
     height: 366px;
 }
-
+.fixed-table-body{
+height: 60% !important;
+}
 #sign-in-btn {
     padding: 20px;
 }

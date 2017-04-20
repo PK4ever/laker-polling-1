@@ -54,9 +54,9 @@
         </div>
     </form>
 </div>
-<div class="form-group" style="text-align: center;">
+<!--<div class="form-group" style="text-align: center;">
     <a href="/course/viewresults?courseId=${session.courseId}" class="btn btn-info" role="button">View Results</a>
-</div>
+</div>-->
 
 <script src="https://apis.google.com/js/platform.js"></script>
 <asset:javascript src="auth/config.js"/>
