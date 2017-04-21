@@ -210,9 +210,9 @@ class CourseControllerSpec extends Specification {
     	
     	prepareData()
     	params.access_token = "admin-1000"
-    	params.crn = "12345"
+    	params.crn = "99999"
     	params.name = "CSC101"
-    	controller.postCourse("admin-1000" , "12345", "CSC101", Long.toString(admin.id))
+    	controller.postCourse("admin-1000" , "99999", "CSC101", Long.toString(admin.id))
 
     	then:
 
@@ -232,13 +232,13 @@ class CourseControllerSpec extends Specification {
     	
     	prepareData()
     	params.access_token = "inst-1000"
-    	params.crn = "12345"
+    	params.crn = "45678"
     	params.name = "CSC101"
-    	controller.postCourse("inst-1000" , "12345", "CSC101", Long.toString(inst1.id))
+    	controller.postCourse("inst-1000" , "45678", "CSC101", Long.toString(inst1.id))
 
     	then:
 
-    	print model
+    	println "postCourse(): Valid parameters (Instructor) model: $model"
 
     	def course = model.course
 
