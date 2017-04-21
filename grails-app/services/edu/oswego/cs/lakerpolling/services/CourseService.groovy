@@ -181,7 +181,7 @@ class CourseService {
      */
     QueryResult<Course> instructorCreateCourse(AuthToken token, String crn, String name, QueryResult<Course> result = new QueryResult<>(success: true)) {
         User instructor = token?.user
-        if (isInstructorOrAdmin(instructor.role) && !courseExists(crn)) {
+        if (isInstructorOrAdmin(instructor.role)) {
             result = createCourse(instructor, name, crn, result)
         } else {
             QueryResult.fromHttpStatus(HttpStatus.BAD_REQUEST, result)
@@ -201,7 +201,7 @@ class CourseService {
     QueryResult<Course> adminCreateCourse(AuthToken token, String crn, String name, String instructor, QueryResult<Course> result = new QueryResult<>(success: true)) {
         User admin = token?.user
         User inst = User.findById(Long.parseLong(instructor))
-        if (admin && inst && admin.role.type == RoleType.ADMIN && inst.role.type == RoleType.INSTRUCTOR && !courseExists(crn)) {
+        if (admin && inst && admin.role.type == RoleType.ADMIN && inst.role.type == RoleType.INSTRUCTOR) {
             result = createCourse(inst, name, crn, result)
         } else {
             QueryResult.fromHttpStatus(HttpStatus.BAD_REQUEST, result)
@@ -248,8 +248,6 @@ class CourseService {
     private boolean isInstructorOrAdmin(Role role) {
         role.type == RoleType.ADMIN || role.type == RoleType.INSTRUCTOR
     }
-
-    private boolean courseExists(String course_id) { Course.findByCrn(course_id) != null }
 
     /**
      * Removes a student from a course. Catching errors and returning results.
