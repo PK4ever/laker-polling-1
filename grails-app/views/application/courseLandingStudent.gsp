@@ -61,16 +61,17 @@
     </script>
 
 </h1> <!-- Class name here -->
+<section>
 <div id="livePollButton" class="form-group" style="text-align: center;">
     <a href="course/answerquestion?courseId=${session.courseId}" class="btn btn-success" role="button">Answer Question</a>
 </div>
 <div id="livePollMessage"style="text-align: center;">
-    <p>The are currently no active questions.</p>
+    <p>There are currently no active questions.</p>
 </div>
 <div class="form-group" style="text-align: center;">
     <a href="course/quizList?courseId=${session.courseId}" class="btn btn-success" role="button">View At-Home Polls</a>
 </div>
-
+</section>
 <asset:javascript src="jquery-3.2.0.min.js"/>
 <script src="https://apis.google.com/js/platform.js"></script>
 
