@@ -37,10 +37,9 @@ $('#newQuizButton').on('click', function(event) {
             var endDate = $("#endDate").val();
             var endTime = $("#endTime").val();
 
+            var startTimestamp = Date.parse(startDate + ' ' + startTime + ' UTC');
+            var endTimestamp = Date.parse(endDate + ' ' + endTime + ' UTC');
 
-            // Moment.js takes care of setting dates and converting them to Unix milliseconds
-            var startTimestamp = moment().valueOf(startDate + ' ' + startTime)
-            var endTimestamp = moment().valueOf(endDate + ' ' + endTime)
 
             var urlStr = '/api/quiz?access_token=' + token + '&course_id=' + courseId + '&name=' + name + '&start_timestamp=' + startTimestamp + '&end_timestamp=' + endTimestamp
             if(!name || !startTimestamp || !endTimestamp) {
