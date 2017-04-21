@@ -133,6 +133,7 @@
         format: 'yyyy-mm-dd',
         todayHighlight: true,
         autoclose: true,
+        clearBtn: true
       };
       date_input.datepicker(options);
     });
