@@ -21,8 +21,9 @@
             </button>
             <a class="navbar-brand page-scroll" href="/dashboard">
 
-                <asset:image src="logo2.png"
-                             style="height: 40px !important; width: 60px !important; position: absolute; top: 10%"/>
+                <asset:image src="logo2.png" class="logo"/></a>
+
+
                 %{--<img src="logo.png" style="height: 60px !important; width: 120px !important; position: absolute; top: 0%">--}%
             </a>
             <a id="coursePageTitle" class="navbar-brand" style="position: relative; text-align: center; font-size: x-large"></a>

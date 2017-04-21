@@ -25,8 +25,7 @@
             </button>
             <a class="navbar-brand page-scroll" href="/dashboard">
 
-                <asset:image src="logo2.png"
-                             style="height: 80px !important; width: 120px !important; position: absolute; top: 10%"/>
+                <asset:image src="logo2.png" class="logo"/></a>
 
                 %{--<img src="logo.png" style="height: 60px !important; width: 120px !important; position: absolute; top: 0%">--}%
             </a>

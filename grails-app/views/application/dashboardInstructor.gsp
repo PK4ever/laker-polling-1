@@ -12,6 +12,7 @@
     <asset:stylesheet href="bootstrap.css"/>
     <asset:stylesheet href="agency.min.css"/>
     <asset:stylesheet href="agency.css"/>
+    <asset:stylesheet href="style.css"/>
 </head>
 <body class="bg-light-gray">
 
@@ -23,8 +24,7 @@
                 <span class="sr-only">Toggle navigation</span> LOGOUT <i class="fa fa-bars"></i>
             </button>
             <a class="navbar-brand page-scroll" href="#page-top">
-                <asset:image src="logo2.png"
-                             style="height: 80px !important; width: 120px !important; position: absolute; top: 10%"/>
+                <asset:image src="logo2.png" class="logo"/>
             </a>
             <a id="pageName" class="navbar-brand" style="position: absolute; left: 45%; font-size: x-large; font-family: monospace;">Instructor</a>
         </div>

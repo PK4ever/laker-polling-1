@@ -19,7 +19,7 @@
 <body class="bg-light-gray">
 <div class="navbar navbar-default" role="navigation">
     <div class="navbar-header">
-        <asset:image class="img-responsive navbar-brand" src="logo.png"/>
+        <asset:image src="logo2.png" class="logo"/></a>
         <a class="navbar-brand">Poll</a>
     </div>
     <div class="navbar-collapse collapse">
