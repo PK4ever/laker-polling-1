@@ -354,8 +354,8 @@ var courseId
                     url: '/api/course/student?access_token=' + token + '&course_id=' + courseId + '&email=' + email,
                     type: 'POST',
                     success: function(data) {
-                        console.log('Works');
-                        // window.location.reload();
+//                        console.log('Works');
+                         window.location.reload();
                     },
                     error: function(jqXHR, textStatus, errorMessage) {
                         console.log(errorMessage)

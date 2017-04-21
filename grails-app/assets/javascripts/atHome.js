@@ -37,10 +37,10 @@ $('#newQuizButton').on('click', function(event) {
             var endDate = $("#endDate").val();
             var endTime = $("#endTime").val();
 
-
             // Moment.js takes care of setting dates and converting them to Unix milliseconds
-            var startTimestamp = moment().valueOf(startDate + ' ' + startTime)
-            var endTimestamp = moment().valueOf(endDate + ' ' + endTime)
+            var startTimestamp = moment(startDate + ' ' + startTime).utc();
+            var endTimestamp = moment(endDate + ' ' + endTime).utc();
+
 
             var urlStr = '/api/quiz?access_token=' + token + '&course_id=' + courseId + '&name=' + name + '&start_timestamp=' + startTimestamp + '&end_timestamp=' + endTimestamp
             if(!name || !startTimestamp || !endTimestamp) {
@@ -81,7 +81,7 @@ function dateFormatter(value, row, index) {
     var str = value.split('T')
     var date = str[0]
     var time = str[1].substring(0,str[1].length-1)
-    return date + ' :: ' + time;
+    return date + ' :: ' + time + " GMT"
 }
 
 $('.js-deleteQuiz').click(function(){
