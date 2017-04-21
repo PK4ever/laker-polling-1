@@ -1,3 +1,7 @@
+body{
+    background: url("/assets/LakerPoling_Background.svg") no-repeat center;
+}
+
 .logo {
     height: 80px;
     width: 120px;
@@ -44,9 +48,7 @@ height: 60% !important;
 #submitAnswer{
     width: 200px !important;
 }
-body{
-    background: url("/assets/LakerPolingBackground.png") !important;
-}
+
 @media (max-width: 414px) {
     .navbar-brand{
         left: 30% !important;
@@ -84,7 +86,6 @@ body{
     border: 1.5px solid #fed136 ;
 }
 
-}
 /*.navbar-header.page-scroll {
     background: linear-gradient(green, gray);
 }

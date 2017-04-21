@@ -4,14 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Course Page</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
     <asset:stylesheet href="bootstrap.min.css"/>
     <asset:stylesheet href="agency.min.css"/>
     <asset:stylesheet href="agency.css"/>
     <asset:stylesheet href="style.css"/>
-    <!-- jQuery (necessary for Bootstrap"s JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-    <!-- Latest compiled and minified JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 </head>
 <body>
 <nav id="mainNav" class="navbar navbar-default navbar-custom navbar-fixed-top">
@@ -46,18 +45,10 @@
     <!-- /.container-fluid -->
 </nav>
 
-<a href="/dashboard" style="margin-left: 80px; href="/dashboard" class="btn btn-default btn-md">
+<a href="/dashboard" style="margin-left: 80px;" href="/dashboard" class="btn btn-default btn-md">
           <span class="glyphicon glyphicon-arrow-left"></span> Back
 </a>
 <h1 id="coursePageTitle" style="text-align: center;">
-    <script>
-        // var i=0
-        // if (i==0) {
-        //     document.getElementById("coursePageTitle").innerHTML = "There is no question available";
-        // } else {
-        //     document.getElementById("coursePageTitle").innerHTML = "Select the question";
-        // }
-    </script>
 
 </h1> <!-- Class name here -->
 <div id="livePollButton" class="form-group" style="text-align: center;">

@@ -119,7 +119,7 @@
 <asset:javascript src="auth/config.js"/>
 <asset:javascript src="auth/logout.js"/>
 <asset:javascript src="instructor.js"/>
-<asset:stylesheet href="style.css"/>
+%{--<asset:stylesheet href="style.css"/>--}%
 
 </body>
 </html>
