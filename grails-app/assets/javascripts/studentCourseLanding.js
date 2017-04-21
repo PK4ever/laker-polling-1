@@ -7,7 +7,6 @@ $(function(){
 
         success: function(data){
             token = data.data.token;
-
             $.ajax({
                 url: '/api/question/active?access_token=' + token + '&course_id=' + courseId,
                 type: 'GET',
