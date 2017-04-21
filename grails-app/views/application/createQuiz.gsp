@@ -24,10 +24,9 @@
             </button>
             <a class="navbar-brand page-scroll" href="/dashboard">
 
-            <asset:image src="logo2.png" class="logo"/>
+<asset:image src="logo2.png" class="logo"/>
 </a>
 
-</a>
 <a id="coursePageTitle" class="navbar-brand" style="position: absolute; left: 45%; font-size: x-large"></a>
 
 
@@ -38,7 +37,7 @@
 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
     <ul class="nav navbar-nav navbar-right">
         <li>
-            <a class="logout" onclick="logout()" >LogOut</a>
+            <a class="logout" onclick="logout()">LogOut</a>
         </li>
     </ul>
 </div>
@@ -50,58 +49,72 @@
 
 
 <section>
-  <div class="row">
-           <button style="margin-left: 60px;class="btn btn-default btn-md" id="backButton">
-                   <span class="glyphicon glyphicon-arrow-left" ></span> Back
-               </button>
-           </div>
+    <div class="row">
+        <button style="margin-left: 60px;class=" btn btn-default btn-md" id="backButton">
+        <span class="glyphicon glyphicon-arrow-left"></span> Back
+    </button>
+    </div>
+
     <div class="container">
         <div class="row">
 
-                    <div class="col-sm-4">
-                        <form id="quiz-form" method="post" style="margin-top: 30px;">
-                            <label>Add Question</label>
-                            <div class="form-cotrol">
-                                <textarea class="form-control" placeholder="Your question *" id="question-text" required data-validation-required-message="Please enter a message."></textarea>
-                                %{--<input id="quiz" type="text" placeholder="what is your question?" required>--}%
-                                %{--<input type="submit" value="Add Quiz" class="btn btn-success" id="email-button">--}%
+            <div class="col-sm-4">
+                <form id="quiz-form" method="post" style="margin-top: 30px;">
+                    <label>Add Question</label>
 
-                                <br>
-                                <label>Answer Details</label>
-                                <br>
-                                <label>A</label>
-                                <input id="answer-a" type="text" placeholder="Answer option A?" required>  <input type="checkbox" name="A" value="">
-                                <label>Correct?</label>
-                                <br>
-                                <br>
-                                <label>B</label>
-                                <input id="answer-b" type="text" placeholder="Answer option B?" required>  <input type="checkbox" name="B" value="">
-                                <label>Correct?</label>
-                                <br>
-                                <br>
-                                <label>C</label>
-                                <input id="answer-c" type="text" placeholder="Answer option C?" required> <input type="checkbox" name="C" value="">
-                                <label>Correct?</label>
-                                <br>
-                                <br>
-                                <label>D</label>
-                                <input id="answer-d" type="text" placeholder="Answer option D?" required> <input type="checkbox" name="D" value="">
-                                <label>Correct?</label>
-                                <br>
-                                <br>
-                                <label>E</label>
-                                <input id="answer-e" type="text" placeholder="Answer option E?" required> <input type="checkbox" name="E" value="">
-                                <label>Correct?</label>
-                            </div>
-                        </form>
-                          <div class="col-md-4 col-lg-offset-3 text-center">
-                                        <input type="submit" value="Add Question" data-course-id="${session.courseId}" data-quiz-id="${session.quizId}" class="btn btn-success" id="create-question-btn">
-                                    </div>
-                                   <div class="col-md-1 col-md-offset-3 text-center">
-                                        <a class="btn btn-success" href="/course/quizList?courseId=${session.courseId}">Activate Quiz</a>
-                                    </div>
+                    <div class="form-cotrol">
+                        <textarea class="form-control" placeholder="Your question *" id="question-text" required
+                                  data-validation-required-message="Please enter a message."></textarea>
+                        %{--<input id="quiz" type="text" placeholder="what is your question?" required>--}%
+                        %{--<input type="submit" value="Add Quiz" class="btn btn-success" id="email-button">--}%
 
-                         </div>
+                        <br>
+                        <label>Answer Details</label>
+                        <br>
+                        <label>A</label>
+                        <input id="answer-a" type="text" placeholder="Answer option A?" required>  <input
+                            type="checkbox" name="A" value="">
+                        <label>Correct?</label>
+                        <br>
+                        <br>
+                        <label>B</label>
+                        <input id="answer-b" type="text" placeholder="Answer option B?" required>  <input
+                            type="checkbox" name="B" value="">
+                        <label>Correct?</label>
+                        <br>
+                        <br>
+                        <label>C</label>
+                        <input id="answer-c" type="text" placeholder="Answer option C?" required> <input type="checkbox"
+                                                                                                         name="C"
+                                                                                                         value="">
+                        <label>Correct?</label>
+                        <br>
+                        <br>
+                        <label>D</label>
+                        <input id="answer-d" type="text" placeholder="Answer option D?" required> <input type="checkbox"
+                                                                                                         name="D"
+                                                                                                         value="">
+                        <label>Correct?</label>
+                        <br>
+                        <br>
+                        <label>E</label>
+                        <input id="answer-e" type="text" placeholder="Answer option E?" required> <input type="checkbox"
+                                                                                                         name="E"
+                                                                                                         value="">
+                        <label>Correct?</label>
+                    </div>
+                </form>
+
+                <div class="col-md-4 col-lg-offset-3 text-center">
+                    <input type="submit" value="Add Question" data-course-id="${session.courseId}"
+                           data-quiz-id="${session.quizId}" class="btn btn-success" id="create-question-btn">
+                </div>
+
+                <div class="col-md-1 col-md-offset-3 text-center">
+                    <a class="btn btn-success" href="/course/quizList?courseId=${session.courseId}">Activate Quiz</a>
+                </div>
+
+            </div>
 
             <!--<div class="col-sm-1"></div>-->
             <div class="col-md-6 col-md-offset-2">
@@ -112,7 +125,8 @@
                             <th class="col-md-1" data-field="id">#</th>
                             <th class="col-md-1" data-field="text">Question</th>
                             <th class="col-md-1" data-field="choices">Answers</th>
-                            <th class="col-md-1" data-field="button" data-formatter="deleteQuestionButtonFormatter" id="deleteQuestionButton">Delete</th>
+                            <th class="col-md-1" data-field="button" data-formatter="deleteQuestionButtonFormatter"
+                                id="deleteQuestionButton">Delete</th>
                         </tr>
                         </thead>
                     </table>
@@ -132,11 +146,14 @@
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h4 class="modal-title heading">Delete Question?</h4>
             </div>
+
             <div class="modal-body">
                 <p>Are you sure you want to remove this question from the quiz?</p>
             </div>
+
             <div class="modal-footer">
-                <button id="confirmDeleteQuestion" type="button" class="btn btn-danger btn-ok js-deleteQuestion" data-dismiss="modal" data-question-id="">Yes</button>
+                <button id="confirmDeleteQuestion" type="button" class="btn btn-danger btn-ok js-deleteQuestion"
+                        data-dismiss="modal" data-question-id="">Yes</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
             </div>
         </div>
@@ -159,8 +176,8 @@
 <asset:javascript src="instructor.js"/>
 <asset:javascript src="createAtHome.js"/>
 <script>
-    window.onload=prepareClassTitle(${session.courseId});
-    window.onload=setQuizId(${session.quizId});
+    window.onload = prepareClassTitle(${session.courseId});
+    window.onload = setQuizId(${session.quizId});
 </script>
 
 </body>

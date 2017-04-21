@@ -20,11 +20,11 @@
 <body>
 <div class="navbar navbar-default" role="navigation">
     <div class="navbar-header">
-        <asset:image src="logo2.png" class="logo"/></a>
-        <a class="navbar-brand">Poll</a>
+        <asset:image src="logo2.png" class="logo"/>
+        %{--<a class="navbar-brand">Poll</a>--}%
     </div>
     <div class="navbar-collapse collapse">
-        <ul class="nav navbar-nav">
+        <ul class="nav navbar-nav navbar-right">
             <a onclick="logout()" class="btn btn-default navbar-right navbar-btn logout">Logout</a>
         </ul>
     </div>

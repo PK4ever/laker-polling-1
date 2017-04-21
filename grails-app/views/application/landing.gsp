@@ -31,8 +31,10 @@
 
             <div class="navbar-header">
                 <a class="navbar-brand" href="/">
-                    <span>    <asset:image src="logo2.png" class="logo"/></a></span>
-                    Laker Polling
+                    %{--<span>    <asset:image src="logo2.png" class="logo"/></a></span>--}%
+                    %{--Laker Polling--}%
+                    <span> <asset:image src="logo2.png" class="logo" /> </span>
+                    %{--Laker Polling--}%
                 </a>
             </div>
 

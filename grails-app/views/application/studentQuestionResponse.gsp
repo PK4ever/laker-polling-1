@@ -20,7 +20,7 @@
 <body>
 <div class="navbar navbar-default" role="navigation">
     <div class="navbar-header">
-        <asset:image src="logo2.png" class="logo"/></a>
+        <asset:image src="logo2.png" class="logo"/>
         <a class="navbar-brand">Poll</a>
     </div>
     <div class="navbar-collapse collapse">
