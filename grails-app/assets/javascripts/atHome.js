@@ -78,10 +78,8 @@ function identifierFormatter(value, row, index) {
 }
 
 function dateFormatter(value, row, index) {
-    var str = value.split('T')
-    var date = str[0]
-    var time = str[1].substring(0,str[1].length-1)
-    return date + ' :: ' + time + " GMT"
+    var result = moment(value).tz('America/New_York').toString();
+    return result.substring(0, result.length - 12);
 }
 
 $('.js-deleteQuiz').click(function(){
