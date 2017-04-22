@@ -72,7 +72,7 @@
         </div>
         <div class="form-group">
         <br>
-        <button class="btn" id="submitAnswerLive" data-course-id="${session.courseId}">Submit answer</button>
+        <input class="btn btn-success" type="button" id="submitAnswerLive" data-course-id="${session.courseId}" value="Submit answer">
         </div>
     </form>
 </div>
