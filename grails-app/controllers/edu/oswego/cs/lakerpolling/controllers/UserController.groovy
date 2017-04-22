@@ -81,7 +81,7 @@ class UserController {
         }
     }
 
-    def putUserRole(String access_token, String current, String master, String user_id) {
+    def putUserRole(String access_token, String current, String master, String email) {
         QueryResult<AuthToken> checks = new QueryResult<>()
         preconditionService.notNull(params, ['access_token'], checks)
         preconditionService.accessToken(access_token, checks)
@@ -93,10 +93,9 @@ class UserController {
                 result = roleService.updateCurrent(checks.data, current)
             } else {
                 QueryResult<Long> secondChecks = new QueryResult()
-                preconditionService.notNull(params, ['master', 'user_id'], secondChecks)
-                preconditionService.convertToLong(user_id, 'user_id', secondChecks)
+                preconditionService.notNull(params, ['master', 'email'], secondChecks)
 
-                result = secondChecks.success ? roleService.updateMaster(checks.data, secondChecks.data, master)
+                result = secondChecks.success ? roleService.updateMaster(checks.data, email, master)
                         : secondChecks
             }
 

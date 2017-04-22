@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus
 
 @Transactional
 class RoleService {
+    UserService userService
 
     /**
      * Retrieves the role for the user attached to the token.
@@ -60,11 +61,11 @@ class RoleService {
     /**
      * Updates the master role for a user identified by user_id. The role of the requesting user must be above {@link RoleType#STUDENT}
      * @param token - The token identifying the user making the request.
-     * @param userId - The id of the use to update data for.
+     * @param email - The email of the user to update data for.
      * @param master - The new master role for the user. Refer to {@link RoleType}
      * @return - The query result describing the operation.
      */
-    QueryResult<Role> updateMaster(AuthToken token, long userId, String master) {
+    QueryResult<Role> updateMaster(AuthToken token, String email, String master) {
         RoleType requestingRole = token.user.role.type
         if (requestingRole != RoleType.INSTRUCTOR && requestingRole != RoleType.ADMIN) {
             return QueryResult.fromHttpStatus(HttpStatus.UNAUTHORIZED)
@@ -75,18 +76,14 @@ class RoleService {
             return new QueryResult<Role>(success: false, message: "Role:$master does not exist")
         }
 
-        User user = User.findById(userId)
+        User user = userService.getOrMakeByEmail(email)
         QueryResult<Role> result
 
-        if (user != null) {
-            Role role = user.role
-            role.master = optional.get()
+        Role role = user.role
+        role.master = optional.get()
 
-            Role temp = role.save(flush: true, failOnError: true)
-            result = new QueryResult<>(success: true, data: temp)
-        } else {
-            result = new QueryResult<>(success: false, message: "No user with user_id:$userId exists.")
-        }
+        Role temp = role.save(flush: true, failOnError: true)
+        result = new QueryResult<>(success: true, data: temp)
 
         result
     }
