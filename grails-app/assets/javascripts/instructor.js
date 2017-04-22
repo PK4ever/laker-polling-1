@@ -195,6 +195,7 @@ var courseId
                             .replace('{{accessToken}}', accessToken)
                     )
                 })
+                
             }, (err) => {
                 $('#quizGradesTablesContainer').html(
                     html
