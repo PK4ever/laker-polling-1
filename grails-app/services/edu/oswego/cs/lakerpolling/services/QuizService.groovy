@@ -6,6 +6,7 @@ import edu.oswego.cs.lakerpolling.domains.AuthToken
 import edu.oswego.cs.lakerpolling.domains.Course
 import edu.oswego.cs.lakerpolling.domains.Question
 import edu.oswego.cs.lakerpolling.domains.Quiz
+import edu.oswego.cs.lakerpolling.domains.QuizSubmission
 import edu.oswego.cs.lakerpolling.domains.User
 import edu.oswego.cs.lakerpolling.util.QueryResult
 import grails.transaction.Transactional
@@ -271,6 +272,12 @@ class QuizService {
             return QueryResult.copyError(accessCheck)
         }
 
+        if (quizSubmissionExists(quiz, token.user)) {
+            def error = QueryResult.fromHttpStatus(HttpStatus.UNAUTHORIZED)
+            error.message = "Quiz has already been submitted"
+            return error
+        }
+
         def questionResult = findQuestion(quiz, questionIdString)
         if (!questionResult.success) {
             return QueryResult.copyError(questionResult)
@@ -282,6 +289,66 @@ class QuizService {
         new QueryResult(success: true)
     }
 
+    /**
+     * Creates a quiz submission for the user with the given AuthToken and the quiz with the given ID
+     * @param token - the token of the requesting user
+     * @param quizIdString - a String representing the id of the quiz
+     * @return a QueryResult containing the created quiz submission
+     */
+    QueryResult<QuizSubmission> submitQuiz(AuthToken token, String quizIdString) {
+        def quizResult = findQuiz(quizIdString)
+        if (!quizResult.success) {
+            return QueryResult.copyError(quizResult)
+        }
+
+        def quiz = quizResult.data
+        def accessCheck = courseService.verifyStudentAccess(token, quiz.course)
+        if (!accessCheck.success) {
+            return QueryResult.copyError(accessCheck)
+        }
+
+        if (quizSubmissionExists(quiz, token.user)) {
+            def error = QueryResult.fromHttpStatus(HttpStatus.UNAUTHORIZED)
+            error.message = "Quiz has already been submitted"
+            return error
+        }
+
+        def submission = new QuizSubmission(student: token.user, quiz: quiz, timestamp: new Date()).save(flush: true, failOnError: true)
+        def result = new QueryResult<QuizSubmission>()
+        result.data = submission
+        result
+    }
+
+    /**
+     * Gets a quiz submission for the user with the given AuthToken and the quiz with the given ID
+     * @param token - the token of the requesting user
+     * @param quizIdString - a String representing the id of the quiz
+     * @return a QueryResult containing the quiz submission
+     */
+    QueryResult<QuizSubmission> getQuizSubmission(AuthToken token, String quizIdString) {
+        def quizResult = findQuiz(quizIdString)
+        if (!quizResult.success) {
+            return QueryResult.copyError(quizResult)
+        }
+
+        def quiz = quizResult.data
+        def accessCheck = courseService.verifyStudentAccess(token, quiz.course)
+        if (!accessCheck.success) {
+            return QueryResult.copyError(accessCheck)
+        }
+
+        def submission = QuizSubmission.where {
+            student == token.user && quiz == quiz
+        }.find()
+
+        if (!submission) {
+            return QueryResult.fromHttpStatus(HttpStatus.BAD_REQUEST)
+        }
+
+        def result = new QueryResult<QuizSubmission>()
+        result.data = submission
+        result
+    }
 
     /**
      * Attempts to find the Quiz associated with the given ID String
@@ -325,9 +392,17 @@ class QuizService {
         result
     }
 
+    private boolean quizSubmissionExists(Quiz quiz, User user) {
+        def quizSubmission = QuizSubmission.where {
+            quiz == quiz && student == user
+        }.find()
+
+        return quizSubmission != null
+    }
+
     private boolean quizIsOpen(Quiz quiz) {
         def now = new Date()
-        now >= quiz.startDate & now < quiz.endDate
+        now >= quiz.startDate && now < quiz.endDate
     }
 
     private Date parseTimestamp(String unixTime) {

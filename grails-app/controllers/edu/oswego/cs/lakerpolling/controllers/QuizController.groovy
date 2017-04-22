@@ -91,6 +91,48 @@ class QuizController {
     }
 
     /**
+     * Endpoint to create a quiz submission for the user of the given access token and the quiz with the given ID.
+     * @param access_token - the access token of the requesting user
+     * @param quiz_id - the id of the quiz
+     */
+    def submitQuiz(String access_token, String quiz_id) {
+        def require = preconditionService.notNull(params, ["access_token", "quiz_id"])
+        def token = preconditionService.accessToken(access_token).data
+
+        if (require.success) {
+            def result = quizService.submitQuiz(token, quiz_id)
+            if (result.success) {
+                render(view: 'quizSubmission', model: [token: token, submission: result.data])
+            } else {
+                render(view: '../failure', model: [errorCode: result.errorCode, message: result.message])
+            }
+        } else {
+            render(view: '../failure', model: [errorCode: require.errorCode, message: require.message])
+        }
+    }
+
+    /**
+     * Endpoint to get the quiz submission for the user of the given access token and the quiz with the given ID.
+     * @param access_token - the access token of the requesting user
+     * @param quiz_id - the id of the quiz
+     */
+    def getQuizSubmission(String access_token, String quiz_id) {
+        def require = preconditionService.notNull(params, ["access_token", "quiz_id"])
+        def token = preconditionService.accessToken(access_token).data
+
+        if (require.success) {
+            def result = quizService.getQuizSubmission(token, quiz_id)
+            if (result.success) {
+                render(view: 'quizSubmission', model: [token: token, submission: result.data])
+            } else {
+                render(view: '../failure', model: [errorCode: result.errorCode, message: result.message])
+            }
+        } else {
+            render(view: '../failure', model: [errorCode: require.errorCode, message: require.message])
+        }
+    }
+
+    /**
      * Endpoint to get a list of all of the question IDs for a quiz.
      * @param access_token - The access token of the requesting user
      * @param quiz_id - the id of the quiz

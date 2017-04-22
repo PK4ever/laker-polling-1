@@ -1,0 +1,18 @@
+import edu.oswego.cs.lakerpolling.domains.AuthToken
+
+model {
+    AuthToken token
+    QuizSubmission submission
+}
+
+json {
+    status "success"
+    data {
+        accessToken token.accessToken
+        submission {
+            timestamp submission.timestamp
+            quizID submission.quiz.id
+            studentEmail submission.student.email
+        }
+    }
+}
