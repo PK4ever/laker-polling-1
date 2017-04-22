@@ -275,7 +275,8 @@ var courseId
     }
 
 
-    $('#courseButton').on('click', function() {
+    $('#courseButton').on('click', function(event) {
+        event.preventDefault();
         $.ajax({
             url: '/user/auth',
             method: 'GET',
@@ -299,7 +300,7 @@ var courseId
                         name: courseName,
                         crn: courseCRN
                     },
-                    success: function() {
+                    success: function(ev) {
                         document.location.href = "/dashboard";
                     }
                 })
