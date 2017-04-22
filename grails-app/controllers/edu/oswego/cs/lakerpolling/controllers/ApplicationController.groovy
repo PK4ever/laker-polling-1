@@ -196,5 +196,4 @@ class ApplicationController {
         String access = session.getAttribute("access")
         preconditionService.accessToken(access)
     }
-
 }
