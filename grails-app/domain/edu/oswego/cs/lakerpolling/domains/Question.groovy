@@ -8,6 +8,7 @@ class Question {
     List<Boolean> answers
     List<String> choices
     QuestionType type
+    Date dateCreated
 
     static belongsTo = [course: Course]
     static hasMany = [responses: Answer]

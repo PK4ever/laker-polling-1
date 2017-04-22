@@ -24,6 +24,7 @@ function getQuestion() {
                     console.log(question_index)
                     console.log(quiz_question_list)
                     if(question_index>=quiz_question_list.length) {
+
                         window.location.href = "/course?courseId=" + course_id;
                     }
                     else {
@@ -93,6 +94,17 @@ $("#submitAnswer").click(function() {
                 window.location.href = "/course/quiz?courseId=" + course_id + "&quizId=" + quiz_id + "&questionIndex=" + question_index;
             }
             else {
+                //submit quiz
+                $.ajax({
+                    url: '/api/quiz/submission?access_token=' + token + '&quiz_id=' + quiz_id,
+                    type: 'POST',
+                    success: function(data) {
+                        console.log("success")
+                    },
+                    error: function() {
+                        console.log("error")
+                    }
+                });
                 window.location.href = "/course?courseId=" + course_id
             }
         },

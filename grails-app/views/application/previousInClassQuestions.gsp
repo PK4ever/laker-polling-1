@@ -50,54 +50,35 @@
     </div>
     <!-- /.container-fluid -->
 </nav>
-
 <section>
-<div class="container">
-<a href="/course?courseId=${session.courseId}" style="margin-left: 60px;" href="/course?courseId=${session.courseId}" class="btn btn-default btn-md">
-          <span class="glyphicon glyphicon-arrow-left"></span> Back
-</a>
-<br><br>
-<a id="attn-btn" class="btn btn-success btn-md" style="margin-left: 60px;" href="" >Download Attendance</a>
-    <div class="row">
-        <div class="col-sm-3"></div>
-        <div class="col-sm-6">
-
- <div class="container-fluid">
-  <div class="row">
-   <div class="col-md-6 col-sm-6 col-xs-12">
-    <form>
-      <div class="form-group"> <!-- Date input -->
-        <label class="control-label" for="date">Date</label>
-        <input class="form-control" id="date" name="date" placeholder="YYYY-MM-DD" type="text" />
-      </div>
-     </form>
-    </div>
-  </div>    
- </div>
+<div class="container-fluid">
+     <div class="row">
+          <div class="col-md-6 col-sm-6 col-xs-12">
+               <form>
+                   <div class="form-group"> <!-- Date input -->
+                       <label class="control-label" for="date">Date</label>
+                       <input class="form-control" id="date" name="date" placeholder="YYYY-MM-DD" type="text" />
+                   </div>
+               </form>
+          </div>
+     </div>
 </div>
-
-
-        </div>
-        <div class="col-sm-3"></div>
-    </div><br>  
-
-    <div class="row">
-        <div class="col-sm-3"></div>
-        <div class="col-sm-6">
-            <div id="attendance" class="table-responsive">
-                <table id="attendanceTable" class="table" data-toggle="table">
-                    <thead>
-                    <tr>
-                        <th class="col-md-1" data-field="email">Email</th>
-                        <th class="col-md-1" data-field="name">Name</th>
-                        <th class="col-md-1" data-field="attended">Attended</th>
-                    </tr>
-                    </thead>
-                </table>
-            </div>
-        </div>
-        <div class="col-sm-3"></div>
-    </div>
+<div id="oldQuestions" class="table-responsive">
+    <table id="questionTable" class="table" data-toggle="table">
+        <thead>
+        <tr>
+            <th class="col-md-1" data-field="question">Question ID</th>
+            <th class="col-md-1" data-field="question">A</th>
+            <th class="col-md-1" data-field="question">B</th>
+            <th class="col-md-1" data-field="question">C</th>
+            <th class="col-md-1" data-field="question">D</th>
+            <th class="col-md-1" data-field="question">E</th>
+            <th class="col-md-1" data-field="question">Correct</th>
+            <th class="col-md-1" data-field="question">% Correct</th>
+        </tr>
+        </thead>
+    </table>
+</div>
 </section>
 
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.css">
@@ -113,16 +94,7 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 
 <script>
-    window.onload= function(){
-        prepareClassTitle(${session.courseId});
-        $.ajax({
-            url: '/user/auth',
-            method: "GET",
-            success: function(data){
-                $('#attn-btn').attr('href', '/api/course/file/attendance?access_token=' + data.data.token + '&course_id=' + ${session.courseId})
-            }
-        });
-    }
+    window.onload = prepareClassTitle(${session.courseId});
 </script>
 
 <script>
@@ -139,7 +111,7 @@
       date_input.datepicker(options).on('changeDate', function(event) {
         console.log('date changed')
 
-        changeDate($(this).val());
+        changeDate2($(this).val());
       });
     });
 </script>

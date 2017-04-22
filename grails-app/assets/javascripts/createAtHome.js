@@ -110,7 +110,6 @@ $('.js-deleteQuestion').click(function () {
 
 
 $('#backButton').on('click', function(event) {
-    debugger
     $.ajax({
         url: '/user/auth',
         type: 'GET',
