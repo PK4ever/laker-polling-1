@@ -230,7 +230,7 @@ class QuizController {
         }
     }
 
-    def getGrades(String accessToken, ) {
+    def getGrades(String accessToken) {
 
     }
 }
