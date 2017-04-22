@@ -230,7 +230,21 @@ class QuizController {
         }
     }
 
-    def getGrades(String accessToken) {
+    def getGrades(String access_token, String quiz_id, String user_id) {
+        def require = preconditionService.notNull(params, ["access_token", "quiz_id"])
+        def token = preconditionService.accessToken(access_token).data
+        def result
+        if(require.success) {
+            if(user_id != null) result = quizService.getUserGrades(token, quiz_id, user_id)
+            else result = quizService.getQuizGrades(token, quiz_id)
 
+            if(result.success) {
+                render(view: 'getGrades', model: [token: token, grades: result.data, quiz: quiz_id])
+            } else {
+                render(view: '../failure', model: [errorCode: result.errorCode, message: result.message])
+            }
+        } else {
+            render(view: '../failure', model: [errorCode: require.errorCode, message: require.message])
+        }
     }
 }

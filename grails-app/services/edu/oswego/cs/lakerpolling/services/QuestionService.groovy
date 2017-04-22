@@ -2,6 +2,7 @@ package edu.oswego.cs.lakerpolling.services
 
 import edu.oswego.cs.lakerpolling.domains.*
 import edu.oswego.cs.lakerpolling.util.QueryResult
+import edu.oswego.cs.lakerpolling.util.QuestionType
 import edu.oswego.cs.lakerpolling.util.RoleType
 import grails.transaction.Transactional
 import org.springframework.http.HttpStatus
@@ -34,9 +35,9 @@ class QuestionService {
                 if (course) {
                     Question newQuestion
                     if (question != null) {
-                        newQuestion = new Question(course: course, answers: answerList, question: question)
+                        newQuestion = new Question(course: course, answers: answerList, question: question, type: QuestionType.CLICKER)
                     } else {
-                        newQuestion = new Question(course: course, answers: answerList)
+                        newQuestion = new Question(course: course, answers: answerList, type: QuestionType.CLICKER)
                     }
                     newQuestion.active = false
                     newQuestion.save(flush: true, failOnError: true)

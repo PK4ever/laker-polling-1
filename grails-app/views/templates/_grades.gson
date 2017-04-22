@@ -1,0 +1,7 @@
+import edu.oswego.cs.lakerpolling.domains.Grade
+
+model {
+    Collection<Grade> grades = []
+}
+
+json tmpl.'/templates/grade'(grades)
