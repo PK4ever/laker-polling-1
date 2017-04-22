@@ -69,6 +69,8 @@ class UrlMappings {
             "/question"(controller: 'quiz', action: 'deleteQuestion', method: 'delete')
 
             "/question/answer"(controller: 'quiz', action: 'answerQuestion', method: 'put')
+
+            "/grades"(controller: 'quiz', action: 'getGrades', method: 'get')
         }
 
     }

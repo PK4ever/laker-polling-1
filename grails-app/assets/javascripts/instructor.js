@@ -3,7 +3,7 @@ var identifierFormatter
 var studentDeleteButtonFormatter
 var currentInstructor
 var courseId
-
+var currentQuizId
 (function() {
     function InstructorNetworkService(instructor) {
         var _instructor = instructor
@@ -169,6 +169,7 @@ var courseId
         }
 
         this.refreshQuizGradesTableById = function(quizId){
+            debugger
             const html = '<table class="table">\
                 <thead>\
                 <tr>\
@@ -206,6 +207,7 @@ var courseId
         this.isInDeleteCoursesMode = function() {
             return _isInDeleteCoursesMode
         }
+        this.refreshQuizGradesTableById(currentQuizId)
     }
 
     $(function() {
@@ -484,6 +486,7 @@ var courseId
         }, 500)
         return deleteStudentButton
     }
+    
 
     function prepareClassTitle(courseId) {
         $.ajax({
@@ -564,14 +567,16 @@ function prepareClassTitle(cId) {
 }
 
 function changeDate(date) {
-    console.log(date.value)
-    updateDates(date.value)
+    console.log(date);
+    updateDates(date);
+
 };
 
 function updateDates(_date) {
-    console.log(currentInstructor)
+    // console.log(currentInstructor)
     var _token
-    var attendees = []
+    var attendees = [];
+
     currentInstructor.getTokenOrFetch((token) => {
         _token = token
     }, function(){alert("Error updating dates.")})
@@ -586,18 +591,26 @@ function updateDates(_date) {
             type: 'GET',
             async: false,
             success: function(stuff) {
+
                 var _attendees = stuff.data.attendees
                 console.log(_attendees)
-                attendees = _attendees;
+                // attendees = _attendees;
+                if (_attendees == null) {
+                    console.log('u got nothin')
+                    $('#attendanceTable').bootstrapTable('removeAll');
+                    
+                } else {
+                    $('#attendanceTable').bootstrapTable('load', _attendees);
+                    
+                }
+                $('#attendanceTable').bootstrapTable('refresh');
+
+                // $("#date").val(""); // clear the picker
+
             },
             error: function(err) {
                 // console.log(err);
             }
         });
     }
-    console.log("TEST")
-    console.log(attendees)
-    $('#attendanceTable').bootstrapTable({
-        data: attendees
-    });
-};
+}

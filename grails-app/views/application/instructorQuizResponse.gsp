@@ -100,8 +100,8 @@
 <asset:javascript src="instructor.js"/>
 
 <script>
-    window.onload=prepareClassTitle(${session.courseId});
-    window.onload=prepareQuizTitle(${session.quizId});
+    //window.onload=prepareClassTitle(${session.courseId});
+    //window.onload=prepareQuizTitle(${session.quizId});
 </script>
 
 </body>

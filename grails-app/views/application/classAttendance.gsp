@@ -68,7 +68,7 @@
     <form>
       <div class="form-group"> <!-- Date input -->
         <label class="control-label" for="date">Date</label>
-        <input class="form-control" id="date" name="date" placeholder="YYYY-MM-DD" type="text" onchange="changeDate(this)"/>
+        <input class="form-control" id="date" name="date" placeholder="YYYY-MM-DD" type="text" />
       </div>
      </form>
     </div>
@@ -85,7 +85,7 @@
         <div class="col-sm-3"></div>
         <div class="col-sm-6">
             <div id="attendance" class="table-responsive">
-                <table id="attendanceTable" class="table">
+                <table id="attendanceTable" class="table" data-toggle="table">
                     <thead>
                     <tr>
                         <th class="col-md-1" data-field="email">Email</th>
@@ -135,7 +135,12 @@
         autoclose: true,
         clearBtn: true
       };
-      date_input.datepicker(options);
+      // date_input.datepicker(options);
+      date_input.datepicker(options).on('changeDate', function(event) {
+        console.log('date changed')
+
+        changeDate($(this).val());
+      });
     });
 </script>
 
