@@ -15,6 +15,7 @@ class UrlMappings {
         "/course/viewresults" (controller: 'application', action: 'resultsView')
         "/course/quizList" (controller: 'application', action: 'quizListView')
         "/course/createQuiz" (controller: 'application', action: 'quizBuildView')
+        "/course/quiz/grades"(controller: 'application', action: 'quizInstructorView')
         "/course/prevQuestions" (controller: 'application', action: 'inClassListView')
         "/course/quiz" (controller: 'application', action: 'quizStudentView')
 
