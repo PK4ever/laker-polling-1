@@ -10,6 +10,7 @@ import edu.oswego.cs.lakerpolling.domains.Quiz
 import edu.oswego.cs.lakerpolling.domains.QuizSubmission
 import edu.oswego.cs.lakerpolling.domains.User
 import edu.oswego.cs.lakerpolling.util.QueryResult
+import edu.oswego.cs.lakerpolling.util.QuestionType
 import grails.transaction.Transactional
 import org.springframework.http.HttpStatus
 
@@ -205,7 +206,7 @@ class QuizService {
             return QueryResult.copyError(accessCheck)
         }
 
-        Question question = new Question(course: quiz.course, question: text, choices: choices, answers: answers)
+        Question question = new Question(course: quiz.course, question: text, choices: choices, answers: answers, type: QuestionType.QUIZ)
         quiz.addToQuestions(question)
         result.data = question
         result
