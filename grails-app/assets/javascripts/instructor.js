@@ -3,7 +3,7 @@ var identifierFormatter
 var studentDeleteButtonFormatter
 var currentInstructor
 var courseId
-var currentQuizId
+
 (function() {
     function InstructorNetworkService(instructor) {
         var _instructor = instructor
@@ -169,33 +169,39 @@ var currentQuizId
         }
 
         this.refreshQuizGradesTableById = function(quizId){
-            debugger
             const html = '<table class="table">\
                 <thead>\
                 <tr>\
                     <th class="col-md-1">Quiz {{quizId}} Results</th>\
                 </tr>\
                 {{dynamicTableRows}}\
-                <tr>\
-                    <td>\
-                        <button class="btn js-downloadQuizResultsCSVButton" type="button" data-quiz-id="{{quizId}}">Download CSV File</button>\
-                    </td>\
-                </tr>\
+                {{dynamicDownloadButtonRow}}\
                 </thead>\
             </table>'
             _service.getQuizGradesById(quizId, (studentGrades) => {
-                const tableRowHTML = "<tr><td>{{name}}</td><td>{{grade}}</td></tr>"
-
-                var dynamicTableRowsHTML = ''
-                ArrayUtils.forEachCachedLength(studentGrades, (grade) => {
-                    tableRows += tableRowHTML.replaceAll('{{name}}', grade.name).replaceAll('{{grade}}', grade.grade)
+                _service.getTokenOrFetch((accessToken) => {
+                    const tableRowHTML = "<tr><td>{{name}}</td><td>{{grade}}</td></tr>"
+                    const dynamicDownloadButtonRowHTML = '<tr><td><a href="/api/course/file/attendance?access_token={{accessToken}}&quiz_id={{quizId}}">\
+                        <button class="btn" type="button">Download CSV File</button>\
+                    <\a></td></tr>'
+                    var dynamicTableRowsHTML = ''
+                    ArrayUtils.forEachCachedLength(studentGrades, (grade) => {
+                        dynamicTableRowsHTML += tableRowHTML.replaceAll('{{name}}', grade.name).replaceAll('{{grade}}', grade.grade)
+                    })
+                    $('#quizGradesTablesContainer').html(
+                        html.replaceAll('{{quizId}}', quizId)
+                            .replace('{{dynamicTableRows}}', dynamicTableRowsHTML)
+                            .replace('{{dynamicDownloadButtonRow}}', dynamicDownloadButtonRowHTML)
+                            .replace('{{accessToken}}', accessToken)
+                    )
                 })
-                $('#quizGradesTableContainer').html(
-                    html.replace('{{quizId}}', quizId)
-                        .replace('{{dynamicTableRows}}', dynamicTableRowsHTML)
-                )
             }, (err) => {
-                $('#quizGradesTableContainer').html(html.replace('{{quizId}}', quizId))
+                $('#quizGradesTablesContainer').html(
+                    html
+                    .replace('{{quizId}}', quizId)
+                    .replace('{{dynamicTableRows}}', '<tr><td>No Grades Available</td></tr>')
+                    .replace('{{dynamicDownloadButtonRow}}', '')
+                )
             })
         }
 
@@ -207,7 +213,8 @@ var currentQuizId
         this.isInDeleteCoursesMode = function() {
             return _isInDeleteCoursesMode
         }
-        this.refreshQuizGradesTableById(currentQuizId)
+
+        this.refreshQuizGradesTableById(NetworkUtils.getCurrentLocationQueryParam('quizId'))
     }
 
     $(function() {
