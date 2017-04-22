@@ -3,7 +3,7 @@ import edu.oswego.cs.lakerpolling.domains.Grade
 
 model {
     AuthToken token
-    Collection<Grade> grades
+    Collection<Grade> grades = []
     String quiz
 }
 

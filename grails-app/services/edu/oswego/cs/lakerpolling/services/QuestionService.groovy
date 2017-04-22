@@ -208,6 +208,30 @@ class QuestionService {
         result
     }
 
+    def getResults(AuthToken token, String date, String courseId) {
+        def user = token.user
+        def result = new QueryResult<List<Question>>()
+        result.success = false
+
+        if(user.role.type == RoleType.INSTRUCTOR || user.role.type == RoleType.ADMIN) {
+            def course = Course.findById(courseId.toLong())
+            if(course) {
+                def qDate = makeDate(date)
+                def questions = course.questions.findAll{q -> (q.type == QuestionType.CLICKER && q.dateCreated == qDate) }
+                questions.sort{a, b -> a.id <=> b.id }
+                result.data = questions
+                result.success = true
+            } else {
+                result.message = "could not find course"
+                result.errorCode = 400
+            }
+        } else {
+            result.message = "students cannot get question results!"
+            result.errorCode = 400
+        }
+        result
+    }
+
     /**
      * makes a Date for the current date
      * @return - returns a usable date
