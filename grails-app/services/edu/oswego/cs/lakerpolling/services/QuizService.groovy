@@ -10,6 +10,7 @@ import edu.oswego.cs.lakerpolling.domains.Quiz
 import edu.oswego.cs.lakerpolling.domains.QuizSubmission
 import edu.oswego.cs.lakerpolling.domains.User
 import edu.oswego.cs.lakerpolling.util.QueryResult
+import edu.oswego.cs.lakerpolling.util.RoleType
 import grails.transaction.Transactional
 import org.springframework.http.HttpStatus
 
@@ -352,6 +353,13 @@ class QuizService {
         def result = new QueryResult<QuizSubmission>()
         result.data = submission
         result
+    }
+
+    def getUserGrades(AuthToken token, String quizId, String userId) {
+        def user = token.user
+        if(user.role.type == RoleType.INSTRUCTOR || RoleType.ADMIN) {
+            
+        }
     }
 
     /**

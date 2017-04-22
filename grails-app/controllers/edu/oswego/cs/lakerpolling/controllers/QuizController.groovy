@@ -230,7 +230,11 @@ class QuizController {
         }
     }
 
-    def getGrades(String accessToken) {
-
+    def getGrades(String accesst_token, String quiz_id, String user_id) {
+        def require = preconditionService.notNull(params, ["access_token", "quiz_id"])
+        def token = preconditionService.accessToken(access_token).data
+        if(require.success) {
+            if(user_id != null) quizService.getUserGrades(token, quiz_id, user_id)
+        }
     }
 }
