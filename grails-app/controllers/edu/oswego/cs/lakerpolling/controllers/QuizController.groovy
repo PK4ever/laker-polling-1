@@ -229,4 +229,8 @@ class QuizController {
             render(view: '../failure', model: [errorCode: require.errorCode, message: require.message])
         }
     }
+
+    def getGrades(String accessToken, ) {
+
+    }
 }
