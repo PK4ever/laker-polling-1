@@ -80,3 +80,41 @@ NetworkUtils.runAjax = function(url, method, onSuccess, onError) {
         error: onError
     })
 }
+
+NetworkUtils.getCurrentPathData = function() {
+    const websiteLocation = window.location
+    const websiteHostName = websiteLocation.host || websiteLocation.hostname
+    const websitePathName = websiteLocation.pathname.trim()
+    const pathArray = websitePathName.split( '/' )
+    return {
+        location: websiteHostName,
+        host: websiteHostName,
+        path: websitePathName,
+        pathArray: pathArray || []
+    }
+}
+
+NetworkUtils.getCurrentPathParamAtIndex = function(index) {
+    let pathArray = NetworkUtils.getCurrentPathData().pathArray
+    if(pathArray.length < index) return
+    return pathArray[index]
+}
+
+NetworkUtils.getCurrentPathEquals = function(path) {
+    return NetworkUtils.getCurrentPathData().path == path
+}
+
+NetworkUtils.getCurrentPathNthParamMatches = function(index, paramToCheck) {
+    return NetworkUtils.getCurrentPathParamAtIndex(index) == paramToCheck
+}
+
+NetworkUtils.getCurrentLocationQueryParam = function(name) {
+    var urlParamsString = window.location.search.replace('?', '')
+    var params = urlParamsString.split("&")
+    for (var i = 0; i < params.length; i++) {
+        const paramParts = params[i].split('=')
+        if (paramParts[0] == name) {
+            return paramParts[1]
+        }
+    }
+}
