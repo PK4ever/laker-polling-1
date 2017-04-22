@@ -17,6 +17,8 @@ $(document).ready(function(){
             success: function(stuff) {
                 console.log(stuff)
                 answers = stuff.answers
+
+
                 AmCharts.makeChart("chartdiv",
                     {
                         "type": "serial",
@@ -31,7 +33,8 @@ $(document).ready(function(){
                         "startEffect": "easeOutSine",
                         "backgroundColor": "transparent",
                         "borderColor": "#D4D4D4",
-                        "color": "#FFFFFF",
+                        //"color": "#FFFFFF",
+                        "color": "black",
                         "creditsPosition": "bottom-right",
                         "fontSize": 13,
                         "theme": "black",
@@ -41,39 +44,54 @@ $(document).ready(function(){
                             "axisColor": "transparent",
                             "boldLabels": true,
                             "color": "gray",
-                            "fontSize": 70,
-                            "inside": true,
-                            "labelOffset": 4,
+                            //"fontSize": 70,
+                            "fontSize": 20,
+                            //"inside": true,
+                            "bottom": true,
+
+                            "labelOffset": 0,
                             "minHorizontalGap": 50,
                             "minorGridAlpha": 0,
                             "title": "",
                             "titleColor": "#008000",
+                            //"titleFontSize": 36,
                             "titleFontSize": 36,
                             "titleRotation": 0
                         },
                         "trendLines": [],
+
                         "graphs": [
                             {
-                                "balloonText": "[[title]] of [[category]]:[[value]]",
-                                "fillAlphas": 1,
+                                "balloonText": "[[category]]:<br>[[percents]]%",
+                                "fillAlphas": 10,
+                                "fillColors": "#fed136" ,
                                 "gapPeriod": 0,
                                 "id": "AmGraph-1",
-                                "labelText": "",
+                                //"labelText": parseFloat("[[value]]") + "",
+                                "labelText": "[[percents]]%",
+
+                                "labelPosition": "top",
+                                "color":"black",
                                 "title": "graph 1",
                                 "type": "column",
-                                "valueField": "column-1"
-                            }
+                                "valueField": "column-1",
+                                "showAllValueLabels": true
+
+                            },
+
                         ],
                         "guides": [],
                         "valueAxes": [
                             {
                                 "id": "ValueAxis-1",
                                 "title": "Number Of Students",
-                                "titleFontSize": 21
+                                "titleFontSize": 21,
+                                "integersOnly": true,
+                                "axisColor": "black",
+                                "minimum":0
                             }
                         ],
                         "allLabels": [],
-                        "balloon": {},
                         "titles": [
                             {
                                 "color": "#008000",
@@ -110,7 +128,6 @@ $(document).ready(function(){
     }
     })
     });
-
 
 function prepareQuestionId(cId, qId) {
     course_Id = cId;
