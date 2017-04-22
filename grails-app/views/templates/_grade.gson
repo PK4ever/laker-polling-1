@@ -1,0 +1,14 @@
+import edu.oswego.cs.lakerpolling.domains.Grade
+
+model {
+    Grade grade
+}
+
+json {
+    id grade.id
+    first grade.student.firstName
+    last grade.student.lastName
+    name grade.student.firstName != null ? String.format("%s %s", grade.student.firstName, grade.student.lastName) : null
+    email grade.student.email
+    grade grade.grade
+}

@@ -1,0 +1,17 @@
+import edu.oswego.cs.lakerpolling.domains.AuthToken
+import edu.oswego.cs.lakerpolling.domains.Grade
+
+model {
+    AuthToken token
+    Collection<Grade> grades
+    String quiz
+}
+
+json {
+    status: "success"
+    data {
+        accessToken token.accessToken
+        quizId quiz
+        grades g.render(template: "/templates/grades", model: [grades: grades])
+    }
+}
