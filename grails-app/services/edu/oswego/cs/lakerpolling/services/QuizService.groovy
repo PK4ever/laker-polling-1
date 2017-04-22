@@ -364,9 +364,56 @@ class QuizService {
 
     def getUserGrades(AuthToken token, String quizId, String userId) {
         def user = token.user
-        if(user.role.type == RoleType.INSTRUCTOR || RoleType.ADMIN) {
-            
+        def result = new QueryResult<Grade>()
+        result.success = false
+
+        if(user.role.type == RoleType.INSTRUCTOR ||  user.role.type == RoleType.ADMIN) {
+            def student = User.findById(userId.toLong())
+            if(student) {
+                def quiz = Quiz.findById(quizId.toLong())
+                if(quiz) {
+                    def quizGrades = quiz.grades.find{s -> s.student == student}
+                    if(quizGrades) {
+                        result.data = quizGrades
+                        result.success = true
+                    } else {
+                        result.message = "could not find grade for selected student!"
+                        result.errorCode = 400
+                    }
+                } else {
+                    result.message = "could not find the requested quiz"
+                    result.errorCode = 400
+                }
+            } else {
+                result.message = "could not find the requested student"
+                result.errorCode = 400
+            }
+        } else {
+            result.message = "Students cannot query for grades!"
+            result.errorCode = 400
         }
+        result
+    }
+
+    def getQuizGrades(AuthToken token, String quizId) {
+        def user = token.user
+        def result = new QueryResult<List<Grade>>()
+        result.success = false
+
+        if(user.role.type == RoleType.INSTRUCTOR || user.role.type == RoleType.ADMIN) {
+            def quiz = Quiz.findById(quizId.toLong())
+            if(quiz) {
+                result.data = quiz.grades
+                result.success = true
+            } else {
+                result.message = "could not find quiz"
+                result.errorCode = 400
+            }
+        } else {
+            result.message = "Students cannot query for grades!"
+            result.errorCode = 400
+        }
+        result
     }
 
     /**

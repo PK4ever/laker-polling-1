@@ -53,7 +53,7 @@ class AuthController {
                 render(view: '/failure', model: [errorCode: result.errorCode, message: result.message])
             }
         } else {
-            render(view: '/unauthorized')
+            logout()
         }
     }
 
