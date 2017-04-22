@@ -78,8 +78,15 @@ class QuestionService {
                         if (attendee) {
                             def isRight = questionResponseIsCorrect(answerList, question)
                             attendee.attended = true
-                            new Answer(correct: isRight, question: question, student: user, answers: answerList).save(flush: true, failOnError: true)
-                            attendee.attended
+                            def result = Answer.findByQuestionAndStudent(question, token.user)
+                            if (result) {
+                                result.correct = isRight
+                                result.answers = answerList
+                            } else {
+                                result = new Answer(correct: isRight, question: question, student: token.user, answers: answerList)
+                            }
+                            result.save(flush: true, failOnError: true)
+                            true
                         } else false
                     } else false
                 } else false
