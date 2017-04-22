@@ -78,8 +78,15 @@ class QuestionService {
                         if (attendee) {
                             def isRight = questionResponseIsCorrect(answerList, question)
                             attendee.attended = true
-                            new Answer(correct: isRight, question: question, student: user, answers: answerList).save(flush: true, failOnError: true)
-                            attendee.attended
+                            def result = Answer.findByQuestionAndStudent(question, token.user)
+                            if (result) {
+                                result.correct = isRight
+                                result.answers = answerList
+                            } else {
+                                result = new Answer(correct: isRight, question: question, student: token.user, answers: answerList)
+                            }
+                            result.save(flush: true, failOnError: true)
+                            true
                         } else false
                     } else false
                 } else false
@@ -205,6 +212,30 @@ class QuestionService {
 
         def result = new QueryResult<>()
         result.data = data
+        result
+    }
+
+    def getResults(AuthToken token, String date, String courseId) {
+        def user = token.user
+        def result = new QueryResult<List<Question>>()
+        result.success = false
+
+        if(user.role.type == RoleType.INSTRUCTOR || user.role.type == RoleType.ADMIN) {
+            def course = Course.findById(courseId.toLong())
+            if(course) {
+                def qDate = makeDate(date)
+                def questions = course.questions.findAll{q -> (q.type == QuestionType.CLICKER && q.dateCreated == qDate) }
+                questions.sort{a, b -> a.id <=> b.id }
+                result.data = questions
+                result.success = true
+            } else {
+                result.message = "could not find course"
+                result.errorCode = 400
+            }
+        } else {
+            result.message = "students cannot get question results!"
+            result.errorCode = 400
+        }
         result
     }
 

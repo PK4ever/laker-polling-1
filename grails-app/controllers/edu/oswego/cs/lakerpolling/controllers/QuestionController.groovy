@@ -134,4 +134,20 @@ class QuestionController {
         } else render(view: '../failure', model: [errorCode: result.errorCode, message: result.message])
 
     }
+
+    def getQuestionResults(String access_token, String date, String course_id) {
+        def require = preconditionService.notNull(params, ["access_token", "date", "course_id"])
+        def token = preconditionService.accessToken(access_token).data
+
+        if(require.success) {
+            def result = questionService.getResults(token, date, course_id)
+            if(result.success) {
+                render(view: 'getQuestionAnswers', model: [token: token, allQuestions: result.data])
+            } else {
+                render(view: '../failure', model: [message: result.message, errorCode: result.errorCode])
+            }
+        } else {
+            render(view: '../failure', model: [message: require.message, errorCode: require.errorCode])
+        }
+    }
 }

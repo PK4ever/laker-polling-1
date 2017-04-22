@@ -1,0 +1,7 @@
+import edu.oswego.cs.lakerpolling.domains.Question
+
+model {
+    Collection<Question> questions = []
+}
+
+json tmpl.'/template/questionGrade'(questions)

@@ -1,0 +1,15 @@
+import edu.oswego.cs.lakerpolling.domains.Question
+
+model {
+    Question question
+    List<Integer> answers = new ArrayList<>()
+    question.responses.forEach{ q -> answers.add(0)}
+    question.responses.forEach{q ->
+        q.answers.eachWithIndex { a, i -> if(a) answers.set(i, answers.get(i) + 1) }
+    }
+}
+
+json {
+    id question.id
+    answers answers
+}
