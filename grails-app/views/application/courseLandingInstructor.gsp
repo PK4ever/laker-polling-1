@@ -58,6 +58,9 @@
     <a href="/course/createquestion?courseId=${session.courseId}" class="btn btn-success" role="button">Create Question</a>
 </div>
 <div class="form-group" style="text-align: center;">
+    <a href="/course/prevQuestions?courseId=${session.courseId}" class="btn btn-success" role="button">Closed Questions</a>
+</div>
+<div class="form-group" style="text-align: center;">
     <a href="/course/quizList?courseId=${session.courseId}" class="btn btn-success" role="button">At-Home Quizzes</a>
 </div>
 <div class="form-group" style="text-align: center;">
