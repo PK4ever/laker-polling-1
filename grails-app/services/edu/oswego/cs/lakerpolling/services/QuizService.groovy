@@ -296,6 +296,7 @@ class QuizService {
         } else {
             answer = new Answer(correct: isCorrect, question: question, student: token.user, answers: response)
         }
+
         answer.save(flush: true, failOnError: true)
         new QueryResult(success: true)
     }
@@ -324,7 +325,16 @@ class QuizService {
             return error
         }
 
-        def totalGrade = quiz.questions.responses.findAll{a -> a.correct[0] == true}.size() / quiz.questions.responses.size()
+        def studentAnswerList = new ArrayList<>()
+        quiz.questions.forEach { q ->
+            def answer = q.responses.find{ r -> r.student == token.user }
+            if (answer) {
+                studentAnswerList.add(answer)
+            }
+        }
+
+        def totalGrade = studentAnswerList.findAll { a-> a.correct == true }.size() / quiz.questions.size()
+
         new Grade(student: token.user, grade: totalGrade, quiz: quiz).save(flush: true, failOnError: true)
         def submission = new QuizSubmission(student: token.user, quiz: quiz, timestamp: new Date()).save(flush: true, failOnError: true)
         def result = new QueryResult<QuizSubmission>()
