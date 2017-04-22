@@ -275,7 +275,8 @@ var courseId
     }
 
 
-    $('#courseButton').on('click', function() {
+    $('#courseButton').on('click', function(event) {
+        event.preventDefault();
         $.ajax({
             url: '/user/auth',
             method: 'GET',
@@ -299,7 +300,7 @@ var courseId
                         name: courseName,
                         crn: courseCRN
                     },
-                    success: function() {
+                    success: function(ev) {
                         document.location.href = "/dashboard";
                     }
                 })
@@ -557,6 +558,55 @@ function updateDates(_date) {
                     
                 }
                 $('#attendanceTable').bootstrapTable('refresh');
+
+                // $("#date").val(""); // clear the picker
+
+            },
+            error: function(err) {
+                // console.log(err);
+            }
+        });
+    }
+};
+
+function changeDate2(date) {
+    console.log(date);
+    updateInClassQuizzes(date);
+
+};
+
+function updateInClassQuizzes(_date) {
+    // console.log(currentInstructor)
+    var _token
+    var attendees = [];
+    debugger
+    currentInstructor.getTokenOrFetch((token) => {
+        _token = token
+    }, function(){alert("Error updating dates.")})
+    if(_date) {
+        $.ajax({
+            url: '/api/question/answer',
+            data: {
+                access_token: _token,
+                course_id: courseId,
+                date: _date
+            },
+            type: 'GET',
+            async: false,
+            success: function(stuff) {
+                var _results = stuff.data.results
+                console.log(_results)
+                // attendees = _attendees;
+                debugger
+                if (_results == null) {
+                    console.log('u got nothin')
+                    $('#questionTable').bootstrapTable('removeAll');
+
+                } else {
+                    $('#questionTable').bootstrapTable('load', _results);
+
+                }
+                $('#questionTable').bootstrapTable('refresh');
 
                 // $("#date").val(""); // clear the picker
 

@@ -1,6 +1,7 @@
 var courseId;
 var deleteQuizFormatter;
 var token;
+var isInstructor;
 
 
 $(function(){
@@ -10,20 +11,56 @@ $(function(){
         success: function(data){
             token = data.data.token
             console.log(token)
+            if(data.data.user.type == "INSTRUCTOR") isInstructor = true;
+            else isInstructor = false;
             $.ajax({
                 url: '/api/quiz?access_token=' +  token + '&course_id=' + courseId,
                 method: "GET",
                 success: function(data) {
                 	var quizzes = data.data.quizzes
                     console.log(quizzes)
-                    $('#quizTable').bootstrapTable({
-		                data: quizzes
-		            });
+                    if(isInstructor) {
+                        $('#quizTable').bootstrapTable({
+                            data: quizzes
+                        });
+                        return
+                    }
+                    checkStudentSubmissionStatusForQuizzes(quizzes)
+                        .always(() => {
+                            $('#quizTable').bootstrapTable({
+                                data: quizzes
+                            });
+                        })
                 }
             });
         }
     });
 });
+
+function checkStudentSubmissionStatusForQuizzes(quizzes) {
+    const promises = quizzes.map((quiz) => {
+        return checkStudentQuizSubmissionStatus(quiz)
+    })
+    return $.when.apply($, promises)
+}
+
+function checkStudentQuizSubmissionStatus (quiz) {
+    var deferred = $.Deferred()
+    $.ajax({
+        url: '/api/quiz/submission?access_token=' + token + '&quiz_id=' + quiz.id,
+        type: 'GET',
+        success: function(data) {
+            //console.log("success")
+            quiz.alreadySubmitted = true
+            deferred.resolve(true)
+        },
+        error: function(error) {
+            quiz.alreadySubmitted = false
+            deferred.resolve(false)
+        }
+    });
+    return deferred.promise()
+}
 
 $('#newQuizButton').on('click', function(event) {
     $.ajax({
@@ -71,10 +108,15 @@ $('#newQuizButton').on('click', function(event) {
 });
 
 function identifierFormatter(value, row, index) {
-    return [
-        '<a class="like" href="/course/quiz?courseId=' + courseId + '&quizId=' + row.id + '&questionIndex=0" title="Like">',
-        value,
-        '</a>'].join('');
+    if (row.alreadySubmitted && !isInstructor) {
+        return value + '<br><span style="font-size:10px">Submitted</span>'
+    } else {
+        if(!isInstructor) {
+            return '<a class="like" href="/course/quiz?courseId=' + courseId + '&quizId=' + row.id + '&questionIndex=0" title="Like">' + value + '</a>'
+        } else {
+            return '<a class="like" href="/course/quiz/grades?courseId=' + courseId + '&quizId=' + row.id + '" title="Like">' + value + '</a>'
+        }
+    }
 }
 
 function dateFormatter(value, row, index) {

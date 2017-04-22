@@ -84,8 +84,12 @@
 
 <asset:javascript src="auth/config.js"/>
 <asset:javascript src="auth/logout.js"/>
-<asset:javascript src="student.js"/>
 <asset:javascript src="atHome.js"/>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.13/moment-timezone.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.13/moment-timezone-with-data-2012-2022.min.js"></script>
 
 <script>
     window.onload=prepareClassTitle(${session.courseId});
