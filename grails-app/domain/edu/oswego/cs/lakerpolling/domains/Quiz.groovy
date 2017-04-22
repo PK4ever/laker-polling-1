@@ -6,7 +6,7 @@ class Quiz {
     String name
 
     static belongsTo = [course: Course]
-    static hasMany = [questions: Question]
+    static hasMany = [questions: Question, grades: Grade]
 
     static constraints = {
         name nullable: true
