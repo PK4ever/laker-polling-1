@@ -175,8 +175,8 @@ class ApplicationController {
             render(view: '../failure', model: [errorCode: require.errorCode, message: require.message])
         }
     }
-
-    def quizInstructorView(long courseId, long quizId) {
+  
+  def quizInstructorView(long courseId, long quizId) {
         QueryResult<AuthToken> require = hasAccess()
         if(require.success) {
             def preReq = preconditionService.notNull(params, ["courseId", "quizId"])
@@ -184,6 +184,21 @@ class ApplicationController {
                 session.setAttribute("courseId", courseId)
                 session.setAttribute("quizId", quizId)
                 render(view: 'instructorQuizResponse')
+            } else {
+                render(view: '../failure', model: [errorCode: preReq.errorCode, message: preReq.message])
+            }
+        } else {
+            render(view: '../failure', model: [errorCode: require.errorCode, message: require.message])
+        }
+    }
+
+    def inClassListView(long courseId) {
+        QueryResult<AuthToken> require = hasAccess()
+        if(require.success) {
+            def preReq = preconditionService.notNull(params, ["courseId"])
+            if(preReq.success) {
+                session.setAttribute("courseId", courseId)
+                render(view: 'previousInClassQuestions')
             } else {
                 render(view: '../failure', model: [errorCode: preReq.errorCode, message: preReq.message])
             }
