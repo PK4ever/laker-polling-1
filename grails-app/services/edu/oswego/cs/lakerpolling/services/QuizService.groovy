@@ -4,6 +4,7 @@ import edu.oswego.cs.lakerpolling.domains.Answer
 import edu.oswego.cs.lakerpolling.domains.AuthToken
 
 import edu.oswego.cs.lakerpolling.domains.Course
+import edu.oswego.cs.lakerpolling.domains.Grade
 import edu.oswego.cs.lakerpolling.domains.Question
 import edu.oswego.cs.lakerpolling.domains.Quiz
 import edu.oswego.cs.lakerpolling.domains.QuizSubmission
@@ -313,6 +314,9 @@ class QuizService {
             return error
         }
 
+        def totalGrade = quizResult.data.questions.answers.find{a -> a}.size() / quizResult.data.questions.answers.size()
+        println("TOTAL GRADE: " + totalGrade)
+        new Grade(student: token.user, grade: totalGrade).save(flush: true, failOnError: true)
         def submission = new QuizSubmission(student: token.user, quiz: quiz, timestamp: new Date()).save(flush: true, failOnError: true)
         def result = new QueryResult<QuizSubmission>()
         result.data = submission
