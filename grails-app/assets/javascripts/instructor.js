@@ -169,6 +169,7 @@ var courseId
         }
 
         this.refreshQuizGradesTableById = function(quizId){
+            
             const html = '<table class="table">\
                 <thead>\
                 <tr>\
