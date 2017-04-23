@@ -132,6 +132,7 @@
 <asset:javascript src="auth/config.js"/>
 <asset:javascript src="auth/logout.js"/>
 <asset:javascript src="instructor.js"/>
+<asset:javascript src="main.js"/>
 
 <script>
     window.onload=prepareClassTitle(${session.courseId});
