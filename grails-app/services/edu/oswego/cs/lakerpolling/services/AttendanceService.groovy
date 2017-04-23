@@ -89,11 +89,15 @@ class AttendanceService {
 
             Set<User> students = course.students
             SimpleDateFormat formatter = new SimpleDateFormat("MMM dd yyyy")
-            response.setHeader("Content-disposition", "filename=attendance-${course.name}.csv")
+            SimpleDateFormat fn = new SimpleDateFormat("MM-dd-yy")
+            response.setHeader("Content-disposition",
+                    "filename=attendance-${course.name}_${fn.format(attendances.first().date)}" +
+                            "___${fn.format(attendances.last().date)}.csv")
             response.contentType = "text/csv"
             response.characterEncoding = "UTF-8"
 
-            outputStream << "Full Name"
+            outputStream << "Name"
+            outputStream << ",Email"
             attendances.each {
                 outputStream << ",${formatter.format(it.date)}"
             }
@@ -102,6 +106,7 @@ class AttendanceService {
 
             students.eachWithIndex { student, index ->
                 outputStream << "${student.firstName} ${student.lastName}"
+                outputStream << ",${student.email}"
                 attendances.each { attendance ->
                     Attendee attendee = Attendee.findByAttendanceAndStudent(attendance, student)
                     outputStream << ",${attendee.attended ? "v" : "x"}"

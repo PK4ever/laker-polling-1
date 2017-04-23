@@ -1,7 +1,9 @@
 package edu.oswego.cs.lakerpolling.controllers
 
+import edu.oswego.cs.lakerpolling.domains.AuthToken
 import edu.oswego.cs.lakerpolling.services.PreconditionService
 import edu.oswego.cs.lakerpolling.services.QuizService
+import edu.oswego.cs.lakerpolling.util.QueryResult
 
 class QuizController {
 
@@ -21,9 +23,9 @@ class QuizController {
         def require = preconditionService.notNull(params, ["access_token", "course_id", "start_timestamp", "end_timestamp"])
         def token = preconditionService.accessToken(access_token).data
 
-        if(require.success) {
+        if (require.success) {
             def result = quizService.createQuiz(token, course_id, name, start_timestamp, end_timestamp)
-            if(result.success) {
+            if (result.success) {
                 render(view: 'getQuiz', model: [quiz: result.data, courseID: course_id.toLong(), token: token])
             } else {
                 render(view: '../failure', model: [errorCode: result.errorCode, message: result.message])
@@ -52,16 +54,14 @@ class QuizController {
                 } else {
                     render(view: '../failure', model: [errorCode: result.errorCode, message: result.message])
                 }
-            }
-            else if (course_id){
+            } else if (course_id) {
                 def result = quizService.getAllQuizzes(token, course_id)
                 if (result.success) {
                     render(view: 'getQuizzes', model: [token: token, courseID: course_id.toLong(), quizzes: result.data])
                 } else {
                     render(view: '../failure', model: [errorCode: result.errorCode, message: result.message])
                 }
-            }
-            else {
+            } else {
                 render(view: '../failure', model: [errorCode: 400, message: "Missing quiz_id or question_id parameter"])
             }
         } else {
@@ -149,8 +149,7 @@ class QuizController {
                 } else {
                     render(view: '../failure', model: [errorCode: result.errorCode, message: result.message])
                 }
-            }
-            else {
+            } else {
                 def result = quizService.getAllQuestionIds(token, quiz_id)
                 if (result.success) {
                     render(view: 'questionIdList', model: [token: token, quizId: quiz_id.toLong(), questionIds: result.data])
@@ -198,9 +197,9 @@ class QuizController {
         def require = preconditionService.notNull(params, ["access_token", "question_id"])
         def token = preconditionService.accessToken(access_token).data
 
-        if(require.success) {
+        if (require.success) {
             def result = quizService.deleteQuestion(token, quiz_id, question_id)
-            if(result.success) {
+            if (result.success) {
                 render(view: 'deleteResult', model: [token: token])
             } else render(view: '../failure', model: [errorCode: result.errorCode, message: result.message])
         } else render(view: '../failure', model: [errorCode: require.errorCode, message: require.message])
@@ -218,9 +217,9 @@ class QuizController {
         def require = preconditionService.notNull(params, ["access_token", "quiz_id", "question_id", "answer"])
         def token = preconditionService.accessToken(access_token).data
 
-        if(require.success) {
+        if (require.success) {
             def result = quizService.answerQuestion(token, quiz_id, question_id, answer)
-            if(result.success) {
+            if (result.success) {
                 render(view: 'answerQuestion', model: [token: token])
             } else {
                 render(view: '../failure', model: [errorCode: result.errorCode, message: result.message])
@@ -234,11 +233,11 @@ class QuizController {
         def require = preconditionService.notNull(params, ["access_token", "quiz_id"])
         def token = preconditionService.accessToken(access_token).data
         def result
-        if(require.success) {
-            if(user_id != null) result = quizService.getUserGrades(token, quiz_id, user_id)
+        if (require.success) {
+            if (user_id != null) result = quizService.getUserGrades(token, quiz_id, user_id)
             else result = quizService.getQuizGrades(token, quiz_id)
 
-            if(result.success) {
+            if (result.success) {
                 render(view: 'getGrades', model: [token: token, grades: result.data, quiz: quiz_id])
             } else {
                 render(view: '../failure', model: [errorCode: result.errorCode, message: result.message])
@@ -247,4 +246,25 @@ class QuizController {
             render(view: '../failure', model: [errorCode: require.errorCode, message: require.message])
         }
     }
+
+    def downloadGrades(String access_token, String course_id) {
+        QueryResult<AuthToken> checks = new QueryResult<>()
+        preconditionService.notNull(params, ["access_token", "course_id"], checks)
+        preconditionService.accessToken(access_token, checks)
+
+        if (checks.success) {
+            QueryResult<Long> convert = preconditionService.convertToLong(course_id, "course_id")
+            if (convert.success) {
+                QueryResult result = quizService.gradesToCsv(checks.data, convert.data, response)
+                if (!result.success) {
+                    render(view: '../failure', model: [errorCode: result.errorCode, message: result.message])
+                }
+            } else {
+                render(view: '../failure', model: [errorCode: convert.errorCode, message: convert.message])
+            }
+        } else {
+            render(view: '../failure', model: [errorCode: checks.errorCode, message: checks.message])
+        }
+    }
+
 }

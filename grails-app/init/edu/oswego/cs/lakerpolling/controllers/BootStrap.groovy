@@ -4,6 +4,8 @@ import edu.oswego.cs.lakerpolling.domains.Attendance
 import edu.oswego.cs.lakerpolling.domains.Attendee
 import edu.oswego.cs.lakerpolling.domains.AuthToken
 import edu.oswego.cs.lakerpolling.domains.Course
+import edu.oswego.cs.lakerpolling.domains.Grade
+import edu.oswego.cs.lakerpolling.domains.Quiz
 import edu.oswego.cs.lakerpolling.domains.Role
 import edu.oswego.cs.lakerpolling.domains.User
 import edu.oswego.cs.lakerpolling.util.RoleType
@@ -89,7 +91,6 @@ class BootStrap {
 
         /*End instructors*/
 
-
         /*Courses*/
         Course csc480 = new Course(name: "CSC 480", crn: 11111, instructor: inst1)
         csc480.addToStudents(a)
@@ -105,7 +106,7 @@ class BootStrap {
         csc212.save(flush: true)
 
 
-        Course hci521 = new Course(name:  "HCI 521", crn: 22222, instructor: linc)
+        Course hci521 = new Course(name: "HCI 521", crn: 22222, instructor: linc)
         hci521.addToStudents(stu)
         hci521.addToStudents(stu2)
         hci521.addToStudents(michael)
@@ -125,21 +126,38 @@ class BootStrap {
         at1.addToAttendees(new Attendee(attended: true, student: b))
         at1.addToAttendees(new Attendee(attended: false, student: michael))
         at1.addToAttendees(new Attendee(attended: true, student: max))
-        at1.save(flush:true)
+        at1.save(flush: true)
 
         Attendance at2 = new Attendance(date: new Date("2017/04/13"), course: csc480)
         at2.addToAttendees(new Attendee(attended: false, student: a))
         at2.addToAttendees(new Attendee(attended: true, student: b))
         at2.addToAttendees(new Attendee(attended: true, student: michael))
         at2.addToAttendees(new Attendee(attended: true, student: max))
-        at2.save(flush:true)
+        at2.save(flush: true)
 
         Attendance at3 = new Attendance(date: new Date("2017/04/14"), course: csc480)
         at3.addToAttendees(new Attendee(attended: false, student: a))
         at3.addToAttendees(new Attendee(attended: true, student: b))
         at3.addToAttendees(new Attendee(attended: true, student: michael))
         at3.addToAttendees(new Attendee(attended: true, student: max))
-        at3.save(flush:true)
+        at3.save(flush: true)
+
+        Quiz quiz1 = new Quiz(course: csc480, startDate: new Date("2017/04/12"), endDate: new Date("2017/04/20"),
+                name: "Quiz 1").save(flush: true)
+
+        new Grade(grade: 100.00d, student: a, quiz: quiz1).save(flush: true)
+        new Grade(grade: 70.56d, student: b, quiz: quiz1).save(flush: true)
+        new Grade(grade: 35.93d, student: michael, quiz: quiz1).save(flush: true)
+        new Grade(grade: 86.33d, student: max, quiz: quiz1).save(flush: true)
+
+
+        Quiz quiz2 = new Quiz(course: csc480, startDate: new Date("2017/04/18"), endDate: new Date("2017/04/25"),
+                name: "Super Difficult").save(flush: true)
+
+        new Grade(grade: 10.4444d, student: a, quiz: quiz2).save(flush: true)
+        new Grade(grade: 80.663d, student: b, quiz: quiz2).save(flush: true)
+        new Grade(grade: 65.1522411d, student: michael, quiz: quiz2).save(flush: true)
+        new Grade(grade: 76.44d, student: max, quiz: quiz2).save(flush: true)
 
     }
 
