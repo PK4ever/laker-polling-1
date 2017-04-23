@@ -86,6 +86,20 @@
                 </button>
             </div>
         </div>
+        <br>
+        <div class="row">
+            <div class="col-sm-4"></div>
+            <div class="col-sm-4">
+                <form id="instructor-form-email" method="put" style="margin-top: 30px;">
+                    <label>Add new instructor by email</label>
+                    <div class="form-group">
+                        <input id="instEmail" type="email" placeholder="lakernetID@oswego.edu" required>
+                        <input style="margin-top: 5px" type="submit" value="Add instructor" class="btn btn-success" id="inst-email-button">
+                    </div>
+                </form>
+            </div>
+            <div class="col-sm-4"></div>
+        </div>
     </div>
 </section>
 <!-- Modal -->

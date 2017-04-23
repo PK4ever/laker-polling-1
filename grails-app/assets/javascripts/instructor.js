@@ -478,6 +478,35 @@ var courseId
         });
     });
 
+    $('#instructor-form-email').submit(function(event) {
+        debugger
+        $.ajax({
+            url: '/user/auth',
+            type: 'GET',
+            success: function(data) {
+                var token = data.data.token;
+                var email = $("#instEmail").val();
+
+                console.log(email);
+                var urlStr = '/api/user/role?access_token=' + token + '&email='+ email +'&master=INSTRUCTOR'
+                $.ajax({
+                    url: urlStr,
+                    type: 'PUT',
+                    success: function(data) {
+                        debugger
+                        alert("User: " + email + "is now an instructor.")
+                        window.location.reload();
+                    },
+                    error: function(jqXHR, textStatus, errorMessage) {
+                        debugger
+                        console.log(errorMessage)
+                    }
+
+                });
+            }
+        });
+    });
+
     $('.js-deleteStudent').click(function () {
         currentInstructor.deleteStudentById($(this).data("student-id"), (student) => {
             // alert("REMOVED STUDENT: " + JSON.stringify(student))
