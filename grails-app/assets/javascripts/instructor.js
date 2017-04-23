@@ -68,7 +68,7 @@ var courseId
 
         this.getQuestionPerformanceByDate = function(date, course_id, onSuccess, onFail){
             _instructor.getTokenOrFetch((token) => {
-                var urlString = '/api/question/answer?access_token=' + token + '&course_id=' + course_id + '&date=' + date;
+                var urlString = '/api/question/result?access_token=' + token + '&course_id=' + course_id + '&date=' + date;
                 NetworkUtils.runAjax(urlString, 'GET', function(data){
                     if(!ArrayUtils.isArray(data.results)){
                         return onFail(new Error ("No questions found for that date"))
