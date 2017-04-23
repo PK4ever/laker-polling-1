@@ -56,10 +56,10 @@ var courseId
             _instructor.getTokenOrFetch((token) => {
                 var urlString = '/api/quiz/grades?access_token=' + token + '&quiz_id=' + id;
                 NetworkUtils.runAjax(urlString, 'GET', function(data){
-                    if (!ArrayUtils.isArray(data.grades)) {
+                    if (!ArrayUtils.isArray(data.data.grades)) {
                         return onFail(new Error("Could not find grades by that "))
                     }
-                    onSuccess(data.grades)
+                    onSuccess(data.data.grades)
                 }, function(err){
                     onFail(err)
                 })
@@ -169,6 +169,7 @@ var courseId
         }
 
         this.refreshQuizGradesTableById = function(quizId){
+            
             const html = '<table class="table">\
                 <thead>\
                 <tr>\
@@ -179,14 +180,14 @@ var courseId
                 </thead>\
             </table>'
             _service.getQuizGradesById(quizId, (studentGrades) => {
-                _service.getTokenOrFetch((accessToken) => {
+                _service.getToken((accessToken) => {
                     const tableRowHTML = "<tr><td>{{name}}</td><td>{{grade}}</td></tr>"
-                    const dynamicDownloadButtonRowHTML = '<tr><td><a href="/api/course/file/attendance?access_token={{accessToken}}&quiz_id={{quizId}}">\
-                        <button class="btn" type="button">Download CSV File</button>\
+                    const dynamicDownloadButtonRowHTML = '<tr><td><a href="/api/quiz/file/grades?access_token={{accessToken}}&course_id=' + courseId + '">\
+                        <button class="btn" type="button">Download CSV File for the class</button>\
                     <\a></td></tr>'
                     var dynamicTableRowsHTML = ''
                     ArrayUtils.forEachCachedLength(studentGrades, (grade) => {
-                        dynamicTableRowsHTML += tableRowHTML.replaceAll('{{name}}', grade.name).replaceAll('{{grade}}', grade.grade)
+                        dynamicTableRowsHTML += tableRowHTML.replaceAll('{{name}}', grade.name).replaceAll('{{grade}}', (grade.grade * 100) + "%")
                     })
                     $('#quizGradesTablesContainer').html(
                         html.replaceAll('{{quizId}}', quizId)
