@@ -15,6 +15,13 @@ import edu.oswego.cs.lakerpolling.util.RoleType
 import grails.transaction.Transactional
 import org.springframework.http.HttpStatus
 
+import javax.servlet.ServletOutputStream
+import javax.servlet.http.HttpServletResponse
+import java.text.DateFormat
+import java.text.DecimalFormat
+import java.text.NumberFormat
+import java.text.SimpleDateFormat
+
 @Transactional
 class QuizService {
     CourseService courseService
@@ -52,7 +59,7 @@ class QuizService {
             return QueryResult.copyError(accessCheck)
         }
 
-        Quiz quiz = new Quiz(course: course, name: name, startDate: startDate, endDate: endDate )
+        Quiz quiz = new Quiz(course: course, name: name, startDate: startDate, endDate: endDate)
         quiz.save(flush: true, failOnError: true)
         result.data = quiz
         result
@@ -172,7 +179,7 @@ class QuizService {
         }
 
         // Prevent Students from viewing question while the quiz is closed
-        if(!quizIsOpen(quiz) && !courseService.verifyInstructorAccess(token, course).success) {
+        if (!quizIsOpen(quiz) && !courseService.verifyInstructorAccess(token, course).success) {
             return QueryResult.fromHttpStatus(HttpStatus.UNAUTHORIZED)
         }
 
@@ -239,7 +246,7 @@ class QuizService {
 
         def question = questionResult.data
         quiz.removeFromQuestions(question)
-        question.delete(flush:true, failOnError:true)
+        question.delete(flush: true, failOnError: true)
 
         new QueryResult(success: true)
     }
@@ -296,6 +303,7 @@ class QuizService {
         } else {
             answer = new Answer(correct: isCorrect, question: question, student: token.user, answers: response)
         }
+
         answer.save(flush: true, failOnError: true)
         new QueryResult(success: true)
     }
@@ -324,7 +332,16 @@ class QuizService {
             return error
         }
 
-        def totalGrade = quiz.questions.responses.findAll{a -> a.correct[0] == true}.size() / quiz.questions.responses.size()
+        def studentAnswerList = new ArrayList<>()
+        quiz.questions.forEach { q ->
+            def answer = q.responses.find { r -> r.student == token.user }
+            if (answer) {
+                studentAnswerList.add(answer)
+            }
+        }
+
+        def totalGrade = studentAnswerList.findAll { a -> a.correct == true }.size() / quiz.questions.size()
+
         new Grade(student: token.user, grade: totalGrade, quiz: quiz).save(flush: true, failOnError: true)
         def submission = new QuizSubmission(student: token.user, quiz: quiz, timestamp: new Date()).save(flush: true, failOnError: true)
         def result = new QueryResult<QuizSubmission>()
@@ -368,13 +385,13 @@ class QuizService {
         def result = new QueryResult<Grade>()
         result.success = false
 
-        if(user.role.type == RoleType.INSTRUCTOR ||  user.role.type == RoleType.ADMIN) {
+        if (user.role.type == RoleType.INSTRUCTOR || user.role.type == RoleType.ADMIN) {
             def student = User.findById(userId.toLong())
-            if(student) {
+            if (student) {
                 def quiz = Quiz.findById(quizId.toLong())
-                if(quiz) {
-                    def quizGrades = quiz.grades.find{s -> s.student == student}
-                    if(quizGrades) {
+                if (quiz) {
+                    def quizGrades = quiz.grades.find { s -> s.student == student }
+                    if (quizGrades) {
                         result.data = quizGrades
                         result.success = true
                     } else {
@@ -401,9 +418,9 @@ class QuizService {
         def result = new QueryResult<List<Grade>>()
         result.success = false
 
-        if(user.role.type == RoleType.INSTRUCTOR || user.role.type == RoleType.ADMIN) {
+        if (user.role.type == RoleType.INSTRUCTOR || user.role.type == RoleType.ADMIN) {
             def quiz = Quiz.findById(quizId.toLong())
-            if(quiz) {
+            if (quiz) {
                 result.data = quiz.grades
                 result.success = true
             } else {
@@ -413,6 +430,63 @@ class QuizService {
         } else {
             result.message = "Students cannot query for grades!"
             result.errorCode = 400
+        }
+        result
+    }
+
+    def gradesToCsv(AuthToken token, long courseId, HttpServletResponse response) {
+        QueryResult result = new QueryResult(success: true)
+        Course course = Course.findById(courseId)
+
+        if (courseService.hasInstructorAccess(token.user, course)) {
+            ServletOutputStream outputStream = response.outputStream
+            List<Quiz> quizList = Quiz.createCriteria().list {
+                eq("course", course)
+                order("startDate", "asc")
+            } as List<Quiz>
+
+            DateFormat fn = new SimpleDateFormat("MM-dd-yy")
+            NumberFormat nf = new DecimalFormat("#0.00")
+
+            Set<User> students = course.students
+            response.setHeader("Content-disposition",
+                    "filename=grades-${course.name}_${fn.format(quizList.first().startDate)}" +
+                            "___${fn.format(quizList.last().endDate)}.csv")
+            response.contentType = "text/csv"
+            response.characterEncoding = "UTF-8"
+
+            outputStream << "Name"
+            outputStream << ",Email"
+            quizList.each { Quiz quiz ->
+                outputStream << ",${quiz.name}"
+            }
+            outputStream << ",Average"
+            outputStream << "\n"
+            outputStream.flush()
+
+            students.eachWithIndex { User student, int i ->
+                outputStream << "${student.firstName} ${student.lastName}"
+                outputStream << ",${student.email}"
+
+                def total = 0
+
+                quizList.each { Quiz quiz ->
+                    Grade grade = Grade.findByStudentAndQuiz(student, quiz)
+                    outputStream << ",${nf.format(grade.grade)}"
+                    total += grade.grade
+                }
+
+                outputStream << ",${nf.format(total / quizList.size())}"
+
+                if (i < students.size() - 1) {
+                    outputStream << "\n"
+                }
+                outputStream.flush()
+            }
+        } else {
+            result.success = false
+            result.errorCode = HttpStatus.UNAUTHORIZED.value()
+            result.message = HttpStatus.UNAUTHORIZED.reasonPhrase
         }
         result
     }
@@ -482,16 +556,16 @@ class QuizService {
     private List<Boolean> toBooleanList(String commaSeparatedStr) {
         List<Boolean> boolList = new ArrayList<>()
         def stringList = commaSeparatedStrToList(commaSeparatedStr)
-        stringList.forEach {s ->
-            if(s == "false") boolList.add(false)
-            else if(s == "true") boolList.add(true)
+        stringList.forEach { s ->
+            if (s == "false") boolList.add(false)
+            else if (s == "true") boolList.add(true)
             else return null
         }
         return boolList
     }
 
     private List<String> commaSeparatedStrToList(String str) {
-        str.indexOf(",") != -1 ? str.split(",").toList(): [str]
+        str.indexOf(",") != -1 ? str.split(",").toList() : [str]
     }
 
 }

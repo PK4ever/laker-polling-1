@@ -151,6 +151,7 @@
 <asset:javascript src="auth/config.js"/>
 <asset:javascript src="auth/logout.js"/>
 <asset:javascript src="instructor.js"/>
+<asset:javascript src="main.js"/>
 <asset:javascript src="atHome.js"/>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/js/bootstrap-timepicker.min.js"></script>

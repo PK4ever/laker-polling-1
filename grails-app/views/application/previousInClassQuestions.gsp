@@ -90,6 +90,7 @@
 <asset:javascript src="auth/config.js"/>
 <asset:javascript src="auth/logout.js"/>
 <asset:javascript src="instructor.js"/>
+<asset:javascript src="main.js"/>
 
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 
