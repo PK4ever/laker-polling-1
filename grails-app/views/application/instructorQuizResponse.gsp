@@ -56,8 +56,8 @@
 </a>
 
     <div class="row">
-        <div class="col-sm-4"></div>
-        <div class="col-sm-4">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-6">
             <div id="quizGradesTablesContainer" class="table-responsive">
             </div>
         </div>
@@ -100,8 +100,8 @@
 <asset:javascript src="instructor.js"/>
 
 <script>
-    //window.onload=prepareClassTitle(${session.courseId});
-    //window.onload=prepareQuizTitle(${session.quizId});
+    window.onload=prepareClassTitle(${session.courseId});
+    window.onload=prepareQuizTitle(${session.quizId});
 </script>
 
 </body>

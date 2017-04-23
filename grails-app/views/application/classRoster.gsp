@@ -55,8 +55,8 @@
 </a>
 
     <div class="row">
-        <div class="col-sm-4"></div>
-        <div class="col-sm-4">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-6">
             <div id="roster" class="table-responsive">
                 <table id="studentTable" class="table">
                     <thead>
