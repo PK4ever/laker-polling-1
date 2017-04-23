@@ -140,7 +140,7 @@ class QuestionController {
         def token = preconditionService.accessToken(access_token).data
 
         if(require.success) {
-            def result = questionService.getResults(token, date, course_id)
+            def result = questionService.getResults(token, formatDateString(date), course_id)
             if(result.success) {
                 render(view: 'getQuestionAnswers', model: [token: token, allQuestions: result.data])
             } else {
@@ -149,5 +149,13 @@ class QuestionController {
         } else {
             render(view: '../failure', model: [message: require.message, errorCode: require.errorCode])
         }
+    }
+
+    static String formatDateString(String date) {
+        if (!date) {
+            return null
+        }
+        List<String> dateList = date.indexOf('-') != -1 ? date.split("-").toList() : null
+        dateList.get(1) + "/" + dateList.get(2) + "/" + dateList.get(0)
     }
 }
