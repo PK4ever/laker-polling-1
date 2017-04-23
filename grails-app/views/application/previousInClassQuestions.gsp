@@ -16,7 +16,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 
-    <title>Instructor</title>
+<title>Closed Questions</title>
 </head>
 <body>
 <nav id="mainNav" class="navbar navbar-default navbar-custom navbar-fixed-top">
@@ -52,16 +52,21 @@
 </nav>
 <section>
 <div class="container-fluid">
-     <div class="col-md-2"></div>
+     <div class="col-md-2">
+         <a href="/course?courseId=${session.courseId}" style="margin-left: 60px;" href="/course?courseId=${session.courseId}" class="btn btn-default btn-md">
+             <span class="glyphicon glyphicon-arrow-left"></span> Back
+         </a>
+     </div>
      <div class="row">
-          <div class="col-md-2 col-sm-4 col-xs-12">
-               <form>
-                   <div class="form-group"> <!-- Date input -->
-                       <label class="control-label" for="date">Date</label>
-                       <input class="form-control" id="date" name="date" placeholder="YYYY-MM-DD" type="text" />
-                   </div>
-               </form>
-          </div>
+         <div class="col-md-2 col-sm-4 col-xs-12">
+              <form>
+                  <div class="form-group"> <!-- Date input -->
+                      <label class="control-label" for="date">Date</label>
+                      <input class="form-control" id="date" name="date" placeholder="YYYY-MM-DD" type="text" />
+                  </div>
+              </form>
+
+         </div>
      </div>
 </div>
 <div class="row">
@@ -104,7 +109,7 @@
       date_input.datepicker(options).on('changeDate', function(event) {
         console.log('date changed')
 
-        getQuestionsFor($(this).val(), $(this).data('course-id'));
+        getQuestionsFor($(this).val(), ${session.courseId});
       });
     });
 </script>

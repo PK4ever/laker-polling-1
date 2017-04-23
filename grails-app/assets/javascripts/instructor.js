@@ -232,8 +232,8 @@ var courseId
                     <th class="col-md-1">C</th>\
                     <th class="col-md-1">D</th>\
                     <th class="col-md-1">E</th>\
-                    <th class="col-md-1">Correct Answer</th>\
-                    <th class="col-md-1">% Correct Answers</th>\
+                    <th class="col-md-2">Correct Answer</th>\
+                    <th class="col-md-2">% Correct</th>\
                 </tr>\
                 </thead>\
                 {{dynamicTableRows}}\
@@ -245,7 +245,7 @@ var courseId
                     <td>{{numD}}</td><td>{{numE}}</td><td>{{correct}}</td><td>{{pc}}</td></tr>"
 
                     var dynamicTableRowsHTML = ''
-                    ArrayUtils.forEachCachedLength(dateQuestions, (question) => {
+                    ArrayUtils.forEachCachedLength(responses, (question) => {
                         tableRows += tableRowHTML.replaceAll('{{index}}', index)
                             .replaceAll('{{numA}}', question.answers[0])
                             .replaceAll('{{numB}}', question.answers[1])
@@ -478,34 +478,29 @@ var courseId
         });
     });
 
-    $('#instructor-form-email').submit(function(event) {
-        debugger
+    $('.js-createInstructor').click(function() {
         $.ajax({
             url: '/user/auth',
-            type: 'GET',
-            success: function(data) {
-                var token = data.data.token;
-                var email = $("#instEmail").val();
-
-                console.log(email);
-                var urlStr = '/api/user/role?access_token=' + token + '&email='+ email +'&master=INSTRUCTOR'
+            method: 'GET',
+            success: function(data){
+                var token = data.data.token
+                var email = $('#instEmail').val()
+                if (email == null) alert('Please enter a SUNY Oswego email')
+                var urlStr = '/api/user/role?access_token=' + token + '&email=' + email + '&master=INSTRUCTOR'
                 $.ajax({
                     url: urlStr,
-                    type: 'PUT',
-                    success: function(data) {
-                        debugger
-                        alert("User: " + email + "is now an instructor.")
-                        window.location.reload();
+                    method:'PUT',
+                    success: function(data){
+                        alert("User: " + email + "is now an instructor")
                     },
-                    error: function(jqXHR, textStatus, errorMessage) {
-                        debugger
-                        console.log(errorMessage)
+                    error: function(){
+                        alert("An error occurred, please try again.")
                     }
-
                 });
             }
         });
-    });
+
+    })
 
     $('.js-deleteStudent').click(function () {
         currentInstructor.deleteStudentById($(this).data("student-id"), (student) => {
@@ -713,9 +708,10 @@ function updateDates(_date) {
     }
 };
 
-
 function getQuestionsFor(date, course_id){
     courseId = course_id
     currentInstructor.refreshQuestionResponsesTableByDate(date)
 }
+
+
 

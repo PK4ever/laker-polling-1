@@ -48,6 +48,7 @@
                 <h3 class="section-subheading">Welcome to your dashboard</h3>
                 <div id="roleButtonDiv" visibility="visible">
                     <button type="submit" class="btn btn-success" id="roleButton">Change role to Student</button>
+                    <button type="button" class="btn btn-success" id="instructorButton" data-toggle="modal" data-target="#createInstructorModal">Create a new Instructor</button>
                 </div>
             </div>
         </div>
@@ -87,21 +88,31 @@
             </div>
         </div>
         <br>
-        <div class="row">
-            <div class="col-sm-4"></div>
-            <div class="col-sm-4">
-                <form id="instructor-form-email" method="put" style="margin-top: 30px;">
-                    <label>Add new instructor by email</label>
-                    <div class="form-group">
-                        <input id="instEmail" type="email" placeholder="lakernetID@oswego.edu" required>
-                        <input style="margin-top: 5px" type="submit" value="Add instructor" class="btn btn-success" id="inst-email-button">
-                    </div>
-                </form>
-            </div>
-            <div class="col-sm-4"></div>
-        </div>
     </div>
 </section>
+
+<!-- Modal -->
+<div id="createInstructorModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content clean-container">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title heading">Create Instructor</h4>
+            </div>
+            <div class="modal-body">
+                <p>Enter the email of the instructor you would like to add:<br><br>
+                <input id="instEmail" type="email" placeholder="lakernetID@oswego.edu"></p>
+            </div>
+            <div class="modal-footer">
+                <button id="addInstructorButton" type="button" class="btn btn-success btn-ok js-createInstructor" data-dismiss="modal">Make Instructor</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
 <!-- Modal -->
 <div id="deleteCourseModal" class="modal fade" role="dialog">
     <div class="modal-dialog">
