@@ -65,6 +65,20 @@ var courseId
                 })
             }, onFail)
         }
+
+        this.getQuestionPerformanceByDate = function(date, course_id, onSuccess, onFail){
+            _instructor.getTokenOrFetch((token) => {
+                var urlString = '/api/question/result?access_token=' + token + '&course_id=' + course_id + '&date=' + date;
+                NetworkUtils.runAjax(urlString, 'GET', function(data){
+                    if(!ArrayUtils.isArray(data.results)){
+                        return onFail(new Error ("No questions found for that date"))
+                    }
+                    onSuccess(data.results)
+                }, function(err){
+                    onFail(err)
+                })
+            }, onFail)
+        }
     }
 
     function CurrentInstructor(token) {
@@ -207,6 +221,49 @@ var courseId
             })
         }
 
+        this.refreshQuestionResponsesTableByDate = function (date){
+            var index = 0
+            const html = '<table class="table">\
+                <thead>\
+                <tr>\
+                    <th class="col-md-1">Question</th>\
+                    <th class="col-md-1">A</th>\
+                    <th class="col-md-1">B</th>\
+                    <th class="col-md-1">C</th>\
+                    <th class="col-md-1">D</th>\
+                    <th class="col-md-1">E</th>\
+                    <th class="col-md-1">Correct Answer</th>\
+                    <th class="col-md-1">% Correct Answers</th>\
+                </tr>\
+                </thead>\
+                {{dynamicTableRows}}\
+                </table>'
+
+                _service.getQuestionPerformanceByDate(date, courseId, (responses) => {
+                    const tableRowHTML = "<tr><td>{{index}}</td>\
+                    <td>{{numA}}</td><td>{{numB}}</td><td>{{numC}}</td>\
+                    <td>{{numD}}</td><td>{{numE}}</td><td>{{correct}}</td><td>{{pc}}</td></tr>"
+
+                    var dynamicTableRowsHTML = ''
+                    ArrayUtils.forEachCachedLength(dateQuestions, (question) => {
+                        tableRows += tableRowHTML.replaceAll('{{index}}', index)
+                            .replaceAll('{{numA}}', question.answers[0])
+                            .replaceAll('{{numB}}', question.answers[1])
+                            .replaceAll('{{numC}}', question.answers[2])
+                            .replaceAll('{{numD}}', question.answers[3])
+                            .replaceAll('{{numE}}', question.answers[4])
+                            .replaceAll('{{correct}}', question.correct)
+                            .replaceAll('{{pc}}', question.percentCorrect)
+                        index++
+                    })
+                    $('#questionPerformanceContainer').html(
+                        html.replace('{{dynamicTableRows}}', dynamicTableRowsHTML)
+                    )
+                }, (err) => {
+                    $('#questionPerformanceContainer').html(html.replace('{{dynamicTableRows}}', ''))
+                })
+        }
+
         this.toggleDeleteCoursesMode = function(enabled) {
             _isInDeleteCoursesMode = !!enabled
             this.refreshCourseTable()
@@ -217,6 +274,8 @@ var courseId
         }
 
         this.refreshQuizGradesTableById(NetworkUtils.getCurrentLocationQueryParam('quizId'))
+
+        this.refreshQuestionResponsesTableByDate(NetworkUtils.getCurrentLocationQueryParam('date'))
     }
 
     $(function() {
@@ -625,51 +684,9 @@ function updateDates(_date) {
     }
 };
 
-function changeDate2(date) {
-    console.log(date);
-    updateInClassQuizzes(date);
 
-};
+function getQuestionsFor(date, course_id){
+    courseId = course_id
+    currentInstructor.refreshQuestionResponsesTableByDate(date)
+}
 
-function updateInClassQuizzes(_date) {
-    // console.log(currentInstructor)
-    var _token
-    var attendees = [];
-    debugger
-    currentInstructor.getTokenOrFetch((token) => {
-        _token = token
-    }, function(){alert("Error updating dates.")})
-    if(_date) {
-        $.ajax({
-            url: '/api/question/answer',
-            data: {
-                access_token: _token,
-                course_id: courseId,
-                date: _date
-            },
-            type: 'GET',
-            async: false,
-            success: function(stuff) {
-                var _results = stuff.data.results
-                console.log(_results)
-                // attendees = _attendees;
-                debugger
-                if (_results == null) {
-                    console.log('u got nothin')
-                    $('#questionTable').bootstrapTable('removeAll');
-
-                } else {
-                    $('#questionTable').bootstrapTable('load', _results);
-
-                }
-                $('#questionTable').bootstrapTable('refresh');
-
-                // $("#date").val(""); // clear the picker
-
-            },
-            error: function(err) {
-                // console.log(err);
-            }
-        });
-    }
-};

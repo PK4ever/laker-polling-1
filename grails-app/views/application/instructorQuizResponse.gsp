@@ -4,8 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Instructor</title>
-    <asset:javascript src="main.js"/>
+    <title>Quiz Results</title>
     <asset:stylesheet href="bootstrap.min.css"/>
     <asset:stylesheet href="bootstrap.css"/>
     <asset:stylesheet href="agency.min.css"/>
@@ -98,6 +97,7 @@
 <asset:javascript src="auth/config.js"/>
 <asset:javascript src="auth/logout.js"/>
 <asset:javascript src="instructor.js"/>
+<asset:javascript src="main.js"/>
 
 <script>
     window.onload=prepareClassTitle(${session.courseId});
