@@ -142,8 +142,9 @@ class QuestionController {
         if(require.success) {
             def result = questionService.getResults(token, formatDateString(date), course_id)
             if(result.success) {
-                render(view: 'getQuestionAnswers', model: [token: token, allQuestions: result.data])
+                render(view: 'getQuestionAnswers', model: [token: token, results: result.data])
             } else {
+                println "failure"
                 render(view: '../failure', model: [message: result.message, errorCode: result.errorCode])
             }
         } else {

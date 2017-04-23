@@ -224,9 +224,26 @@ class QuestionService {
             def course = Course.findById(courseId.toLong())
             if(course) {
                 def qDate = makeDate(date)
-                def questions = course.questions.findAll{q -> (q.type == QuestionType.CLICKER && q.dateCreated == qDate) }
+                def questions = course.questions.findAll{q -> (q.type == QuestionType.CLICKER && isSameDay(q.dateCreated, qDate)) }
                 questions.sort{a, b -> a.id <=> b.id }
-                result.data = questions
+
+                def allResults = new ArrayList<>()
+                questions.forEach { q ->
+                    List<Integer> answers = new ArrayList<>()
+                    q.answers.forEach{ a -> answers.add(0)}
+
+                    def numberCorrect = 0
+                    q.responses.forEach{r ->
+                        if (r.correct) {numberCorrect++}
+                        r.answers.eachWithIndex { a, i ->
+                            if(a) { answers.set(i, answers.get(i) + 1) }
+                        }
+                    }
+
+                    def percentCorrect = q.responses != null && q.responses.size() != 0 ? numberCorrect / q.responses.size() : 0
+                    allResults.add(new QuestionResult(answers: allResults, correct: q.answers, percentCorrect: percentCorrect))
+                }
+                result.data = allResults
                 result.success = true
             } else {
                 result.message = "could not find course"
@@ -237,6 +254,10 @@ class QuestionService {
             result.errorCode = 400
         }
         result
+    }
+
+    private boolean isSameDay(Date d1, Date d2) {
+        d1.clearTime() == d2.clearTime()
     }
 
     /**
