@@ -67,8 +67,8 @@
 <script src="https://apis.google.com/js/platform.js"></script>
 <asset:javascript src="auth/config.js"/>
 <asset:javascript src="auth/logout.js"/>
-<asset:javascript src="instructor.js"/>
 <asset:javascript src="main.js"/>
+<asset:javascript src="instructor.js"/>
 <asset:javascript src="question.js"/>
 
 

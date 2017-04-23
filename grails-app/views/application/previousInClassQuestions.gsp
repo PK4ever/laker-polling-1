@@ -52,8 +52,9 @@
 </nav>
 <section>
 <div class="container-fluid">
+     <div class="col-md-2"></div>
      <div class="row">
-          <div class="col-md-6 col-sm-6 col-xs-12">
+          <div class="col-md-2 col-sm-4 col-xs-12">
                <form>
                    <div class="form-group"> <!-- Date input -->
                        <label class="control-label" for="date">Date</label>
@@ -63,22 +64,13 @@
           </div>
      </div>
 </div>
-<div id="oldQuestions" class="table-responsive">
-    <table id="questionTable" class="table" data-toggle="table">
-        <thead>
-        <tr>
-            <th class="col-md-1" data-field="question">Question ID</th>
-            <th class="col-md-1" data-field="question">A</th>
-            <th class="col-md-1" data-field="question">B</th>
-            <th class="col-md-1" data-field="question">C</th>
-            <th class="col-md-1" data-field="question">D</th>
-            <th class="col-md-1" data-field="question">E</th>
-            <th class="col-md-1" data-field="question">Correct</th>
-            <th class="col-md-1" data-field="question">% Correct</th>
-        </tr>
-        </thead>
-    </table>
-</div>
+<div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+            <div id="questionPerformanceContainer" class="table-responsive">
+            </div>
+        </div>
+    </div>
 </section>
 
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.css">
@@ -89,8 +81,8 @@
 
 <asset:javascript src="auth/config.js"/>
 <asset:javascript src="auth/logout.js"/>
-<asset:javascript src="instructor.js"/>
 <asset:javascript src="main.js"/>
+<asset:javascript src="instructor.js"/>
 
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 
@@ -112,7 +104,7 @@
       date_input.datepicker(options).on('changeDate', function(event) {
         console.log('date changed')
 
-        changeDate2($(this).val());
+        getQuestionsFor($(this).val(), $(this).data('course-id'));
       });
     });
 </script>

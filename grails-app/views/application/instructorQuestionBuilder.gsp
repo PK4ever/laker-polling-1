@@ -82,7 +82,7 @@
 
 <script src="https://apis.google.com/js/platform.js"></script>
 
-
+<asset:javascript src="main.js"/>
 <asset:javascript src="instructor.js"/>
 <asset:javascript src="main.js"/>
 <asset:javascript src="question.js"/>
