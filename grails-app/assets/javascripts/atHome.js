@@ -74,8 +74,6 @@ $('#newQuizButton').on('click', function(event) {
             var endDate = $("#endDate").val();
             var endTime = $("#endTime").val();
 
-            debugger
-
             // Moment.js takes care of setting dates and converting them to Unix milliseconds
             var startTimestamp = moment(startDate + ' ' + startTime).utc();
             var endTimestamp = moment(endDate + ' ' + endTime).utc();
