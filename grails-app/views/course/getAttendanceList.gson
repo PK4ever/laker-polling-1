@@ -3,13 +3,15 @@ import edu.oswego.cs.lakerpolling.domains.AuthToken
 
 model {
     AuthToken token
-    Collection<Attendee> attendees = []
+    Long courseID
+    Collection<Attendance> attendanceList = []
 }
 
 json {
     status "success"
     data {
         accessToken token.accessToken
-        attendees g.render(template: "/templates/attendees", model: [attendees: attendees])
+        courseID courseID
+        attendance g.render(template: "/templates/attendanceList", model: [attendanceList: attendanceList])
     }
 }

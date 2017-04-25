@@ -1,5 +1,6 @@
 var courses = [];
 var token = '';
+var courseID;
 
 $(function() {
     $.ajax({
@@ -8,6 +9,7 @@ $(function() {
 
         success: function(data){
             token = data.data.token;
+            var type = data.data.user.type;
             //GET COURSES AND DISPLAY ON THE PAGE
             var urlstr = '/api/course?=' + token;
             $.ajax({
@@ -35,6 +37,28 @@ $(function() {
                         courseDiv.appendChild(div);
                     }
 
+                }
+
+            });
+
+            //Check role
+            $.ajax({
+                url: '/api/user/role?access_token='+token,
+                type: 'GET',
+                success: function(data) {
+                    var availableRoles = data.data.role.available;
+                    var isInstructor = false;
+                    type;
+                    $.each(availableRoles, function(i,obj) {
+                      if (obj === 'INSTRUCTOR') { isInstructor = true; return false;}
+                    });
+                    if(isInstructor)
+                        document.getElementById('roleButtonDiv').style.visibility="visible";
+                    else  
+                        document.getElementById('roleButtonDiv').style.visibility="hidden";
+                },
+                error: function(jqXHR, textStatus, errorMessage) {
+                    console.log(errorMessage)
                 }
 
             });
@@ -72,13 +96,35 @@ $(function() {
     });
 });
 
+$('#roleButton').on('click', function(event) {
+    $.ajax({
+        url: '/user/auth',
+        type: 'GET',
+        success: function(data) {
+            var token = data.data.token;
+            var userId = data.data.user.id;
+            $.ajax({
+                url: '/api/user/role?access_token='+token+'&user_id='+ userId +'&current=INSTRUCTOR',
+                type: 'PUT',
+                success: function(data) {
+                    window.location.href = "/dashboard";
+                },
+                error: function(jqXHR, textStatus, errorMessage) {
+                    console.log(errorMessage)
+                }
+
+            });
+        }
+    });
+});
 
 
 function courseHTML(courseName, crn, id) {
     //var str = '<div class="col-md-4 col-sm-6 portfolio-item" style="box-shadow: 0px 0px 0px gray; padding: 20px;">'
     var str = '<div class="col-md-4 col-sm-6 portfolio-item" style="box-shadow: 10px 10px 50px gray; padding: 10px;">'
     //var str = '<div class="col-md-4 col-sm-6 portfolio-item" style="box-shadow: 0px 0px 0px gray; padding: 10px;">'
-    str += '<a href="/course/answerquestion?courseId=' + id + '" class="portfolio-link" data-toggle="modal">'
+    str += '<a href="/course?courseId=' + id + '" class="portfolio-link" data-toggle="modal">'
+    str += '<a href="/course?courseId=' + id + '" class="portfolio-link" data-toggle="modal">'
     str += '<div class="portfolio-hover">'
     str += '<div class="portfolio-hover-content">'
     str += '<i class="fa fa-plus fa-3x"></i></div></div>'
@@ -99,4 +145,8 @@ function identifierFormatter(value, row, index) {
 
 function checkquestionfromcourse(crn) {
     //retrieve the number of question of course
+}
+
+function prepareClassTitle(cId) {
+    courseId = cId;
 }

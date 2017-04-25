@@ -63,7 +63,7 @@ class UserService {
 
         if (user == null) {
             user = new User(email: email)
-            user.setRole(new Role(type: RoleType.STUDENT))
+            user.setRole(new Role(type: RoleType.STUDENT, master: RoleType.STUDENT))
             user.save(flush: true, failOnError: true)
         }
 
@@ -97,7 +97,7 @@ class UserService {
             user = User.findByEmail(email)
             if (user == null) { //it's a new user
                 user = new User(firstName: first, lastName: last, imageUrl: imageUrl, email: email)
-                user.setRole(new Role(type: RoleType.STUDENT))
+                user.setRole(new Role(type: RoleType.STUDENT, master: RoleType.STUDENT))
             } else {
                 //we've found the pre-loaded user, set their values to the ones active the g profile
                 user.firstName = first
@@ -107,7 +107,7 @@ class UserService {
         }
 
         user = user.save(flush: true, failOnError: true)
-        if(user.authToken == null) {
+        if (user.authToken == null) {
             user.setAuthToken(new AuthToken(subject: subj, accessToken: UUID.randomUUID()))
             user = user.save(flush: true, failOnError: true)
         }
@@ -117,6 +117,80 @@ class UserService {
         user != null ? Optional.of(new Pair<User, AuthToken>(user, token))
                 : Optional.empty()
 
+    }
+
+    QueryResult<List<User>> findUsersBy(AuthToken token, String first, String last, String email) {
+        QueryResult<List<User>> result
+
+        if (checkIfInstructor(token.user)) {
+            def users = User.createCriteria().list {
+                if (first) {
+                    like('firstName', first.concat("%"))
+                }
+
+                if (last) {
+                    like('lastName', last.concat("%"))
+                }
+
+                if (email) {
+                    eq('email', email.concat("%"))
+                }
+            } as List<User>
+
+            result = new QueryResult<>(success: true, data: users)
+        } else {
+            result = QueryResult.fromHttpStatus(HttpStatus.UNAUTHORIZED)
+        }
+
+        result
+    }
+
+    QueryResult<User> createUser(AuthToken token, String email, String role) {
+        QueryResult<User> result
+        if (checkIfInstructor(token.user)) {
+            if (User.findByEmail(email) == null) {
+                if (email.contains("oswego.edu")) {
+                    RoleType roleType
+
+                    if (role != null) {
+                        try {
+                            roleType = role as RoleType
+                        } catch (IllegalArgumentException e) {
+                            return new QueryResult<>(success: false, errorCode: HttpStatus.BAD_REQUEST.value(), message: "Unexpected role:" + role)
+                        }
+                    } else {
+                        roleType = RoleType.STUDENT
+                    }
+
+                    User temp = new User(email: email)
+                    temp.setRole(new Role(type: roleType, master: roleType))
+                    temp.save(flush: true)
+                    result = new QueryResult<>(success: true, data: temp)
+                } else {
+                    result = new QueryResult<>(success: false, errorCode: HttpStatus.BAD_REQUEST.value(), message: "Non oswego.edu email.")
+                }
+            } else {
+                result = new QueryResult<>(success: false, errorCode: HttpStatus.BAD_REQUEST.value(), message: "Email already exists")
+            }
+        } else {
+            result = QueryResult.fromHttpStatus(HttpStatus.UNAUTHORIZED)
+        }
+        result
+    }
+
+    /**
+     * Attempts to find the user associated with the given AuthToken
+     * @param token - the AuthToken
+     * @return A QueryResult containing the associated user
+     */
+   QueryResult<User> findUser(AuthToken token) {
+        QueryResult<User> result = new QueryResult<>()
+        User user = token?.user
+        if (!user) {
+            return QueryResult.fromHttpStatus(HttpStatus.BAD_REQUEST)
+        }
+        result.data = user
+        result
     }
 
 }

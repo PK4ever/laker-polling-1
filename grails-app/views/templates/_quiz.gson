@@ -1,0 +1,12 @@
+import edu.oswego.cs.lakerpolling.domains.Quiz
+
+model {
+    Quiz quiz
+}
+
+json {
+    id quiz.id
+    name quiz.name
+    startDate quiz.startDate
+    endDate quiz.endDate
+}

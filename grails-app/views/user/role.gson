@@ -1,0 +1,30 @@
+import edu.oswego.cs.lakerpolling.domains.AuthToken
+import edu.oswego.cs.lakerpolling.domains.Role
+import edu.oswego.cs.lakerpolling.util.RoleType
+import org.grails.web.json.JSONArray
+
+model {
+    AuthToken token
+    Role role
+}
+
+json {
+    success true
+    data {
+        accessToken token.accessToken
+        role {
+            current role.type
+
+            JSONArray array = new JSONArray()
+            array.add(RoleType.STUDENT.toString())
+
+            if (role.master == RoleType.ADMIN) {
+                array.add(RoleType.INSTRUCTOR.toString())
+                array.add(RoleType.ADMIN.toString())
+            } else if (role.master == RoleType.INSTRUCTOR) {
+                array.add(RoleType.INSTRUCTOR.toString())
+            }
+            available array
+        }
+    }
+}

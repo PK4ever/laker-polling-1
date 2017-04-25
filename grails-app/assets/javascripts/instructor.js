@@ -10,33 +10,33 @@ var courseId
         this.deleteCourseById = function(courseId, onSuccess, onFail) {
             _instructor.getTokenOrFetch((token) => {
                 var urlstring = '/api/course?access_token=' + token + '&course_id=' + courseId;
-            $.ajax({
-                url: urlstring,
-                method: 'DELETE',
-                success: function() {
-                    onSuccess(courseId)
-                },
-                error: function(err) {
-                    onFail(err)
-                }
-            })
-        }, onFail)
+                $.ajax({
+                        url: urlstring,
+                        method: 'DELETE',
+                        success: function() {
+                            onSuccess(courseId)
+                        },
+                        error: function(err) {
+                            onFail(err)
+                        }
+                })
+            }, onFail)
         }
 
         this.deleteStudentById = function(studentId, onSuccess, onFail){
             _instructor.getTokenOrFetch((token) => {
                 var urlString = '/api/course/student?access_token=' + token + '&course_id=' + courseId + '&user_id=' + studentId;
-            $.ajax({
-                url: urlString,
-                method: 'DELETE',
-                success: function(){
-                    onSuccess(studentId)
-                },
-                error: function(err){
-                    onFail(err)
-                }
-            })
-        }, onFail)
+                $.ajax({
+                    url: urlString,
+                    method: 'DELETE',
+                    success: function(){
+                        onSuccess(studentId)
+                    },
+                    error: function(err){
+                        onFail(err)
+                    }
+                })
+            }, onFail)
         }
 
         this.getToken = function(onSuccess, onFail) {
@@ -50,6 +50,34 @@ var courseId
                     onFail(err)
                 }
             });
+        }
+
+        this.getQuizGradesById = function(id, onSuccess, onFail) {
+            _instructor.getTokenOrFetch((token) => {
+                var urlString = '/api/quiz/grades?access_token=' + token + '&quiz_id=' + id;
+                NetworkUtils.runAjax(urlString, 'GET', function(data){
+                    if (!ArrayUtils.isArray(data.data.grades)) {
+                        return onFail(new Error("Could not find grades by that "))
+                    }
+                    onSuccess(data.data.grades)
+                }, function(err){
+                    onFail(err)
+                })
+            }, onFail)
+        }
+
+        this.getQuestionPerformanceByDate = function(date, course_id, onSuccess, onFail){
+            _instructor.getTokenOrFetch((token) => {
+                var urlString = '/api/question/result?access_token=' + token + '&course_id=' + course_id + '&date=' + date;
+                NetworkUtils.runAjax(urlString, 'GET', function(data){
+                    if(!ArrayUtils.isArray(data.results)){
+                        return onFail(new Error ("No questions found for that date"))
+                    }
+                    onSuccess(data.results)
+                }, function(err){
+                    onFail(err)
+                })
+            }, onFail)
         }
     }
 
@@ -154,6 +182,88 @@ var courseId
             });
         }
 
+        this.refreshQuizGradesTableById = function(quizId){
+            
+            const html = '<table class="table">\
+                <thead>\
+                <tr>\
+                    <th class="col-md-1">Quiz {{quizId}} Results</th>\
+                </tr>\
+                {{dynamicTableRows}}\
+                {{dynamicDownloadButtonRow}}\
+                </thead>\
+            </table>'
+            _service.getQuizGradesById(quizId, (studentGrades) => {
+                _service.getToken((accessToken) => {
+                    const tableRowHTML = "<tr><td>{{name}}</td><td>{{grade}}</td></tr>"
+                    const dynamicDownloadButtonRowHTML = '<tr><td><a href="/api/quiz/file/grades?access_token={{accessToken}}&course_id=' + courseId + '">\
+                        <button class="btn" type="button">Download CSV File for the class</button>\
+                    <\a></td></tr>'
+                    var dynamicTableRowsHTML = ''
+                    ArrayUtils.forEachCachedLength(studentGrades, (grade) => {
+                        dynamicTableRowsHTML += tableRowHTML.replaceAll('{{name}}', grade.name).replaceAll('{{grade}}', (grade.grade * 100) + "%")
+                    })
+                    $('#quizGradesTablesContainer').html(
+                        html.replaceAll('{{quizId}}', quizId)
+                            .replace('{{dynamicTableRows}}', dynamicTableRowsHTML)
+                            .replace('{{dynamicDownloadButtonRow}}', dynamicDownloadButtonRowHTML)
+                            .replace('{{accessToken}}', accessToken)
+                    )
+                })
+                
+            }, (err) => {
+                $('#quizGradesTablesContainer').html(
+                    html
+                    .replace('{{quizId}}', quizId)
+                    .replace('{{dynamicTableRows}}', '<tr><td>No Grades Available</td></tr>')
+                    .replace('{{dynamicDownloadButtonRow}}', '')
+                )
+            })
+        }
+
+        this.refreshQuestionResponsesTableByDate = function (date){
+            var index = 0
+            const html = '<table class="table">\
+                <thead>\
+                <tr>\
+                    <th class="col-md-1">Question</th>\
+                    <th class="col-md-1">A</th>\
+                    <th class="col-md-1">B</th>\
+                    <th class="col-md-1">C</th>\
+                    <th class="col-md-1">D</th>\
+                    <th class="col-md-1">E</th>\
+                    <th class="col-md-2">Correct Answer</th>\
+                    <th class="col-md-2">% Correct</th>\
+                </tr>\
+                </thead>\
+                {{dynamicTableRows}}\
+                </table>'
+
+                _service.getQuestionPerformanceByDate(date, courseId, (responses) => {
+                    const tableRowHTML = "<tr><td>{{index}}</td>\
+                    <td>{{numA}}</td><td>{{numB}}</td><td>{{numC}}</td>\
+                    <td>{{numD}}</td><td>{{numE}}</td><td>{{correct}}</td><td>{{pc}}</td></tr>"
+
+                    var dynamicTableRowsHTML = ''
+                    ArrayUtils.forEachCachedLength(responses, (question) => {
+                        tableRows += tableRowHTML.replaceAll('{{index}}', index)
+                            .replaceAll('{{numA}}', question.answers[0])
+                            .replaceAll('{{numB}}', question.answers[1])
+                            .replaceAll('{{numC}}', question.answers[2])
+                            .replaceAll('{{numD}}', question.answers[3])
+                            .replaceAll('{{numE}}', question.answers[4])
+                            .replaceAll('{{correct}}', question.correct)
+                            .replaceAll('{{pc}}', question.percentCorrect)
+                        index++
+                    })
+                    $('#questionPerformanceContainer').html(
+                        html.replace('{{dynamicTableRows}}', dynamicTableRowsHTML)
+                    )
+                }, (err) => {
+                    $('#questionPerformanceContainer').html(html.replace('{{dynamicTableRows}}', ''))
+                })
+        }
+
         this.toggleDeleteCoursesMode = function(enabled) {
             _isInDeleteCoursesMode = !!enabled
             this.refreshCourseTable()
@@ -162,6 +272,10 @@ var courseId
         this.isInDeleteCoursesMode = function() {
             return _isInDeleteCoursesMode
         }
+
+        this.refreshQuizGradesTableById(NetworkUtils.getCurrentLocationQueryParam('quizId'))
+
+        this.refreshQuestionResponsesTableByDate(NetworkUtils.getCurrentLocationQueryParam('date'))
     }
 
     $(function() {
@@ -170,7 +284,6 @@ var courseId
             method: "GET",
             success: function(data){
                 var token = data.data.token
-                console.log(token)
                 currentInstructor = new CurrentInstructor(token)
                 $.ajax({
                     url: '/api/course',
@@ -221,8 +334,6 @@ var courseId
                     var profDiv = document.createElement("div");
                     profDiv.innerHTML = picString;
                     pic.appendChild(profDiv);
-
-
                 }
             });
         }
@@ -274,9 +385,9 @@ var courseId
         });
         return result;
     }
-
-
-    $('#courseButton').on('click', function() {
+  
+    $('#courseButton').on('click', function(event) {
+        event.preventDefault();
         $.ajax({
             url: '/user/auth',
             method: 'GET',
@@ -300,7 +411,7 @@ var courseId
                         name: courseName,
                         crn: courseCRN
                     },
-                    success: function() {
+                    success: function(ev) {
                         document.location.href = "/dashboard";
                     }
                 })
@@ -355,8 +466,8 @@ var courseId
                     url: '/api/course/student?access_token=' + token + '&course_id=' + courseId + '&email=' + email,
                     type: 'POST',
                     success: function(data) {
-                        console.log('Works');
-                        // window.location.reload();
+//                        console.log('Works');
+                         window.location.reload();
                     },
                     error: function(jqXHR, textStatus, errorMessage) {
                         console.log(errorMessage)
@@ -366,6 +477,30 @@ var courseId
             }
         });
     });
+
+    $('.js-createInstructor').click(function() {
+        $.ajax({
+            url: '/user/auth',
+            method: 'GET',
+            success: function(data){
+                var token = data.data.token
+                var email = $('#instEmail').val()
+                if (email == null) alert('Please enter a SUNY Oswego email')
+                var urlStr = '/api/user/role?access_token=' + token + '&email=' + email + '&master=INSTRUCTOR'
+                $.ajax({
+                    url: urlStr,
+                    method:'PUT',
+                    success: function(data){
+                        alert("User: " + email + "is now an instructor")
+                    },
+                    error: function(){
+                        alert("An error occurred, please try again.")
+                    }
+                });
+            }
+        });
+
+    })
 
     $('.js-deleteStudent').click(function () {
         currentInstructor.deleteStudentById($(this).data("student-id"), (student) => {
@@ -399,7 +534,7 @@ var courseId
     function prepareDeleteButton() {
         $('.js-deleteCourseButton').click(function () {
             const clickedButton = $(this);
-            debugger
+            // debugger
             const courseId = clickedButton.data('course-id');
             var course = currentInstructor.getCourseById(courseId);
 
@@ -412,7 +547,7 @@ var courseId
                 alert("Course not found by id " + courseId);
                 return
             }
-            debugger
+            // debugger
             $('#deleteCourseModal').find('#confirmDeleteButton').data("course-id",course.id);
             $('#deleteCourseModal').data("course-id",  course.id);
             $('#deleteCourseModal').find('#courseId').html(course.id);
@@ -444,6 +579,7 @@ var courseId
         }, 500)
         return deleteStudentButton
     }
+    
 
     function prepareClassTitle(courseId) {
         $.ajax({
@@ -451,6 +587,9 @@ var courseId
             method: "GET",
             success: function(data){
                 var token = data.data.token
+                var sessionx = session
+                var quizId = sessionx.quizId
+                debugger
                 currentInstructor = new CurrentInstructor(token)
                 $.ajax({
                     url: '/api/course',
@@ -494,19 +633,43 @@ var courseId
     })
 })();
 
+$('#roleButton').on('click', function(event) {
+    $.ajax({
+        url: '/user/auth',
+        type: 'GET',
+        success: function(data) {
+            var token = data.data.token;
+            var userId = data.data.user.id
+            $.ajax({
+                url: '/api/user/role?access_token='+token+'&current=STUDENT',
+                type: 'PUT',
+                success: function(data) {
+                    window.location.href = "/dashboard";
+                },
+                error: function(jqXHR, textStatus, errorMessage) {
+                    console.log(errorMessage)
+                }
+
+            });
+        }
+    });
+});
+
 function prepareClassTitle(cId) {
     courseId = cId;
 }
 
 function changeDate(date) {
-    console.log(date.value)
-    updateDates(date.value)
+    console.log(date);
+    updateDates(date);
+
 };
 
 function updateDates(_date) {
-    console.log(currentInstructor)
+    // console.log(currentInstructor)
     var _token
-    var attendees = []
+    var attendees = [];
+
     currentInstructor.getTokenOrFetch((token) => {
         _token = token
     }, function(){alert("Error updating dates.")})
@@ -521,18 +684,34 @@ function updateDates(_date) {
             type: 'GET',
             async: false,
             success: function(stuff) {
+
                 var _attendees = stuff.data.attendees
                 console.log(_attendees)
-                attendees = _attendees;
+                // attendees = _attendees;
+                if (_attendees == null) {
+                    console.log('u got nothin')
+                    $('#attendanceTable').bootstrapTable('removeAll');
+                    
+                } else {
+                    $('#attendanceTable').bootstrapTable('load', _attendees);
+                    
+                }
+                $('#attendanceTable').bootstrapTable('refresh');
+
+                // $("#date").val(""); // clear the picker
+
             },
             error: function(err) {
                 // console.log(err);
             }
         });
     }
-    console.log("TEST")
-    console.log(attendees)
-    $('#attendanceTable').bootstrapTable({
-        data: attendees
-    });
 };
+
+function getQuestionsFor(date, course_id){
+    courseId = course_id
+    currentInstructor.refreshQuestionResponsesTableByDate(date)
+}
+
+
+

@@ -5,9 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Course Page</title>
     <asset:stylesheet href="bootstrap.min.css"/>
-    <!-- jQuery (necessary for Bootstrap"s JavaScript plugins) -->
+    <asset:stylesheet href="agency.min.css"/>
+    <asset:stylesheet href="agency.css"/>
+    <asset:stylesheet href="style.css"/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-    <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 </head>
 <body>
@@ -20,11 +21,12 @@
             </button>
             <a class="navbar-brand page-scroll" href="/dashboard">
 
-                <asset:image src="logo2.png"
-                             style="height: 80px !important; width: 120px !important; position: absolute; top: 0%"/>
+                <asset:image src="logo2.png" class="logo"/>
+
+
                 %{--<img src="logo.png" style="height: 60px !important; width: 120px !important; position: absolute; top: 0%">--}%
             </a>
-            <a id="coursePageTitle" class="navbar-brand" style="position: absolute; left: 45%; font-size: x-large"></a>
+            %{--<a id="coursePageTitle" class="navbar-brand" style="position: relative; text-align: center; font-size: x-large"></a>--}%
     
 
         <!--<a class="navbar-brand page-scroll" href="#page-top">LOGO HERE</a>-->
@@ -45,8 +47,8 @@
 </nav>
 <section>
 <!-- <a style="margin-left: 40px; font-weight: bold" href="/dashboard">Return to Dashboard</a> -->
-<a href="/dashboard" style="margin-left: 60px; href="/dashboard" class="btn btn-default btn-md">
-          <span class="glyphicon glyphicon-arrow-left"></span> Back to Dashboard
+<a href="/dashboard" style="margin-left: 60px;" class="btn btn-default btn-md">
+          <span class="glyphicon glyphicon-arrow-left"></span> Back
 </a>
 <h1 id="coursePageTitle" style="text-align: center;">
 
@@ -56,11 +58,18 @@
     <a href="/course/createquestion?courseId=${session.courseId}" class="btn btn-success" role="button">Create Question</a>
 </div>
 <div class="form-group" style="text-align: center;">
-    <a href="/course/roster" class="btn btn-success" role="button">Roster</a>
+    <a href="/course/prevQuestions?courseId=${session.courseId}" class="btn btn-success" role="button">Closed Questions</a>
+</div>
+<div class="form-group" style="text-align: center;">
+    <a href="/course/quizList?courseId=${session.courseId}" class="btn btn-success" role="button">At-Home Quizzes</a>
 </div>
 <div class="form-group" style="text-align: center;">
     <a href="/course/attendance" class="btn btn-success" role="button">Attendance</a>
 </div>
+<div class="form-group" style="text-align: center;">
+    <a href="/course/roster" class="btn btn-success" role="button">Roster</a>
+</div>
+
 </section>
 
 <asset:javascript src="jquery-3.2.0.min.js"/>
@@ -75,11 +84,9 @@
 <asset:javascript src="auth/config.js"/>
 <asset:javascript src="auth/logout.js"/>
 <asset:javascript src="instructor.js"/>
+<asset:javascript src="main.js"/>
 <script>
     window.onload=prepareClassTitle(${session.courseId});
 </script>
-<asset:stylesheet href="agency.min.css"/>
-<asset:stylesheet href="agency.css"/>
-<asset:stylesheet href="style.css"/>
 </body>
 </html>

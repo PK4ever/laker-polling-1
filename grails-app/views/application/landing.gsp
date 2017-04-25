@@ -8,6 +8,9 @@
     <asset:stylesheet href="bootstrap.min.css"/>
     %{--<asset:stylesheet href="bootstrap-theme.min.css"/>--}%
     <asset:stylesheet href="landing.css"/>
+    <asset:stylesheet src="agency.css"/>
+    <asset:stylesheet src="agency.min.css"/>
+    <asset:stylesheet src="style.css"/>
 </head>
 
 <body class="bg-light-gray">
@@ -28,8 +31,10 @@
 
             <div class="navbar-header">
                 <a class="navbar-brand" href="/">
-                    <span><asset:image src="logo2.png" id="logoimage"/></span>
-                    Laker Polling
+                    %{--<span>    <asset:image src="logo2.png" class="logo"/></a></span>--}%
+                    %{--Laker Polling--}%
+                    <span> <asset:image src="logo2.png" class="logo" /> </span>
+                    %{--Laker Polling--}%
                 </a>
             </div>
 
@@ -133,9 +138,6 @@
 <asset:javascript src="auth/config.js"/>
 <asset:javascript src="auth/login.js"/>
 <asset:javascript src="bootstrap.min.js"/>
-<asset:stylesheet src="agency.css"/>
-<asset:stylesheet src="agency.min.css"/>
-<asset:stylesheet src="style.css"/>
 
 </body>
 </html>
