@@ -24,18 +24,19 @@ $(':checkbox').change(function() { // just for testing, can be removed
 
 
 // STUDENT - submit answer
-$("#submitAnswer").click(function() {
-    var courseId = $(this).data('course-id');
-    var selected = [];
-    $(':checkbox').each(function() {
-        if ($(this).is(':checked')) {
-            selected.push("true");
-        }
-        else {
-            selected.push("false");
-        }
-    });
-    // console.log(selected.toString());
+$("#submitAnswerLive").click(function() {
+        var courseId = $(this).data('course-id');
+        var selected = [];
+        $(':checkbox').each(function() {
+            if ($(this).is(':checked')) {
+                selected.push("true");
+            }
+            else {
+                selected.push("false");
+            }
+        });
+        // console.log(selected.toString());
+
 
     var question_id;
     var answer = selected.toString();
@@ -47,11 +48,12 @@ $("#submitAnswer").click(function() {
             console.log(data)
             question_id = data.questionId; // get question_id
             $.ajax({
-                url: '/api/question/answer?access_token=' + token + '&question_id='
-                + question_id + '&answer=' + answer,
+                url: '/api/question/answer?access_token=' + token + '&question_id=' + question_id + '&answer=' + answer,
                 type: 'PUT',
                 success: function() {
                     console.log(question_id + 'is the q id')
+                    alert('Answer Submitted')
+                    window.location.href="/course/answerquestion?courseId=" + courseId
                 }
             });
         },

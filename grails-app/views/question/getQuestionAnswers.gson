@@ -1,0 +1,16 @@
+import edu.oswego.cs.lakerpolling.domains.AuthToken
+import edu.oswego.cs.lakerpolling.domains.QuestionResult
+
+response.status OK.value()
+model {
+    AuthToken token
+    Collection<QuestionResult> results = []
+}
+
+json {
+    status "success"
+    data {
+        token token.accessToken
+        results g.render(template: "/templates/questionResults", model: [results: results])
+    }
+}

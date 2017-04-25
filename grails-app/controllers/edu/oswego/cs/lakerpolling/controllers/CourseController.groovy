@@ -1,6 +1,8 @@
 package edu.oswego.cs.lakerpolling.controllers
 
+import edu.oswego.cs.lakerpolling.domains.AuthToken
 import edu.oswego.cs.lakerpolling.domains.Course
+import edu.oswego.cs.lakerpolling.services.AttendanceService
 import edu.oswego.cs.lakerpolling.services.CourseListParserService
 import edu.oswego.cs.lakerpolling.services.CourseService
 import edu.oswego.cs.lakerpolling.services.PreconditionService
@@ -14,6 +16,7 @@ class CourseController {
 
     PreconditionService preconditionService
     CourseService courseService
+    AttendanceService attendanceService
     CourseListParserService courseListParserService
 
     /**
@@ -181,13 +184,13 @@ class CourseController {
     }
 
     /**
-     * Gets the attendance for a selected course and date or for a selected course, student, and range of dates
+     * Gets the attendance for a selected course
      * @param access_token - the access_token of the user
      * @param course_id - the course id of the course being selected
-     * @param student_id - the student's id of the student being selected
-     * @param date - the single date selected for a course
-     * @param start_date - the start date of the range of dates selected
-     * @param end_date - the end date of the range of dates selected
+     * @param student_id - the student id to filter the result by
+     * @param date - the date to filter the result by
+     * @param start_date - the start date of the range of dates to filter the results by
+     * @param end_date - the end date of the range of dates to filter the results by
      * @return - returns a json view
      */
     def getAttendance(String access_token, String course_id, String student_id, String date, String start_date, String end_date) {
@@ -195,34 +198,84 @@ class CourseController {
         def token = preconditionService.accessToken(access_token).data
 
         if (require.success) {
-            if (preconditionService.notNull(params, ["date"]).success) {
-                List<String> revisedDate = date.indexOf('-') != -1 ? date.split("-").toList() : null
-                String reDate = revisedDate.get(1) + "/" + revisedDate.get(2) + "/" + revisedDate.get(0)
-                def students = courseService.getAllStudentAttendance(course_id, reDate)
-                if (students.success) {
-                    render(view: 'attendanceList', model: [token: token, attendees: students.data])
+            // dateRange spans either from start_date to end_date or just includes date
+            def dateRange = getDateRange(date, start_date, end_date)
+            if (dateRange) {
+                if (student_id) {
+                    def result = attendanceService.getStudentAttendance(token, student_id, course_id, dateRange)
+                    if (result.success) {
+                        render(view: 'getAttendees', model: [token: token, courseID: course_id.toLong(), attendees: result.data])
+                    } else {
+                        render(view: '../failure', model: [errorCode: result.errorCode, message: result.message])
+                    }
                 } else {
-                    render(view: '../failure', model: [errorCode: students.errorCode, message: students.message])
-                }
-            } else if (preconditionService.notNull(params, ["student_id", "start_date", "end_date"]).success) {
-                List<String> revisedStart = start_date.indexOf('-') != -1 ? start_date.split("-").toList() : null
-                List<String> revisedEnd = end_date.indexOf('-') != -1 ? end_date.split("-").toList() : null
-                String start = revisedStart.get(1) + "/" + revisedStart.get(2) + "/" + revisedStart.get(0)
-                String end = revisedEnd.get(1) + "/" + revisedEnd.get(2) + "/" + revisedEnd.get(0)
-                println("START: " + start + " END: " + end)
-                def student = courseService.getStudentAttendance(student_id, start, end)
-                if (student.success) {
-                    render(view: 'attendanceList', model: [token: token, attendees: student.data])
-                } else {
-                    render(view: '../failure', model: [errorCode: student.errorCode, message: student.message])
+                    def result = attendanceService.getAllStudentAttendance(token, course_id, dateRange)
+                    if (result.success) {
+                        def attendanceList = result.data
+                        if (attendanceList.size() == 1) {
+                            def attendees = attendanceList.get(0).attendees
+                            render(view: 'getAttendees', model: [token: token, courseID: course_id.toLong(), attendees: attendees])
+                        } else {
+                            render(view: 'getAttendanceList', model: [token: token, courseID: course_id.toLong(), attendanceList: result.data])
+                        }
+                    } else {
+                        render(view: '../failure', model: [errorCode: result.errorCode, message: result.message])
+                    }
                 }
             } else {
-                render(view: '../failure', model: [errorCode: HttpStatus.BAD_REQUEST.value(), message: "Missing parameter"])
+                render(view: '../failure', model: [errorCode: 400, message: "Missing Date parameters"])
             }
         } else {
             render(view: '../failure', model: [errorCode: require.errorCode, message: require.message])
         }
+    }
 
+    def downloadAttendance(String access_token, String course_id) {
+        QueryResult<AuthToken> checks = new QueryResult<>()
+        preconditionService.notNull(params, ["access_token", "course_id"], checks)
+        preconditionService.accessToken(access_token, checks)
+
+        if (checks.success) {
+            QueryResult<Long> convert = preconditionService.convertToLong(course_id, 'course_id')
+            if (convert.success) {
+                QueryResult result = attendanceService.getCourseAttendanceCsv(checks.data, convert.data, response)
+                if(!result.success) {
+                    render(view: '../failure', model: [errorCode: result.errorCode, message: result.message])
+                }
+            } else {
+                render(view: '../failure', model: [errorCode: convert.errorCode, message: convert.message])
+            }
+        } else {
+            render(view: '../failure', model: [errorCode: checks.errorCode, message: checks.message])
+        }
+    }
+
+    Range<Date> getDateRange(String dateString, String startDateString, String endDateString) {
+        if (dateString) {
+            dateString = formatDateString(dateString)
+            def date = new Date(dateString).clearTime()
+            //create a range of dates including just the given date
+            date..date
+        } else if (startDateString && endDateString) {
+            startDateString = formatDateString(startDateString)
+            endDateString = formatDateString(endDateString)
+
+            def startDate = new Date(startDateString).clearTime()
+            def endDate = new Date(endDateString).clearTime()
+            //create a range of dates from the given start date to the given end date
+            startDate..endDate
+        } else {
+            null
+        }
+    }
+
+    static String formatDateString(String date) {
+        if (!date) {
+            return null
+        }
+        List<String> dateList = date.indexOf('-') != -1 ? date.split("-").toList() : null
+        dateList.get(1) + "/" + dateList.get(2) + "/" + dateList.get(0)
+//        new Date(date)
     }
 
 }

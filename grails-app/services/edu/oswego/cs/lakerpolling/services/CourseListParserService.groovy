@@ -166,7 +166,7 @@ class CourseListParserService {
         def maybeEmail = getFromRecord(record, columnIndexMap, Column.EMAIL)
         if (!maybeEmail.isPresent()) {
             def maybeLakerNetID = getFromRecord(record, columnIndexMap, Column.LAKER_NET_ID)
-            return maybeLakerNetID.isPresent() ? Optional.of("${maybeLakerNetID.get()}@oswego.edu") : Optional.empty()
+            return maybeLakerNetID.isPresent() ? Optional.of("${maybeLakerNetID.get()}@oswego.edu".toString()) : Optional.empty()
         }
         return maybeEmail
     }

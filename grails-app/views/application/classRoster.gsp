@@ -6,6 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Instructor</title>
     <asset:stylesheet href="bootstrap.min.css"/>
+    <asset:stylesheet href="bootstrap.css"/>
+    <asset:stylesheet href="agency.min.css"/>
+    <asset:stylesheet href="agency.css"/>
+    <asset:stylesheet href="style.css"/>
     <!-- jQuery (necessary for Bootstrap"s JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <!-- Latest compiled and minified JavaScript -->
@@ -21,8 +25,7 @@
             </button>
             <a class="navbar-brand page-scroll" href="/dashboard">
 
-                <asset:image src="logo2.png"
-                             style="height: 80px !important; width: 120px !important; position: absolute; top: 0%"/>
+                <asset:image src="logo2.png" class="logo"/>
 
                 %{--<img src="logo.png" style="height: 60px !important; width: 120px !important; position: absolute; top: 0%">--}%
             </a>
@@ -47,56 +50,52 @@
 </nav>
 <section>
 <div class="container">
-<a href="/course?courseId=${session.courseId}" style="margin-left: 60px; href="/course?courseId=${session.courseId}" class="btn btn-default btn-md">
-          <span class="glyphicon glyphicon-arrow-left"></span> Back to Course Page
+<a href="/course?courseId=${session.courseId}" style="margin-left: 60px;" href="/course?courseId=${session.courseId}" class="btn btn-default btn-md">
+          <span class="glyphicon glyphicon-arrow-left"></span> Back
 </a>
 
     <div class="row">
-        <div class="col-sm-4"></div>
-        <div class="col-sm-4">
-            <div id="courses" class="table-responsive">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-6">
+            <div id="roster" class="table-responsive">
                 <table id="studentTable" class="table">
                     <thead>
                     <tr>
                         <th class="col-md-1" data-field="email">Email</th>
+                        <th class="col-md-1" data-field="name">Name</th>
                         <th class="col-md-1" data-field="button" data-formatter="studentDeleteButtonFormatter" id="deleteStudentButton">Remove</th>
                     </tr>
                     </thead>
                 </table>
             </div>
+
+        <div class="col-sm-8">
+            <form id="csv-form-email" method="post" style="margin-top: 30px;">
+                <label>Add student by email</label>
+                <div class="form-group">
+                    <input id="email" type="email" placeholder="lakernetID@oswego.edu" required>
+                    <input style="margin-top: 5px" type="submit" value="Add student" class="btn btn-success" id="email-button">
+                </div>
+            </form>
+        </div>
+        <div class="col-sm-4">
+            <form id="csv-form" enctype="multipart/form-data" style="margin-top: 30px;" method="post">
+                <label>Add by CSV</label>
+                <div class="form-group">
+                    <input value="Choose a CSV file" id="csv-file" type="file" accept=".csv">
+                    <input style="margin-top: 10px;" type="submit" value="Send CSV" class="btn btn-success" id="file-button">
+                </div>
+            </form>
+        </div>
+
+
         </div>
         <div class="col-sm-4"></div>
     </div>
 </section>
-    <!-- add student by email -->
-    <div class="row">
         <div class="col-sm-4"></div>
         <div class="col-sm-4">
-            <form id="csv-form-email" method="post" style="margin-top: 30px;">
-                <label>Add student by email</label>
-                <div class="form-cotrol">
-                    <input id="email" type="email" placeholder="lakernetID@oswego.edu" required>
-                    <input type="submit" value="Add student" class="btn btn-success" id="email-button">
-                </div>
-
-            </form>
         </div>
-    </div>
-
-    <h3 style="text-align: center;">OR</h3>
-
-    <div class="row">
-        <div class="col-sm-4"></div>
-        <div class="col-sm-4">
-            <form id="csv-form" enctype="multipart/form-data" method="post">
-                <label>Add a CSV file</label>
-                <div class="form-group">
-                    <input id="csv-file" type="file" accept=".csv">
-                    <input style="margin-top: 5px;" type="submit" value="Send CSV" class="btn btn-success" id="file-button">
-                </div>
-            </form>
-        </div>
-    </div>
 
 </div>
 <!-- Modal -->
@@ -132,11 +131,8 @@
 
 <asset:javascript src="auth/config.js"/>
 <asset:javascript src="auth/logout.js"/>
+<asset:javascript src="main.js"/>
 <asset:javascript src="instructor.js"/>
-<asset:stylesheet href="bootstrap.css"/>
-<asset:stylesheet href="agency.min.css"/>
-<asset:stylesheet href="agency.css"/>
-<asset:stylesheet href="style.css"/>
 
 <script>
     window.onload=prepareClassTitle(${session.courseId});

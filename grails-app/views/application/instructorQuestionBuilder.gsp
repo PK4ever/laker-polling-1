@@ -3,8 +3,9 @@
 <head>
     <asset:stylesheet href="bootstrap.min.css"/>
     <asset:stylesheet href="style.css"/>
+    <asset:stylesheet href="agency.min.css"/>
+    <asset:stylesheet href="agency.css"/>
 
-<asset:javascript src="question.js"/>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Create a Question</title>
@@ -23,8 +24,7 @@
             </button>
             <a class="navbar-brand page-scroll" href="/dashboard">
 
-                <asset:image src="logo2.png"
-                             style="height: 80px !important; width: 120px !important; position: absolute; top: 0%"/>
+                <asset:image src="logo2.png" class="logo"/>
 
                 %{--<img src="logo.png" style="height: 60px !important; width: 120px !important; position: absolute; top: 0%">--}%
             </a>
@@ -51,7 +51,7 @@
 <section>
 
 <a href="/course?courseId=${session.courseId}" style="margin-left: 60px; href="/course?courseId=${session.courseId}" class="btn btn-default btn-md">
-          <span class="glyphicon glyphicon-arrow-left"></span> Back to Course Page
+          <span class="glyphicon glyphicon-arrow-left"></span> Back
 </a>
 
 <div class="form-group" style="text-align: center;">
@@ -80,16 +80,14 @@
 </div>
 </section>
 
-<asset:javascript src="jquery-3.2.0.min.js"/>
 <script src="https://apis.google.com/js/platform.js"></script>
 
-
+<asset:javascript src="main.js"/>
 <asset:javascript src="instructor.js"/>
+<asset:javascript src="main.js"/>
 <asset:javascript src="question.js"/>
 <asset:javascript src="auth/config.js"/>
 <asset:javascript src="auth/logout.js"/>
-<asset:stylesheet href="agency.min.css"/>
-<asset:stylesheet href="agency.css"/>
 <script>
     window.onload=prepareClassTitle(${session.courseId});
 </script>

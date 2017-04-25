@@ -1,15 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Instructor</title>
     <asset:stylesheet href="bootstrap.min.css"/>
-    <!-- jQuery (necessary for Bootstrap"s JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-    <!-- Latest compiled and minified JavaScript -->
+    <asset:stylesheet href="bootstrap.css"/>
+    <asset:stylesheet href="agency.min.css"/>
+    <asset:stylesheet href="agency.css"/>
+    <asset:stylesheet href="style.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+    <title>Instructor</title>
 </head>
 <body>
 <nav id="mainNav" class="navbar navbar-default navbar-custom navbar-fixed-top">
@@ -21,15 +28,13 @@
             </button>
             <a class="navbar-brand page-scroll" href="/dashboard">
 
-                <asset:image src="logo2.png"
-                             style="height: 80px !important; width: 120px !important; position: absolute; top: 0%"/>
-
+                <asset:image src="logo2.png" class="logo"/>
                 %{--<img src="logo.png" style="height: 60px !important; width: 120px !important; position: absolute; top: 0%">--}%
             </a>
             <a id="coursePageTitle" class="navbar-brand" style="position: absolute; left: 45%; font-size: x-large"></a>
-    
 
-        <!--<a class="navbar-brand page-scroll" href="#page-top">LOGO HERE</a>-->
+
+            <!--<a class="navbar-brand page-scroll" href="#page-top">LOGO HERE</a>-->
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
@@ -45,18 +50,33 @@
     </div>
     <!-- /.container-fluid -->
 </nav>
+
 <section>
 <div class="container">
-<a href="/course?courseId=${session.courseId}" style="margin-left: 60px; href="/course?courseId=${session.courseId}" class="btn btn-default btn-md">
-          <span class="glyphicon glyphicon-arrow-left"></span> Back to Course Page
+<a href="/course?courseId=${session.courseId}" style="margin-left: 60px;" href="/course?courseId=${session.courseId}" class="btn btn-default btn-md">
+          <span class="glyphicon glyphicon-arrow-left"></span> Back
 </a>
+<br><br>
+<a id="attn-btn" class="btn btn-success btn-md" style="margin-left: 60px;" href="" >Download Attendance</a>
     <div class="row">
         <div class="col-sm-3"></div>
         <div class="col-sm-6">
-        <form>
-            Date:
-            <input id="datepicker" type="date" name="date" onchange="changeDate(this)" />
-        </form>
+
+ <div class="container-fluid">
+  <div class="row">
+   <div class="col-md-6 col-sm-6 col-xs-12">
+    <form>
+      <div class="form-group"> <!-- Date input -->
+        <label class="control-label" for="date">Date</label>
+        <input class="form-control" id="date" name="date" placeholder="YYYY-MM-DD" type="text" />
+      </div>
+     </form>
+    </div>
+  </div>    
+ </div>
+</div>
+
+
         </div>
         <div class="col-sm-3"></div>
     </div><br>  
@@ -65,10 +85,11 @@
         <div class="col-sm-3"></div>
         <div class="col-sm-6">
             <div id="attendance" class="table-responsive">
-                <table id="attendanceTable" class="table">
+                <table id="attendanceTable" class="table" data-toggle="table">
                     <thead>
                     <tr>
                         <th class="col-md-1" data-field="email">Email</th>
+                        <th class="col-md-1" data-field="name">Name</th>
                         <th class="col-md-1" data-field="attended">Attended</th>
                     </tr>
                     </thead>
@@ -79,25 +100,49 @@
     </div>
 </section>
 
-<!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.css">
 
-<asset:javascript src="jquery-3.2.0.min.js"/>
 <script src="https://apis.google.com/js/platform.js"></script>
 
-<!-- Latest compiled and minified JavaScript -->
 <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.js"></script>
 
 <asset:javascript src="auth/config.js"/>
 <asset:javascript src="auth/logout.js"/>
 <asset:javascript src="instructor.js"/>
-<asset:stylesheet href="bootstrap.css"/>
-<asset:stylesheet href="agency.min.css"/>
-<asset:stylesheet href="agency.css"/>
-<asset:stylesheet href="style.css"/>
+<asset:javascript src="main.js"/>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 
 <script>
-    window.onload=prepareClassTitle(${session.courseId});
+    window.onload= function(){
+        prepareClassTitle(${session.courseId});
+        $.ajax({
+            url: '/user/auth',
+            method: "GET",
+            success: function(data){
+                $('#attn-btn').attr('href', '/api/course/file/attendance?access_token=' + data.data.token + '&course_id=' + ${session.courseId})
+            }
+        });
+    }
+</script>
+
+<script>
+    var date_input;
+    $(document).ready(function() {
+      date_input = $('input[name="date"]');
+      var options = {
+        format: 'yyyy-mm-dd',
+        todayHighlight: true,
+        autoclose: true,
+        clearBtn: true
+      };
+      // date_input.datepicker(options);
+      date_input.datepicker(options).on('changeDate', function(event) {
+        console.log('date changed')
+
+        changeDate($(this).val());
+      });
+    });
 </script>
 
 </body>

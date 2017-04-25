@@ -1,0 +1,6 @@
+import edu.oswego.cs.lakerpolling.domains.QuestionResult
+
+model {
+    Collection<QuestionResult> results = []
+}
+json tmpl.'/templates/questionResult'(results)

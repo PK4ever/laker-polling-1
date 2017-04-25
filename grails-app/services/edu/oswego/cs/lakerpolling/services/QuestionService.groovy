@@ -1,11 +1,15 @@
 package edu.oswego.cs.lakerpolling.services
 
 import edu.oswego.cs.lakerpolling.domains.*
+import edu.oswego.cs.lakerpolling.util.QueryResult
+import edu.oswego.cs.lakerpolling.util.QuestionType
 import edu.oswego.cs.lakerpolling.util.RoleType
 import grails.transaction.Transactional
+import org.springframework.http.HttpStatus
 
 @Transactional
 class QuestionService {
+    CourseService courseService
 
     /**
      * creates a new question
@@ -31,15 +35,11 @@ class QuestionService {
                 if (course) {
                     Question newQuestion
                     if (question != null) {
-                        newQuestion = new Question(course: course, answers: answerList, question: question)
+                        newQuestion = new Question(course: course, answers: answerList, question: question, type: QuestionType.CLICKER)
                     } else {
-                        newQuestion = new Question(course: course, answers: answerList)
+                        newQuestion = new Question(course: course, answers: answerList, type: QuestionType.CLICKER)
                     }
                     newQuestion.active = false
-                    newQuestion.studentAnswers = new ArrayList<>()
-                    println("Answer list size: " + answerList.size())
-                    answerList.each { i -> newQuestion.studentAnswers.add(0) }
-                    println("new question student list size: " + newQuestion.studentAnswers.size())
                     newQuestion.save(flush: true, failOnError: true)
                     def attendance = Attendance.findByDateAndCourse(makeDate(), course)
                     if (attendance == null) {
@@ -76,27 +76,32 @@ class QuestionService {
                     if(question.active) {
                         def attendee = Attendance.findByDateAndCourse(makeDate(), question.course).attendees.find { a -> a.student == user }
                         if (attendee) {
-                            def isRight = false
-                            def realAnswers = question.answers
-                            realAnswers.eachWithIndex { a, i ->
-                                isRight = (a == answerList.get(i))
-                                println("ANSWERLIST-STUDENT: " + answerList.get(i))
-                                if (answerList.get(i)) {
-                                    def num = question.studentAnswers.get(i)
-                                    num += 1
-                                    question.studentAnswers.remove(i)
-                                    question.studentAnswers.add(i, num)
-                                    println("ADDING 1 TO QUESTION")
-                                }
-                            }
+                            def isRight = questionResponseIsCorrect(answerList, question)
                             attendee.attended = true
-                            new Answer(correct: isRight, question: question, student: user).save(flush: true, failOnError: true)
-                            attendee.attended
+                            def result = Answer.findByQuestionAndStudent(question, token.user)
+                            if (result) {
+                                result.correct = isRight
+                                result.answers = answerList
+                            } else {
+                                result = new Answer(correct: isRight, question: question, student: token.user, answers: answerList)
+                            }
+                            result.save(flush: true, failOnError: true)
+                            true
                         } else false
                     } else false
                 } else false
             } else false
         } else false
+    }
+
+    boolean questionResponseIsCorrect(List<Boolean> response, Question question) {
+        def answers = question.answers
+        def isCorrect = true
+        answers.eachWithIndex { a, i ->
+            // isCorrect if it is not already marked as incorrect and the next response is also correct
+            isCorrect = isCorrect && (a == response.get(i))
+        }
+        isCorrect
     }
 
     /**
@@ -160,6 +165,99 @@ class QuestionService {
                 } else null
             } else null
         } else null
+    }
+
+    /**
+     * Gets a summary of all of the student responses to the given question
+     * @param token - the AuthToken of the user
+     * @param questionIdString - A String representation of the id of the question
+     * @return - returns a QueryResult containing the answer statistics
+     */
+    QueryResult<List<Integer>> getAnswers(AuthToken token, String questionIdString) {
+        if (!questionIdString.isLong()) {
+            return QueryResult.fromHttpStatus(HttpStatus.BAD_REQUEST)
+        }
+
+        def questionId = questionIdString.toLong()
+        def question = Question.findById(questionId)
+        if (!question) {
+            return QueryResult.fromHttpStatus(HttpStatus.BAD_REQUEST)
+        }
+
+        if (question.active) {
+            def error = QueryResult.fromHttpStatus(HttpStatus.BAD_REQUEST)
+            error.message = "Question is still enabled"
+            return error
+        }
+
+        def course = question.course
+        if (!courseService.verifyStudentAccess(token, course)) {
+            return QueryResult.fromHttpStatus(HttpStatus.UNAUTHORIZED)
+        }
+
+        def responses = Answer.where {
+            question == question
+        }.list()
+
+        List<Integer> data = new ArrayList<>()
+        question.answers.each {a -> data.add(0) }
+
+        responses.each { r ->
+            r.answers.eachWithIndex { answer, i ->
+                if (answer) {
+                    data.set(i, data.get(i) + 1)
+                }
+            }
+        }
+
+        def result = new QueryResult<>()
+        result.data = data
+        result
+    }
+
+    def getResults(AuthToken token, String date, String courseId) {
+        def user = token.user
+        def result = new QueryResult<List<Question>>()
+        result.success = false
+
+        if(user.role.type == RoleType.INSTRUCTOR || user.role.type == RoleType.ADMIN) {
+            def course = Course.findById(courseId.toLong())
+            if(course) {
+                def qDate = makeDate(date)
+                def questions = course.questions.findAll{q -> (q.type == QuestionType.CLICKER && isSameDay(q.dateCreated, qDate)) }
+                questions.sort{a, b -> a.id <=> b.id }
+
+                def allResults = new ArrayList<>()
+                questions.forEach { q ->
+                    List<Integer> answers = new ArrayList<>()
+                    q.answers.forEach{ a -> answers.add(0)}
+
+                    def numberCorrect = 0
+                    q.responses.forEach{r ->
+                        if (r.correct) {numberCorrect++}
+                        r.answers.eachWithIndex { a, i ->
+                            if(a) { answers.set(i, answers.get(i) + 1) }
+                        }
+                    }
+
+                    def percentCorrect = q.responses != null && q.responses.size() != 0 ? numberCorrect / q.responses.size() : 0
+                    allResults.add(new QuestionResult(answers: allResults, correct: q.answers, percentCorrect: percentCorrect))
+                }
+                result.data = allResults
+                result.success = true
+            } else {
+                result.message = "could not find course"
+                result.errorCode = 400
+            }
+        } else {
+            result.message = "students cannot get question results!"
+            result.errorCode = 400
+        }
+        result
+    }
+
+    private boolean isSameDay(Date d1, Date d2) {
+        d1.clearTime() == d2.clearTime()
     }
 
     /**

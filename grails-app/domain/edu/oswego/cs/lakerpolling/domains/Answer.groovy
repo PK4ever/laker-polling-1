@@ -2,12 +2,12 @@ package edu.oswego.cs.lakerpolling.domains
 
 class Answer {
     boolean correct
-    int answer
+    List<Boolean> answers
 
     static belongsTo = [question: Question]
     static hasOne = [student: User]
 
     static constraints = {
-        answer nullable: true
+        answers nullable: true
     }
 }

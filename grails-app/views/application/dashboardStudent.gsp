@@ -3,7 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
+    
+    <asset:stylesheet href="bootstrap.css"/>
+    <asset:stylesheet href="agency.min.css"/>
+    <asset:stylesheet href="agency.css"/>
+    <asset:stylesheet href="style.css"/>
     <title>Student</title>
 </head>
 
@@ -16,11 +20,10 @@
                 <span class="sr-only">Toggle navigation</span> LOGOUT <i class="fa fa-bars"></i>
             </button>
             <a class="navbar-brand page-scroll" href="#page-top">
-                <asset:image src="logo2.png"
-                             style="height: 60px !important; width: 120px !important; position: absolute; top: 0%"/>
+                <asset:image src="logo2.png" class="logo"/>
                 %{--<img src="logo.png" style="height: 60px !important; width: 120px !important; position: absolute; top: 0%">--}%
             </a>
-            <a id="pageName" class="navbar-brand" style="position: absolute; left: 45%; font-size: x-large">Student Dashboard</a>
+            %{--<a id="pageName" class="navbar-brand" style="position: relative; text-align: center; font-size: x-large; font-family: monospace;">Student</a>--}%
         %{--<a id="pageName" class="page-scroll navbar-brand" style="position: absolute; left: 40%; font-size: xx-large">Student Dashboard</a>--}%
 
         <!--<a class="navbar-brand page-scroll" href="#page-top">LOGO HERE</a>-->
@@ -29,7 +32,7 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav navbar-right">
-                <li>
+                <li style="border: 1.5px solid #fed136">
                     %{--<button onclick="logout()" class="btn btn-default navbar-right navbar-btn">Logout</button>--}%
                     <a style="cursor: pointer" onclick="logout()" >LogOut</a>
                 </li>
@@ -39,17 +42,6 @@
     </div>
     <!-- /.container-fluid -->
 </nav>
-%{--<div class="navbar navbar-default" role="navigation">--}%
-%{--<div class="navbar-header">--}%
-%{--<asset:image class="img-responsive navbar-brand" src="logo.png"/>--}%
-%{--<a class="navbar-brand">Student Dashboard</a>--}%
-%{--</div>--}%
-%{--<div class="navbar-collapse collapse">--}%
-%{--<ul class="nav navbar-nav">--}%
-%{--<button onclick="logout()" class="btn btn-default navbar-right navbar-btn">Logout</button>--}%
-%{--</ul>--}%
-%{--</div>--}%
-%{--</div>--}%
 
 <section id="portfolio">
     <div class="container">
@@ -63,9 +55,11 @@
                 <div id="profilePic"></div>
                 <h3 class="section-subheading text-muted">Welcome to your dashboard</h3>
 
+                <div id="roleButtonDiv" style="visibility: hidden">
+                    <button type="submit" class="btn btn-success" id="roleButton">Change role to Instructor</button>
+                </div>
             </div>
         </div>
-
         <h3 class="text-muted">Your Courses:</h3>
         <div class="row" id="courses">
             %{--courses are displayed here--}%
@@ -74,29 +68,6 @@
         </div>
     </div>
 </section>
-
-%{--<div class="container">--}%
-    %{--<div class="row">--}%
-        %{--<div class="col-sm-4"></div>--}%
-
-        %{--<div class="col-sm-4">--}%
-            %{--<div id="courses" class="table-responsive">--}%
-                %{--<table id="courseTable" class="table">--}%
-                    %{--<thead>--}%
-                    %{--<tr>--}%
-                        %{--<th class="col-md-3" data-field="name" data-formatter="identifierFormatter">Course Name</th>--}%
-                        %{--<th class="col-md-1" data-field="crn">CRN</th>--}%
-                        %{--<th class="col-md-1" data-field="students">Number of Students</th>--}%
-                    %{--</tr>--}%
-                    %{--</thead>--}%
-                %{--</table>--}%
-            %{--</div>--}%
-        %{--</div>--}%
-
-        %{--<div class="col-sm-4"></div>--}%
-    %{--</div>--}%
-
-</div>
 
 
 
@@ -112,11 +83,7 @@
 <asset:javascript src="auth/config.js"/>
 <asset:javascript src="auth/logout.js"/>
 <asset:javascript src="bootstrap.min.js"/>
-<asset:stylesheet href="bootstrap.css"/>
 <asset:javascript src="student.js"/>
-<asset:stylesheet href="agency.min.css"/>
-<asset:stylesheet href="agency.css"/>
-<asset:stylesheet href="style.css"/>
 
 
 </body>

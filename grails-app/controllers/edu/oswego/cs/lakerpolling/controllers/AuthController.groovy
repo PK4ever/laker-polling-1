@@ -53,7 +53,7 @@ class AuthController {
                 render(view: '/failure', model: [errorCode: result.errorCode, message: result.message])
             }
         } else {
-            render(view: '/unauthorized')
+            logout()
         }
     }
 
@@ -63,7 +63,7 @@ class AuthController {
             session.removeAttribute("access")
         }
         session.invalidate()
-        render(view: 'authUser')
+        render(view: 'logout')
     }
 
 }
