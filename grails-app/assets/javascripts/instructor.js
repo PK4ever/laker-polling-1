@@ -53,7 +53,9 @@ var courseId
         }
 
         this.getQuizGradesById = function(id, onSuccess, onFail) {
+            if (id == null) return;
             _instructor.getTokenOrFetch((token) => {
+
                 var urlString = '/api/quiz/grades?access_token=' + token + '&quiz_id=' + id;
                 NetworkUtils.runAjax(urlString, 'GET', function(data){
                     if (!ArrayUtils.isArray(data.data.grades)) {
@@ -67,7 +69,9 @@ var courseId
         }
 
         this.getQuestionPerformanceByDate = function(date, course_id, onSuccess, onFail){
+            if (date == null || course_id == null) return;
             _instructor.getTokenOrFetch((token) => {
+
                 var urlString = '/api/question/result?access_token=' + token + '&course_id=' + course_id + '&date=' + date;
                 NetworkUtils.runAjax(urlString, 'GET', function(data){
                     if(!ArrayUtils.isArray(data.results)){
@@ -453,6 +457,7 @@ var courseId
     });
 
     $('#csv-form-email').submit(function(event) {
+        event.preventDefault();
         $.ajax({
             url: '/user/auth',
             type: 'GET',
