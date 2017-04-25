@@ -15,9 +15,6 @@ import spock.lang.Specification
 
 import javax.servlet.http.HttpServletRequest
 
-/**
- * See the API for {@link grails.test.mixin.services.ServiceUnitTestMixin} for usage instructions
- */
 @Integration
 @Rollback
 @TestFor(PreconditionService)
