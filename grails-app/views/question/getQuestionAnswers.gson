@@ -1,5 +1,7 @@
 import edu.oswego.cs.lakerpolling.domains.AuthToken
 import edu.oswego.cs.lakerpolling.domains.QuestionResult
+import org.grails.web.json.JSONArray
+import org.grails.web.json.JSONObject
 
 response.status OK.value()
 model {
@@ -11,6 +13,14 @@ json {
     status "success"
     data {
         token token.accessToken
-        results g.render(template: "/templates/questionResults", model: [results: results])
+        JSONArray array = new JSONArray()
+        for(QuestionResult r in results) {
+            JSONObject o = new JSONObject()
+            o.put("answers", r.answers)
+            o.put("correct", r.correct)
+            o.put("percentCorrect", r.percentCorrect)
+            array.put(o)
+        }
+        results array
     }
 }
