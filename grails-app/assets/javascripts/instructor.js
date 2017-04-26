@@ -74,10 +74,11 @@ var courseId
 
                 var urlString = '/api/question/result?access_token=' + token + '&course_id=' + course_id + '&date=' + date;
                 NetworkUtils.runAjax(urlString, 'GET', function(data){
-                    if(!ArrayUtils.isArray(data.results)){
+                    if(!ArrayUtils.isArray(data.data.results)){
                         return onFail(new Error ("No questions found for that date"))
                     }
-                    onSuccess(data.results)
+                    console.log(data.data)
+                    onSuccess(data.data)
                 }, function(err){
                     onFail(err)
                 })
@@ -249,8 +250,8 @@ var courseId
                     <td>{{numD}}</td><td>{{numE}}</td><td>{{correct}}</td><td>{{pc}}</td></tr>"
 
                     var dynamicTableRowsHTML = ''
-                    ArrayUtils.forEachCachedLength(responses, (question) => {
-                        tableRows += tableRowHTML.replaceAll('{{index}}', index)
+                    ArrayUtils.forEachCachedLength(responses.results, (question) => {
+                        dynamicTableRowsHTML += tableRowHTML.replaceAll('{{index}}', index)
                             .replaceAll('{{numA}}', question.answers[0])
                             .replaceAll('{{numB}}', question.answers[1])
                             .replaceAll('{{numC}}', question.answers[2])
