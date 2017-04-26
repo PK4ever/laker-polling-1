@@ -1,13 +1,11 @@
 package edu.oswego.cs.lakerpolling.services
 
-import com.sun.javaws.exceptions.InvalidArgumentException
 import edu.oswego.cs.lakerpolling.domains.AuthToken
 import edu.oswego.cs.lakerpolling.domains.Course
 import edu.oswego.cs.lakerpolling.domains.Role
 import edu.oswego.cs.lakerpolling.domains.User
 import edu.oswego.cs.lakerpolling.util.QueryResult
 import edu.oswego.cs.lakerpolling.util.RoleType
-import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
 import grails.test.mixin.integration.Integration
 import grails.transaction.Rollback
