@@ -52,8 +52,12 @@ $("#submitAnswerLive").click(function() {
                 type: 'PUT',
                 success: function() {
                     console.log(question_id + 'is the q id')
-                    alert('Answer Submitted')
+                    alert('Answer submitted!')
                     window.location.href="/course/answerquestion?courseId=" + courseId
+                }
+                error: function() {
+                    alert('This question is no longer active!');
+                    window.location.href="/course?courseId=" + courseId
                 }
             });
         },
