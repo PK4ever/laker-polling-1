@@ -241,7 +241,7 @@ class QuestionService {
                     }
 
                     def percentCorrect = q.responses != null && q.responses.size() != 0 ? numberCorrect / q.responses.size() : 0
-                    allResults.add(new QuestionResult(answers: allResults, correct: q.answers, percentCorrect: percentCorrect))
+                    allResults.add(new QuestionResult(answers: answers, correct: q.answers, percentCorrect: percentCorrect))
                 }
                 result.data = allResults
                 result.success = true

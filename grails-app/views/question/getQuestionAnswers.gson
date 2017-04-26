@@ -16,8 +16,28 @@ json {
         JSONArray array = new JSONArray()
         for(QuestionResult r in results) {
             JSONObject o = new JSONObject()
-            o.put("answers", r.answers)
-            o.put("correct", r.correct)
+
+            JSONArray answers = new JSONArray()
+            for (Integer i in r.answers) {
+                answers.put(i)
+            }
+            o.put("answers", answers)
+
+            String correctString = ""
+            r.correct.eachWithIndex { option, i ->
+                if (option) {
+                    if (i == 0) correctString = correctString + "A,"
+                    if (i == 1) correctString = correctString + "B,"
+                    if (i == 2) correctString = correctString + "C,"
+                    if (i == 3) correctString = correctString + "D,"
+                    if (i == 4) correctString = correctString + "E,"
+                }
+            }
+            if (correctString.size() > 0) {
+                correctString = correctString.substring(0, correctString.size() - 1 )
+            }
+
+            o.put("correct", correctString)
             o.put("percentCorrect", r.percentCorrect)
             array.put(o)
         }
