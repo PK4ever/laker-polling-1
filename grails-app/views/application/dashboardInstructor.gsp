@@ -71,11 +71,11 @@
                 <form id="addClassForm" role="form">
                     <div class="form-group">
                         <label for="courseName">Course name</label>
-                        <input type="text" class="form-control" id="courseName" placeholder="CSC212" required>
+                        <input type="text" class="form-control" id="courseName" placeholder="Enter course name here" required>
                     </div>
                     <div class="form-group">
                         <label for="courseCRN">CRN</label>
-                        <input type="text" class="form-control" id="courseCRN" placeholder="133742" required>
+                        <input type="text" class="form-control" id="courseCRN" placeholder="Enter CRN here" required>
                     </div>
                     <div class="form-group">
                         <button type="submit" class="btn btn-success" id="courseButton">Create Course</button>
