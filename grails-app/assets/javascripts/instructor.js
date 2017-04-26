@@ -53,7 +53,9 @@ var courseId
         }
 
         this.getQuizGradesById = function(id, onSuccess, onFail) {
+            if (id == null) return;
             _instructor.getTokenOrFetch((token) => {
+
                 var urlString = '/api/quiz/grades?access_token=' + token + '&quiz_id=' + id;
                 NetworkUtils.runAjax(urlString, 'GET', function(data){
                     if (!ArrayUtils.isArray(data.data.grades)) {
@@ -67,7 +69,9 @@ var courseId
         }
 
         this.getQuestionPerformanceByDate = function(date, course_id, onSuccess, onFail){
+            if (date == null || course_id == null) return;
             _instructor.getTokenOrFetch((token) => {
+
                 var urlString = '/api/question/result?access_token=' + token + '&course_id=' + course_id + '&date=' + date;
                 NetworkUtils.runAjax(urlString, 'GET', function(data){
                     if(!ArrayUtils.isArray(data.results)){
@@ -420,6 +424,32 @@ var courseId
         });
     });
 
+    $('.js-createCourse').click( function(){
+        $.ajax({
+            url: '/user/auth',
+            method: 'GET',
+            success: function(data){
+                var token = data.data.token
+                var courseName = $('#modalCourseName').val()
+                var CRN = $('#modalCourseCRN').val()
+                if (courseName == null || CRN == null) alert('Please enter a name and CRN')
+                var urlStr = '/api/course?access_token=' + token + '&name=' + courseName + '&crn=' + CRN
+                $.ajax({
+                    url: urlStr,
+                    method:'POST',
+                    success: function(data){
+                        alert(courseName + "created!")
+                        window.location.reload()
+                    },
+                    error: function(){
+                        alert("An error occurred, please try again.")
+                    }
+                });
+            }
+        });
+
+    })
+
     $('#csv-form').submit(function(event) {
         event.preventDefault();
         $.ajax({
@@ -453,6 +483,7 @@ var courseId
     });
 
     $('#csv-form-email').submit(function(event) {
+        event.preventDefault();
         $.ajax({
             url: '/user/auth',
             type: 'GET',

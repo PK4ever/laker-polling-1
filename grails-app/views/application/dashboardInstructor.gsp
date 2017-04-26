@@ -52,6 +52,10 @@
                 </div>
             </div>
         </div>
+        <div class="row text-center">
+            <br>
+            <button type="button" class="btn btn-success" id="course-btn" data-toggle="modal" data-target="#createCourseModal">Create a new Course</button>
+        </div>
 
         <h3 class="text-muted">Your Courses:</h3>
         <div class="row" id="courses">
@@ -79,8 +83,8 @@
                 </form>
             </div>
             <div class="col-sm-4">
-                <button class="js-enableDeleteCoursesMode">
-                    <asset:image src="icon_trash_can.svg" style="height: 60px !important; width: 120px !important; position: absolute; top: 0%"/>
+                <button class="btn btn-default btn-lg js-enableDeleteCoursesMode">
+                    <span class="glyphicon glyphicon-trash"></span> Delete Course(s)
                 </button>
                 <button style="display: none" class="js-disableDeleteCoursesMode">
                     Done Deleting Courses
@@ -91,7 +95,35 @@
     </div>
 </section>
 
-<!-- Modal -->
+<!-- Create Course Modal -->
+<div id="createCourseModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content clean-container">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title heading">Create Course</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="courseName">Course name</label>
+                    <input type="text" class="form-control" id="modalCourseName" placeholder="CSC212" required>
+                </div>
+                <div class="form-group">
+                    <label for="courseCRN">CRN</label>
+                    <input type="text" class="form-control" id="modalCourseCRN" placeholder="133742" required>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="courseButton" type="button" class="btn btn-success btn-ok js-createCourse" data-dismiss="modal">Create Course</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- Instructor Modal -->
 <div id="createInstructorModal" class="modal fade" role="dialog">
     <div class="modal-dialog">
         <!-- Modal content-->
@@ -113,7 +145,7 @@
 </div>
 </div>
 
-<!-- Modal -->
+<!-- Delete Course Modal -->
 <div id="deleteCourseModal" class="modal fade" role="dialog">
     <div class="modal-dialog">
         <!-- Modal content-->

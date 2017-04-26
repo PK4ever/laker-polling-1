@@ -10,6 +10,7 @@
     <asset:stylesheet href="agency.min.css"/>
     <asset:stylesheet href="agency.css"/>
     <asset:stylesheet href="style.css"/>
+    <asset:stylesheet href="jquery-clockpicker.min.css"/>
     <!-- jQuery (necessary for Bootstrap"s JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <!-- Latest compiled and minified JavaScript -->
@@ -82,35 +83,36 @@
 
             <div class="form-group">
                 <label class="control-label" for="startDate">Start Date</label>
-                <input class="form-control" id="startDate" name="startDate" placeholder="YYYY-MM-DD" type="text"/>
+                <input class="form-control" id="startDate" name="startDate" placeholder="YYYY-MM-DD" type="text"  readonly="readonly"/>
             </div>
 
             <div class="form-group">
                 <label class="control-label" for="startTime">Start Time</label>
-                <div class="bootstrap-timepicker">
-                    <input id="startTime" type="text" class="form-control">
-                    <i class="icon-time"></i>
+                
+                <div class="input-group clockpicker">
+                    <input id="startTime" type="text" class="form-control" value="09:30" readonly="readonly">
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-time"></span>
+                    </span>
                 </div>
             </div>
 
             <div class="form-group"> 
                 <label class="control-label" for="endDate">End Date</label>
-                <input class="form-control" id="endDate" name="endDate" placeholder="YYYY-MM-DD" type="text"/>
+                <input class="form-control" id="endDate" name="endDate" type="text" placeholder="YYYY-MM-DD" readonly="readonly"/>
             </div>
 
             <div class="form-group">
                 <label class="control-label" for="endTime">End Time</label>
-                <div class="bootstrap-timepicker">
-                    <input id="endTime" type="text" class="form-control">
-                    <i class="icon-time"></i>
+
+                <div class="input-group clockpicker">
+                    <input id="endTime" type="text" class="form-control" value="09:30" readonly="readonly">
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-time"></span>
+                    </span>
                 </div>
             </div>
 
-            <!--Start Time:
-            <input id="startDate" type="date" name="startdate" onchange="changeDate(this)" /> <br><br>
-            End Time:
-            <input id="endDate" type="date" name="enddate" onchange="changeDate(this)" /> <br><br>
-            -->
             Quiz Name:
             <input type="text" name="quizName" id="quizName"><br><br>
             <input class="btn btn-success" type="button" data-course-id="${session.courseId}" id="newQuizButton" value="Create New Quiz">
@@ -153,6 +155,10 @@
 <asset:javascript src="main.js"/>
 <asset:javascript src="instructor.js"/>
 <asset:javascript src="atHome.js"/>
+
+<asset:javascript src="jquery-clockpicker.min.js"/>
+
+
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/js/bootstrap-timepicker.min.js"></script>
 
@@ -160,22 +166,15 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.13/moment-timezone.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.13/moment-timezone-with-data-2012-2022.min.js"></script>
 
+
+
 <script>
     window.onload=prepareClassTitle(${session.courseId});
 </script>
 
 <script type="text/javascript">
-    $('#startTime').timepicker({
-        template: false,
-        showInputs: false,
-        minuteStep: 1
-    });
-</script>
-<script type="text/javascript">
-    $('#endTime').timepicker({
-        template: false,
-        showInputs: false,
-        minuteStep: 1
+    $('.clockpicker').clockpicker({
+        autoclose: true
     });
 </script>
 
@@ -189,6 +188,7 @@
         format: 'yyyy-mm-dd',
         todayHighlight: true,
         autoclose: true,
+        disableTouchKeyboard: true
       };
       start_date_input.datepicker(options);
       end_date_input.datepicker(options);
