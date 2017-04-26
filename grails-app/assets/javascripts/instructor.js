@@ -227,7 +227,7 @@ var courseId
         }
 
         this.refreshQuestionResponsesTableByDate = function (date){
-            var index = 0
+            var index = 1
             const html = '<table class="table">\
                 <thead>\
                 <tr>\
