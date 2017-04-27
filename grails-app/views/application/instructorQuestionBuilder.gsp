@@ -51,7 +51,7 @@
 <section>
 
 <a href="/course?courseId=${session.courseId}" style="margin-left: 60px; href="/course?courseId=${session.courseId}" class="btn btn-default btn-md">
-          <span class="glyphicon glyphicon-arrow-left"></span> Back
+          <span class="glyphicon glyphicon-arrow-left"></span> Back to Course
 </a>
 
 <div class="form-group" style="text-align: center;">
@@ -73,7 +73,7 @@
         <input class="btn btn-success" type="button" data-course-id="${session.courseId}" id="submit-question-btn" value="Submit">
         <input class="btn btn-success" type="button" data-course-id="${session.courseId}" id="submit-question-btn2" value="Submit another question" style="display:none;">
     </form>
-        <button class="btn btn-danger" id="close-question-btn" style="display: none; width: 200px; text-align: center;" >Close Question</button>
+        <button class="btn btn-danger" id="close-question-btn" data-course-id="${session.courseId}" style="display: none; width: 200px; text-align: center;" >Close Question</button>
         <br> <br>
         <div id="resultLink">
             
@@ -85,12 +85,31 @@
 
 <asset:javascript src="main.js"/>
 <asset:javascript src="instructor.js"/>
-<asset:javascript src="main.js"/>
 <asset:javascript src="question.js"/>
 <asset:javascript src="auth/config.js"/>
 <asset:javascript src="auth/logout.js"/>
 <script>
-    window.onload=prepareClassTitle(${session.courseId});
+    window.onload= function(){
+        $.ajax({
+            url: '/user/auth',
+            method: 'GET',
+            success: function(data){
+                var token = data.data.token
+                $.ajax({
+                    url:'/api/question/active?access_token=' + token + '&course_id=' + ${session.courseId},
+                    method: 'GET',
+                    success: function(data){
+                        question_id = data.questionId
+                        prepareClassTitle(${session.courseId})
+                        toggleButtons()
+                    },
+                    error: function(){
+                        prepareClassTitle(${session.courseId})
+                    }
+                });
+            }
+        });
+    }
 </script>
 
 </body>

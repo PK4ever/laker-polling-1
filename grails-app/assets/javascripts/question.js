@@ -71,6 +71,7 @@ $("#submitAnswerLive").click(function() {
 
 //Instructor Submit Question
 $("#submit-question-btn").click(function(){
+    debugger
     var courseId = $(this).data('course-id')
     var selected = [];
     $(':checkbox').each(function(){
@@ -132,9 +133,23 @@ $("#close-question-btn").click(function(){
     $.ajax({
         url: '/api/question?access_token=' + token + '&question_id=' + question_id + '&flip=false',
         method: 'PUT',
-        success: toggleButtons()
+        success: toggleButtons(),
+        error: function(){
+            $.ajax({
+                url: '/api/question/active?access_token=' + token + '&course_id=' + $(this).data('course-id'),
+                method: 'GET',
+                success: function (data){
+                    question_id = data.questionId
+                    $.ajax({
+                        url: '/api/question?access_token=' + token + '&question_id=' + question_id + '&flip=false',
+                        method: 'PUT',
+                        success: toggleButtons()
+                    });
+                }
+            });
+        }
     });
-})
+});
 
 //Make close and start buttons appear/disappear
 function toggleButtons (){
