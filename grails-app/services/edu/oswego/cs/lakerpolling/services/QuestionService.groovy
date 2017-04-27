@@ -228,18 +228,6 @@ class QuestionService {
                 def questions = course.questions.findAll{q -> (q.type == QuestionType.CLICKER && isSameDay(q.dateCreated, qDate)) }
                 System.out.println "Before" + questions.id
                 def sortedQuestions = questions.sort {a,b -> a.id <=> b.id}
-                //int[] questionIds = questions.id
-                //for(int i = 0; i < questionIds.size(); ++i) {
-                //    for(int j = 0; j < questionIds.size() - 1; ++j) {
-                //        if(questionIds[j] > questionIds[i]) {
-                //            def temp = questionIds[i]
-                //            questionIds[i] = questionIds[j]
-                //            questionIds[j] = temp
-                //        }
-                //    }
-                //}
-                //System.out.println "After" + questionIds
-                //def sortedQuestions = course.questions
                 System.out.println "Sorted Questions: " + sortedQuestions.id
 
                 def allResults = new ArrayList<>()
