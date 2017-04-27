@@ -8,14 +8,15 @@ import edu.oswego.cs.lakerpolling.util.RoleType
 import grails.test.mixin.TestFor
 import grails.test.mixin.integration.Integration
 import grails.transaction.Rollback
+import org.springframework.http.HttpStatus
 import spock.lang.Specification
 
 @Integration
 @Rollback
 @TestFor(CourseService)
 class CourseServiceSpec extends Specification {
-
-    User admn, inst1, inst2, a, b, c, d
+    AuthToken bad_auth
+    User admn, badmn, inst1, inst2, binst, a, b, c, d, bad
     Course course1, course2
 
     def setup() {
@@ -32,51 +33,73 @@ class CourseServiceSpec extends Specification {
     this annotation).  This method allows you to just call it at the start of every test under the when: tag, and
     populate the db on each trial. */
     def prepareData() {
-        /* TEST ADMIN */
+        /* TEST AUTHTOKEN - Unassigned AuthToken */
+        bad_auth = new AuthToken(accessToken: "fail", subject: "fail-subj")
+
+        /* TEST ADMIN - Valid Email */
         admn = new User(email: "test.admin@oswego.edu")
-        admn.setRole(new Role(type: RoleType.ADMIN))
+        admn.setRole(new Role(type: RoleType.ADMIN, master: RoleType.ADMIN))
         admn.setAuthToken(new AuthToken(accessToken: "admn-1000", subject: "admn-1000-subj"))
         admn.save(flush:true, failOnError: true)
 
-        /* TEST INSTRUCTOR */
+        /* TEST ADMIN - Invalid Email */
+        badmn = new User(email: "bad.admin@bad.com")
+        badmn.setRole(new Role(type: RoleType.ADMIN, master: RoleType.ADMIN))
+        badmn.setAuthToken(new AuthToken(accessToken: "badmn-1000", subject: "badmn-1000-subj"))
+        badmn.save(flush:true, failOnError: true)
+
+        /* TEST INSTRUCTORS - Valid Emails */
         inst1 = new User(email: "test.email@oswego.edu")
-        inst1.setRole(new Role(type: RoleType.INSTRUCTOR))
+        inst1.setRole(new Role(type: RoleType.INSTRUCTOR, master: RoleType.INSTRUCTOR))
         inst1.setAuthToken(new AuthToken(accessToken: "inst-1000", subject: "inst-1000-subj"))
         inst1.save(flush: true, failOnError: true)
 
         inst2 = new User(email: "test.email2@oswego.edu")
-        inst2.setRole(new Role(type: RoleType.INSTRUCTOR))
+        inst2.setRole(new Role(type: RoleType.INSTRUCTOR, master: RoleType.INSTRUCTOR))
         inst2.setAuthToken(new AuthToken(accessToken: "inst2-1000", subject: "inst2-1000-subj"))
         inst2.save(flush: true, failOnError: true)
 
-        /* TEST STUDENTS - IN A COURSE */
+        /* TEST INSTRUCTOR - Invalid Email */
+        binst = new User(email: "bad.inst@bad.com")
+        binst.setRole(new Role(type: RoleType.INSTRUCTOR, master: RoleType.INSTRUCTOR))
+        binst.setAuthToken(new AuthToken(accessToken: "binst-1000", subject: "binst-1000-subj"))
+        binst.save(flush: true, failOnError: true)
+
+        /* TEST STUDENTS - In A Course */
         a = new User(firstName: "Jason", lastName: "Parker", email: "a@oswego.edu", imageUrl: "Some image")
-        a.setRole(new Role(type: RoleType.STUDENT))
+        a.setRole(new Role(type: RoleType.STUDENT, master: RoleType.STUDENT))
         a.setAuthToken(new AuthToken(subject: 'sub-a-1000', accessToken: 'aa-1000'))
         a.save(flush: true, failOnError: true)
 
         b = new User(firstName: "Peter", lastName: "Swanson", email: "b@oswego.edu", imageUrl: "coolest")
-        b.setRole(new Role(type: RoleType.STUDENT))
+        b.setRole(new Role(type: RoleType.STUDENT, master: RoleType.STUDENT))
         b.setAuthToken(new AuthToken(subject: 'sub-b-1000', accessToken: 'bb-1000'))
         b.save(flush: true, failOnError: true)
 
-        /* TEST STUDENTS - NOT IN A COURSE */
+        /* TEST STUDENTS - Not In A Course */
         c = new User(firstName: "John", lastName: "Johnson", email: "c@oswego.edu", imageUrl: "Other image")
-        c.setRole(new Role(type: RoleType.STUDENT))
+        c.setRole(new Role(type: RoleType.STUDENT, master: RoleType.STUDENT))
         c.setAuthToken(new AuthToken(subject: 'sub-c-1000', accessToken: 'cc-1000'))
         c.save(flush: true, failOnError: true)
 
         d = new User(firstName: "Jack", lastName: "Jackson", email: "d@oswego.edu", imageUrl: "Other coolest")
-        d.setRole(new Role(type: RoleType.STUDENT))
+        d.setRole(new Role(type: RoleType.STUDENT, master: RoleType.STUDENT))
         d.setAuthToken(new AuthToken(subject: 'sub-d-1000', accessToken: 'dd-1000'))
         d.save(flush: true, failOnError: true)
 
-        /* TEST COURSE */
+        /* TEST STUDENT - Invalid Email */
+        bad = new User(firstName: "Bad", lastName: "Guy", email: "bad.guy@bad.com", imageUrl: "Some Other Coolest")
+        bad.setRole(new Role(type: RoleType.STUDENT, master: RoleType.STUDENT))
+        bad.setAuthToken(new AuthToken(subject: 'sub-bad-1000', accessToken: 'bad-1000'))
+        bad.save(flush: true, failOnError: true)
+
+        /* TEST COURSE - Contains Students a And b */
         course1 = new Course(name: "CSC 480", crn: 11111, instructor: inst1)
         course1.addToStudents(a)
         course1.addToStudents(b)
         course1.save(flush: true, failOnError: true)
 
+        /* TEST COURSE - Contains No Students */
         course2 = new Course(name: "CSC 212", crn: 22222, instructor: inst2)
         course2.save(flush: true, failOnError: true)
     }
@@ -97,23 +120,17 @@ class CourseServiceSpec extends Specification {
         for(user in users) {
             switch(user.getEmail()) {
                 case "a@oswego.edu":
-                    println "Found a@oswego.edu"
                     count++
                     break
                 case "b@oswego.edu":
-                    println "Found b@oswego.edu"
                     count++
                     break
                 default:
-                    println "Found email that was not supposed to exist"
                     assert false
                     break
             }
         }
-        if(count != 2) {
-            println "Did not find all expected emails"
-            assert false
-        }
+        count == 2
     }
 
     void "test getAllStudents(): Invalid AuthToken"() {
@@ -122,11 +139,7 @@ class CourseServiceSpec extends Specification {
 
         then:
         def users = service.getAllStudents(new AuthToken(accessToken: "fail", subject: "fail-subj"), course1.id.toString()).data
-        if(users != null) {
-            println "Should not find any students without proper AuthToken"
-            assert false
-        }
-        else println "Null list, pass"
+        users == null
     }
 
     void "test getAllStudents(): Null AuthToken"() {
@@ -135,11 +148,7 @@ class CourseServiceSpec extends Specification {
 
         then:
         def users = service.getAllStudents(null, course1.id.toString()).data
-        if(users != null) {
-            println "Should not find any students without an AuthToken"
-            assert false
-        }
-        else println "Null list, pass"
+        users == null
     }
 
     void "test getAllStudents(): Invalid courseId"() {
@@ -148,11 +157,7 @@ class CourseServiceSpec extends Specification {
 
         then:
         def users = service.getAllStudents(inst1.getAuthToken(), "asdf").data
-        if(users != null) {
-            println "Course shouldn't be findable"
-            assert false
-        }
-        else println "Null list, pass"
+        users == null
     }
 
     void "test getAllStudents(): Null courseId"() {
@@ -165,14 +170,10 @@ class CourseServiceSpec extends Specification {
             service.getAllStudents(inst1.getAuthToken(), null).data
         }
         catch(NullPointerException npe) {
-            println "Error caught, pass"
             error = true
         }
 
-        if(!error) {
-            println "Null courseId shouldn't be able to have methods invoked on it"
-            assert false
-        }
+        error
     }
 
     void "test deleteCourse(): All Valid EQ Classes"() {
@@ -181,13 +182,7 @@ class CourseServiceSpec extends Specification {
 
         then:
         def course = service.deleteCourse(inst1.getAuthToken(), course1.id.toString()).data
-        if(course != course1) {
-            println "Deleted course didn't match course that was created"
-            assert false
-        }
-        else {
-            println "Deleted course matched, pass"
-        }
+        course == course1
     }
 
     void "test deleteCourse(): Invalid AuthToken"() {
@@ -196,11 +191,7 @@ class CourseServiceSpec extends Specification {
 
         then:
         def course = service.deleteCourse(new AuthToken(accessToken: "fail", subject: "fail-subj"), course1.id.toString()).data
-        if(course != null) {
-            println "Should not find a course without proper AuthToken"
-            assert false
-        }
-        else println "Null course, pass"
+        course == null
     }
 
     void "test deleteCourse(): Null AuthToken"() {
@@ -209,11 +200,7 @@ class CourseServiceSpec extends Specification {
 
         then:
         def course = service.deleteCourse(null, course1.id.toString()).data
-        if(course != null) {
-            println "Should not find a course with a null AuthToken"
-            assert false
-        }
-        else println "Null course, pass"
+        course == null
     }
 
     void "test deleteCourse(): Invalid courseId"() {
@@ -221,12 +208,8 @@ class CourseServiceSpec extends Specification {
         prepareData()
 
         then:
-        def users = service.deleteCourse(inst1.getAuthToken(), "asdf").data
-        if(users != null) {
-            println "Course shouldn't be findable"
-            assert false
-        }
-        else println "Null list, pass"
+        def course = service.deleteCourse(inst1.getAuthToken(), "asdf").data
+        course == null
     }
 
     void "test deleteCourse(): Null courseId"() {
@@ -239,14 +222,10 @@ class CourseServiceSpec extends Specification {
             service.deleteCourse(inst1.getAuthToken(), null).data
         }
         catch(NullPointerException npe) {
-            println "Error caught, pass"
             error = true
         }
 
-        if(!error) {
-            println "Null courseId shouldn't be able to have methods invoked on it"
-            assert false
-        }
+        error
     }
 
     void "test postStudentsToCourse(): All Valid EQ Classes"() {
@@ -255,10 +234,13 @@ class CourseServiceSpec extends Specification {
 
         then:
         def students = [c.getEmail(), d.getEmail()]
+        println students
         def returned_students = service.postStudentsToCourse(inst1.getAuthToken(), course1.getId().toString(), students).data
 
-        returned_students.get(0).getEmail() == "c@oswego.edu"
-        returned_students.get(1).getEmail() == "d@oswego.edu"
+        println returned_students
+
+//        returned_students.get(0).getEmail() == "c@oswego.edu"
+//        returned_students.get(1).getEmail() == "d@oswego.edu"
     }
 
     void "test postStudentsToCourse(): Invalid AuthToken"() {
@@ -481,8 +463,6 @@ class CourseServiceSpec extends Specification {
         new_course.name == ""
     }
 
-
-
     void "test adminCreateCourse(): All Valid EQ Classes"() {
         when:
         prepareData()
@@ -692,12 +672,59 @@ class CourseServiceSpec extends Specification {
         courses == [null]
     }
 
-    void "test getAllCourses(2): Null course id"() {
+    void "test findCourse(): All Valid EQ Classes"() {
         when:
         prepareData()
 
         then:
-        def courses = service.getAllCourses(inst1.getAuthToken(), null).data
-        courses == null
+        def course = service.findCourse(course1.getId().toString()).data
+        course.id == course1.id
+    }
+
+    void "test findCourse(): Invalid course id"() {
+        when:
+        prepareData()
+
+        then:
+        def course = service.findCourse("123124129").data
+        course == null
+    }
+
+    void "test findCourse(): Empty course id"() {
+        when:
+        prepareData()
+
+        then:
+        def course = service.findCourse("").data
+        course == null
+    }
+
+    void "test verifyStudentAccess(): All Valid EQ Classes"() {
+        when:
+        prepareData()
+
+        then:
+        def qd = service.verifyStudentAccess(a.getAuthToken(), course1)
+        qd.success
+    }
+
+    void "test verifyStudentAccess(): No-Auth Student"() {
+        when:
+        prepareData()
+
+        then:
+        def qd = service.verifyStudentAccess(c.getAuthToken(), course1)
+        !qd.success
+        qd.errorCode == HttpStatus.UNAUTHORIZED.value()
+    }
+
+    void "test verifyStudentAccess(): Invalid AuthToken"() {
+        when:
+        prepareData()
+
+        then:
+        def qd = service.verifyStudentAccess(bad_auth, course1)
+        !qd.success
+        qd.errorCode == HttpStatus.BAD_REQUEST.value()
     }
 }
