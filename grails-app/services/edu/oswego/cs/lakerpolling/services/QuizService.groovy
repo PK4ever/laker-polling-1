@@ -479,7 +479,7 @@ class QuizService {
                         outputStream << ",N/A"
                 }
 
-                outputStream << ",${nf.format(total / quizList.size())}"
+                outputStream << (quizList.size() != 0 ? ",${nf.format(total / quizList.size())}" : "N/A")
 
                 if (i < students.size() - 1) {
                     outputStream << "\n"
