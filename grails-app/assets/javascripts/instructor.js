@@ -425,6 +425,12 @@ var courseId
         });
     });
 
+    $('#courseCreateCancelButton').click( function(){
+        debugger
+        $('#modalCourseCRN').val("")
+        $('#modalCourseName').val("")
+    });
+
     $('.js-createCourse').click( function(){
         $.ajax({
             url: '/user/auth',
@@ -449,7 +455,7 @@ var courseId
             }
         });
 
-    })
+    });
 
     $('#csv-form').submit(function(event) {
         event.preventDefault();

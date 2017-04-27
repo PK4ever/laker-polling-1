@@ -56,21 +56,22 @@
 
 <div class="form-group" style="text-align: center;">
     <form id="question-form" method="post">
-        <div class="btn-group" data-toggle="buttons" >
+        <div class="btn-group" data-toggle="buttons" id="checkboxDiv">
             <label class="btn btn-default" id="answers">
-            <input type="checkbox" autocomplete="off" name="vehicle">A</label><br>
+            <input type="checkbox" autocomplete="off" name="vehicle" id="checkbox1">A</label><br>
             <label class="btn btn-default" id="answers">
-            <input type="checkbox" autocomplete="off" name="vehicle" >B</label><br>
+            <input type="checkbox" autocomplete="off" name="vehicle" id="checkbox2">B</label><br>
             <label class="btn btn-default" id="answers">
-            <input type="checkbox" autocomplete="off" name="vehicle" >C</label><br>
+            <input type="checkbox" autocomplete="off" name="vehicle" id="checkbox3">C</label><br>
             <label class="btn btn-default" id="answers">
-            <input type="checkbox" autocomplete="off" name="vehicle">D</label><br>
+            <input type="checkbox" autocomplete="off" name="vehicle" id="checkbox4">D</label><br>
             <label class="btn btn-default" id="answers">
-            <input type="checkbox" autocomplete="off" name="vehicle" >E</label><br>
+            <input type="checkbox" autocomplete="off" name="vehicle" id="checkbox5">E</label><br>
         </div>
         <br>
         <br>
         <input class="btn btn-success" type="button" data-course-id="${session.courseId}" id="submit-question-btn" value="Submit">
+        <input class="btn btn-success" type="button" data-course-id="${session.courseId}" id="submit-question-btn2" value="Submit another question" style="display:none;">
     </form>
         <button class="btn btn-danger" id="close-question-btn" style="display: none; width: 200px; text-align: center;" >Close Question</button>
         <br> <br>
