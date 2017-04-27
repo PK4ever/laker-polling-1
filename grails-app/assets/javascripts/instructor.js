@@ -227,7 +227,7 @@ var courseId
         }
 
         this.refreshQuestionResponsesTableByDate = function (date){
-            var index = 0
+            var index = 1
             const html = '<table class="table">\
                 <thead>\
                 <tr>\
@@ -258,7 +258,7 @@ var courseId
                             .replaceAll('{{numD}}', question.answers[3])
                             .replaceAll('{{numE}}', question.answers[4])
                             .replaceAll('{{correct}}', question.correct)
-                            .replaceAll('{{pc}}', question.percentCorrect)
+                            .replaceAll('{{pc}}', (question.percentCorrect*100) + "%")
                         index++
                     })
                     $('#questionPerformanceContainer').html(
@@ -323,12 +323,12 @@ var courseId
 
                 success: function(data){
                     var user = data.data.user
-                    Name = user.name;
+                    Name = user.email;
 
                     profpic = user.imageUrl;
                     var courseDiv = document.getElementById("userName");
 
-                    var string = '<h2 class="section-heading">Hello, '+Name+'</h2>';
+                    var string = '<h3 class="section-heading">Hello, you are currently logged in as '+Name+'.</h3>';
                     var div = document.createElement("div")
                     div.innerHTML = string;
                     courseDiv.appendChild(div);
@@ -425,6 +425,12 @@ var courseId
         });
     });
 
+    $('#courseCreateCancelButton').click( function(){
+        debugger
+        $('#modalCourseCRN').val("")
+        $('#modalCourseName').val("")
+    });
+
     $('.js-createCourse').click( function(){
         $.ajax({
             url: '/user/auth',
@@ -449,7 +455,7 @@ var courseId
             }
         });
 
-    })
+    });
 
     $('#csv-form').submit(function(event) {
         event.preventDefault();

@@ -83,7 +83,7 @@
                 <label>Add by CSV</label>
                 <div class="form-group">
                     <input value="Choose a CSV file" id="csv-file" type="file" accept=".csv">
-                    <input style="margin-top: 10px;" type="submit" value="Send CSV" class="btn btn-success" id="file-button">
+                    <input style="margin-top: 10px;" type="submit" value="Upload CSV" class="btn btn-success" id="file-button">
                 </div>
             </form>
         </div>

@@ -67,7 +67,7 @@
     <a href="/course/attendance" class="btn btn-success" role="button">Attendance</a>
 </div>
 <div class="form-group" style="text-align: center;">
-    <a href="/course/roster" class="btn btn-success" role="button">Roster</a>
+    <a href="/course/roster" class="btn btn-success" role="button">Student List</a>
 </div>
 
 </section>
