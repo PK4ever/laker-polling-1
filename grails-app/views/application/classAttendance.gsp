@@ -68,7 +68,7 @@
     <form>
       <div class="form-group"> <!-- Date input -->
         <label class="control-label" for="date">Date</label>
-        <input class="form-control" id="date" name="date" placeholder="YYYY-MM-DD" type="text" />
+        <input class="form-control" id="date" name="date" placeholder="YYYY-MM-DD" type="text" readonly="readonly"/>
       </div>
      </form>
     </div>
@@ -134,7 +134,8 @@
         format: 'yyyy-mm-dd',
         todayHighlight: true,
         autoclose: true,
-        clearBtn: true
+        clearBtn: true,
+        disableTouchKeyboard: true
       };
       // date_input.datepicker(options);
       date_input.datepicker(options).on('changeDate', function(event) {
