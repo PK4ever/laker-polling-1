@@ -140,10 +140,7 @@ class QuestionService {
                     if(question) question
                     else null
                 } else null
-            } else {
-                System.out.println "Instructor can do this!"
-                null
-            }
+            } else null
         } else null
     }
 
