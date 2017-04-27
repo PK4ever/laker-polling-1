@@ -258,7 +258,7 @@ var courseId
                             .replaceAll('{{numD}}', question.answers[3])
                             .replaceAll('{{numE}}', question.answers[4])
                             .replaceAll('{{correct}}', question.correct)
-                            .replaceAll('{{pc}}', question.percentCorrect)
+                            .replaceAll('{{pc}}', question.percentCorrect*100 + "%")
                         index++
                     })
                     $('#questionPerformanceContainer').html(
