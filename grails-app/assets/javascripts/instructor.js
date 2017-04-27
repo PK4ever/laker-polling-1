@@ -445,7 +445,7 @@ var courseId
                     url: urlStr,
                     method:'POST',
                     success: function(data){
-                        alert(courseName + "created!")
+                        alert(courseName + " created!")
                         window.location.reload()
                     },
                     error: function(){
