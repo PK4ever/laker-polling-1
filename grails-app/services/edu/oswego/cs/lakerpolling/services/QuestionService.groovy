@@ -151,17 +151,15 @@ class QuestionService {
      * @return - returns a collection of active questions
      */
     def getActiveQuestion(AuthToken token, String course_id) {
-        def user = token.user
-        if(user) {
-            if(user.role.type == RoleType.STUDENT) {
-                def course = Course.findById(course_id.toLong())
-                if(course) {
-                    def question = course.questions
-                    if(question) {
-                        def active = question.find{q -> q.active}
-                        if(active) active
-                        else null
-                    } else null
+        def courseResult = courseService.findCourse(course_id)
+        if(courseResult.success) {
+            def course = courseResult.data
+            if(courseService.verifyStudentAccess(token, course)) {
+                def questions = course.questions
+                if(questions) {
+                    def active = questions.find{q -> q.active}
+                    if(active) active
+                    else null
                 } else null
             } else null
         } else null
