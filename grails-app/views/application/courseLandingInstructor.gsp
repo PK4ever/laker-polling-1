@@ -54,8 +54,8 @@
 
 </h1> <!-- Class name here -->
 
-<div class="form-group" style="text-align: center;">
-    <a href="/course/createquestion?courseId=${session.courseId}" class="btn btn-success" role="button">Create Question</a>
+<div class="form-group" style="text-align: center;" id="LiveQuestionDiv">
+    <a href="/course/createquestion?courseId=${session.courseId}" class="btn btn-success" role="button">Create Live Question</a>
 </div>
 <div class="form-group" style="text-align: center;">
     <a href="/course/prevQuestions?courseId=${session.courseId}" class="btn btn-success" role="button">Closed Questions</a>

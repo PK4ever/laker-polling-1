@@ -693,6 +693,33 @@ $('#roleButton').on('click', function(event) {
     });
 });
 
+$(function(){
+    $.ajax({
+        url: '/user/auth',
+        method: "GET",
+
+        success: function(data){
+            token = data.data.token;
+            debugger
+            $.ajax({
+                url: '/api/question/active?access_token=' + token + '&course_id=' + courseId,
+                type: 'GET',
+                success: function(data) {
+                    debugger
+                    var str = '<a href="/course/createquestion?courseId=' + courseId + '" class="btn btn-success" role="button">View Live Question</a>'
+                    document.getElementById('LiveQuestionDiv').innerHTML = str
+                },
+                error: function() {
+                    debugger
+                    var str = '<a href="/course/createquestion?courseId=' + courseId + '" class="btn btn-success" role="button">Create Live Question</a>'
+                    document.getElementById('LiveQuestionDiv').innerHTML = str
+                }
+            });
+        }
+    });
+        
+});
+
 function prepareClassTitle(cId) {
     courseId = cId;
 }
