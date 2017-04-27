@@ -465,15 +465,18 @@ class QuizService {
             outputStream.flush()
 
             students.eachWithIndex { User student, int i ->
-                outputStream << "${student.firstName} ${student.lastName}"
+                outputStream << (student.firstName ? "${student.firstName} ${student.lastName}" : "Not Specified")
                 outputStream << ",${student.email}"
 
                 def total = 0
 
                 quizList.each { Quiz quiz ->
                     Grade grade = Grade.findByStudentAndQuiz(student, quiz)
-                    outputStream << ",${nf.format(grade.grade)}"
-                    total += grade.grade
+                    if (grade) {
+                        outputStream << ",${nf.format(grade.grade)}"
+                        total += grade.grade
+                    } else
+                        outputStream << ",N/A"
                 }
 
                 outputStream << ",${nf.format(total / quizList.size())}"
