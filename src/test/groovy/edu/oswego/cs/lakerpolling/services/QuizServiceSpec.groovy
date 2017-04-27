@@ -3,8 +3,8 @@ package edu.oswego.cs.lakerpolling.services
 import grails.test.mixin.TestFor
 import spock.lang.Specification
 
-@TestFor(AttendanceService)
-class AttendanceServiceSpec extends Specification {
+@TestFor(QuizService)
+class QuizServiceSpec extends Specification {
 
     def setup() {
     }

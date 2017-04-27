@@ -10,9 +10,6 @@ import grails.test.mixin.integration.Integration
 import org.springframework.test.annotation.Rollback
 import spock.lang.Specification
 
-/**
- * See the API for {@link grails.test.mixin.services.ServiceUnitTestMixin} for usage instructions
- */
 @Integration
 @Rollback
 @TestFor(UserService)

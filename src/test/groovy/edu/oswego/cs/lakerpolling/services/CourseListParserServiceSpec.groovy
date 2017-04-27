@@ -8,7 +8,7 @@ import spock.lang.Specification
 @TestFor(CourseListParserService)
 class CourseListParserServiceSpec extends Specification {
 
-    def "Test Email With Header"() {
+    def "test parse(): Email With Header"() {
         when: "The CSV is loaded"
         QueryResult<List<String>> users = service.parse(getFile("EmailWithHeader.csv"))
 
@@ -18,7 +18,7 @@ class CourseListParserServiceSpec extends Specification {
         users.data.contains("user3@oswego.edu")
     }
 
-    def "Test Email Without Header"() {
+    def "test parse(): Email Without Header"() {
         when: "The CSV is loaded"
         QueryResult<List<String>> users = service.parse(getFile("EmailWithoutHeader.csv"))
 
@@ -28,7 +28,7 @@ class CourseListParserServiceSpec extends Specification {
         users.data.contains("user3@oswego.edu")
     }
 
-    def "Test Username With Header"() {
+    def "test parse(): Username With Header"() {
         when: "The CSV is loaded"
         QueryResult<List<String>> users = service.parse(getFile("UsernameWithHeader.csv"))
 
@@ -38,7 +38,7 @@ class CourseListParserServiceSpec extends Specification {
         users.data.contains("user3@oswego.edu")
     }
 
-    def "Test Username Without Header"() {
+    def "test parse(): Username Without Header"() {
         when: "The CSV is loaded"
         QueryResult<List<String>> users = service.parse(getFile("UsernameWithoutHeader.csv"))
 
@@ -46,7 +46,7 @@ class CourseListParserServiceSpec extends Specification {
         !users.success
     }
 
-    def "Test Different Delimiter"() {
+    def "test parse(): Different Delimiter"() {
         when: "The CSV is loaded"
         QueryResult<List<String>> users = service.parse(getFile("DifferentDelimiter.csv"))
 
