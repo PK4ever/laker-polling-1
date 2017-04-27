@@ -108,12 +108,15 @@
                 <div class="col-md-4 col-lg-offset-3 text-center">
                     <input type="submit" value="Add Question" data-course-id="${session.courseId}"
                            data-quiz-id="${session.quizId}" class="btn btn-success" id="create-question-btn">
-                </div>
 
+                    <input type="submit" value="Activate Quiz" data-course-id="${session.courseId}"
+                           data-quiz-id="${session.quizId}" class="btn btn-success" id="activate-quiz-btn">
+                </div>
+                <!-- OLD ACTIVATE QUIZ BUTTON (Does not check for zero-question quiz)
                 <div class="col-md-1 col-md-offset-3 text-center">
                     <a class="btn btn-success" href="/course/quizList?courseId=${session.courseId}">Activate Quiz</a>
                 </div>
-
+                -->
             </div>
 
             <!--<div class="col-sm-1"></div>-->
