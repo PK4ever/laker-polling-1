@@ -67,20 +67,20 @@
         <div class="row">
             <div class="col-sm-4"></div>
             <div class="col-sm-4">
-                <h2 style="text-align: center">Add a new course</h2>
+                <!--<h2 style="text-align: center">Add a new course</h2>
                 <form id="addClassForm" role="form">
                     <div class="form-group">
                         <label for="courseName">Course name</label>
-                        <input type="text" class="form-control" id="courseName" placeholder="CSC212" required>
+                        <input type="text" class="form-control" id="courseName" placeholder="Enter course name here" required>
                     </div>
                     <div class="form-group">
                         <label for="courseCRN">CRN</label>
-                        <input type="text" class="form-control" id="courseCRN" placeholder="133742" required>
+                        <input type="text" class="form-control" id="courseCRN" placeholder="Enter CRN here" required>
                     </div>
                     <div class="form-group">
                         <button type="submit" class="btn btn-success" id="courseButton">Create Course</button>
                     </div>
-                </form>
+                </form>-->
             </div>
             <div class="col-sm-4">
                 <button class="btn btn-default btn-lg js-enableDeleteCoursesMode">
@@ -107,16 +107,16 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label for="courseName">Course name</label>
-                    <input type="text" class="form-control" id="modalCourseName" placeholder="CSC212" required>
+                    <input type="text" class="form-control" id="modalCourseName" placeholder="Enter course name here..." required>
                 </div>
                 <div class="form-group">
                     <label for="courseCRN">CRN</label>
-                    <input type="text" class="form-control" id="modalCourseCRN" placeholder="133742" required>
+                    <input type="text" class="form-control" id="modalCourseCRN" placeholder="Enter course CRN here..." required>
                 </div>
             </div>
             <div class="modal-footer">
                 <button id="courseButton" type="button" class="btn btn-success btn-ok js-createCourse" data-dismiss="modal">Create Course</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button id="courseCreateCancelButton" type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
             </div>
         </div>
     </div>

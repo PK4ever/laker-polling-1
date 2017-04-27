@@ -4,6 +4,7 @@ import edu.oswego.cs.lakerpolling.domains.Attendance
 import edu.oswego.cs.lakerpolling.domains.Attendee
 import edu.oswego.cs.lakerpolling.domains.AuthToken
 import edu.oswego.cs.lakerpolling.domains.Course
+import edu.oswego.cs.lakerpolling.domains.Quiz
 import edu.oswego.cs.lakerpolling.domains.Role
 import edu.oswego.cs.lakerpolling.domains.User
 import edu.oswego.cs.lakerpolling.util.QueryResult
@@ -232,6 +233,16 @@ class CourseService {
      */
     private QueryResult<Course> doDelete(Course course, QueryResult<Course> result = new QueryResult<>(success: true)) {
         try {
+            def quizzes = Quiz.findAllByCourse(course)
+            for ( quiz in quizzes ) {
+                quiz.delete(flush: true, failOnError: true)
+            }
+
+            def attendanceList = Attendance.findAllByCourse(course)
+            for ( attendance in attendanceList ) {
+                attendance.delete(flush: true, failOnError: true)
+            }
+
             course.delete(flush: true, failOnError: true)
         } catch (Exception e) {
             e.printStackTrace()

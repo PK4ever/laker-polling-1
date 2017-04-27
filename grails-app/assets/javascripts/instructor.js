@@ -74,10 +74,11 @@ var courseId
 
                 var urlString = '/api/question/result?access_token=' + token + '&course_id=' + course_id + '&date=' + date;
                 NetworkUtils.runAjax(urlString, 'GET', function(data){
-                    if(!ArrayUtils.isArray(data.results)){
+                    if(!ArrayUtils.isArray(data.data.results)){
                         return onFail(new Error ("No questions found for that date"))
                     }
-                    onSuccess(data.results)
+                    console.log(data.data)
+                    onSuccess(data.data)
                 }, function(err){
                     onFail(err)
                 })
@@ -226,7 +227,7 @@ var courseId
         }
 
         this.refreshQuestionResponsesTableByDate = function (date){
-            var index = 0
+            var index = 1
             const html = '<table class="table">\
                 <thead>\
                 <tr>\
@@ -249,15 +250,15 @@ var courseId
                     <td>{{numD}}</td><td>{{numE}}</td><td>{{correct}}</td><td>{{pc}}</td></tr>"
 
                     var dynamicTableRowsHTML = ''
-                    ArrayUtils.forEachCachedLength(responses, (question) => {
-                        tableRows += tableRowHTML.replaceAll('{{index}}', index)
+                    ArrayUtils.forEachCachedLength(responses.results, (question) => {
+                        dynamicTableRowsHTML += tableRowHTML.replaceAll('{{index}}', index)
                             .replaceAll('{{numA}}', question.answers[0])
                             .replaceAll('{{numB}}', question.answers[1])
                             .replaceAll('{{numC}}', question.answers[2])
                             .replaceAll('{{numD}}', question.answers[3])
                             .replaceAll('{{numE}}', question.answers[4])
                             .replaceAll('{{correct}}', question.correct)
-                            .replaceAll('{{pc}}', question.percentCorrect)
+                            .replaceAll('{{pc}}', (question.percentCorrect*100).toFixed(1) + "%")
                         index++
                     })
                     $('#questionPerformanceContainer').html(
@@ -322,12 +323,12 @@ var courseId
 
                 success: function(data){
                     var user = data.data.user
-                    Name = user.name;
+                    Name = user.email;
 
                     profpic = user.imageUrl;
                     var courseDiv = document.getElementById("userName");
 
-                    var string = '<h2 class="section-heading">Hello, '+Name+'</h2>';
+                    var string = '<h3 class="section-heading">Hello, you are currently logged in as '+Name+'.</h3>';
                     var div = document.createElement("div")
                     div.innerHTML = string;
                     courseDiv.appendChild(div);
@@ -424,6 +425,12 @@ var courseId
         });
     });
 
+    $('#courseCreateCancelButton').click( function(){
+        debugger
+        $('#modalCourseCRN').val("")
+        $('#modalCourseName').val("")
+    });
+
     $('.js-createCourse').click( function(){
         $.ajax({
             url: '/user/auth',
@@ -438,7 +445,7 @@ var courseId
                     url: urlStr,
                     method:'POST',
                     success: function(data){
-                        alert(courseName + "created!")
+                        alert(courseName + " created!")
                         window.location.reload()
                     },
                     error: function(){
@@ -448,7 +455,7 @@ var courseId
             }
         });
 
-    })
+    });
 
     $('#csv-form').submit(function(event) {
         event.preventDefault();
@@ -684,6 +691,33 @@ $('#roleButton').on('click', function(event) {
             });
         }
     });
+});
+
+$(function(){
+    $.ajax({
+        url: '/user/auth',
+        method: "GET",
+
+        success: function(data){
+            token = data.data.token;
+            debugger
+            $.ajax({
+                url: '/api/question/active?access_token=' + token + '&course_id=' + courseId,
+                type: 'GET',
+                success: function(data) {
+                    debugger
+                    var str = '<a href="/course/createquestion?courseId=' + courseId + '" class="btn btn-success" role="button">View Live Question</a>'
+                    document.getElementById('LiveQuestionDiv').innerHTML = str
+                },
+                error: function() {
+                    debugger
+                    var str = '<a href="/course/createquestion?courseId=' + courseId + '" class="btn btn-success" role="button">Create Live Question</a>'
+                    document.getElementById('LiveQuestionDiv').innerHTML = str
+                }
+            });
+        }
+    });
+        
 });
 
 function prepareClassTitle(cId) {

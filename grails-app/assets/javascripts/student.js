@@ -74,12 +74,12 @@ $(function() {
 
         success: function(data){
             var user = data.data.user
-            Name = user.name;
+            Name = user.email;
 
             profpic = user.imageUrl;
             var courseDiv = document.getElementById("userName");
 
-            var string = '<h2 class="section-heading">Hello, '+Name+'</h2>';
+            var string = '<h3 class="section-heading">Hello, you are currently logged in as '+Name+'.</h3>';
             var div = document.createElement("div")
             div.innerHTML = string;
             courseDiv.appendChild(div);
