@@ -47,7 +47,7 @@ class UserServiceSpec extends Specification {
         notInstructor.setRole(new Role(type: RoleType.STUDENT, master: RoleType.STUDENT))
         notInstructor.save()
 
-        AuthToken token2 = new AuthToken(accessToken: "inst-1000", subject: "inst-1000-subj", user: notInstructor)
+        AuthToken token2 = new AuthToken(accessToken: "inst-199199", subject: "inst-1000333233-subj", user: notInstructor)
         token2.save(flush: true)
     }
 
