@@ -5,6 +5,7 @@ import edu.oswego.cs.lakerpolling.domains.Attendee
 import edu.oswego.cs.lakerpolling.domains.AuthToken
 import edu.oswego.cs.lakerpolling.domains.Course
 import edu.oswego.cs.lakerpolling.domains.Quiz
+import edu.oswego.cs.lakerpolling.domains.QuizSubmission
 import edu.oswego.cs.lakerpolling.domains.Role
 import edu.oswego.cs.lakerpolling.domains.User
 import edu.oswego.cs.lakerpolling.util.QueryResult
@@ -235,6 +236,10 @@ class CourseService {
         try {
             def quizzes = Quiz.findAllByCourse(course)
             for ( quiz in quizzes ) {
+                def submissions = QuizSubmission.findAllByQuiz(quiz)
+                for ( submission in submissions ) {
+                    submission.delete(flush: true, failOnError: true)
+                }
                 quiz.delete(flush: true, failOnError: true)
             }
 
