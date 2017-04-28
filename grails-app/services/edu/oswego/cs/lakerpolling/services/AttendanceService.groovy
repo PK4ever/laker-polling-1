@@ -90,26 +90,31 @@ class AttendanceService {
             Set<User> students = course.students
             SimpleDateFormat formatter = new SimpleDateFormat("MMM dd yyyy")
             SimpleDateFormat fn = new SimpleDateFormat("MM-dd-yy")
+
+            def (String min, String max) = attendances.size() > 0 ? [
+                    fn.format(attendances.first().date),
+                    fn.format(attendances.last().date)
+            ] : ["", ""]
+
             response.setHeader("Content-disposition",
-                    "filename=attendance-${course.name}_${fn.format(attendances.first().date)}" +
-                            "___${fn.format(attendances.last().date)}.csv")
+                    "filename=attendance-${course.name}__${min}__${max}.csv")
             response.contentType = "text/csv"
             response.characterEncoding = "UTF-8"
 
             outputStream << "Name"
             outputStream << ",Email"
-            attendances.each {
+            attendances?.each {
                 outputStream << ",${formatter.format(it.date)}"
             }
             outputStream << "\n"
             outputStream.flush()
 
-            students.eachWithIndex { student, index ->
+            students?.eachWithIndex { student, index ->
                 outputStream << "${student.firstName} ${student.lastName}"
                 outputStream << ",${student.email}"
                 attendances.each { attendance ->
                     Attendee attendee = Attendee.findByAttendanceAndStudent(attendance, student)
-                    outputStream << ",${attendee.attended ? "v" : "x"}"
+                    outputStream << (attendee ? ",${attendee.attended ? "v" : "x"}" : "x")
                 }
                 if (index < students.size() - 1) {
                     outputStream << "\n"

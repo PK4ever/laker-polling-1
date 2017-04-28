@@ -448,10 +448,11 @@ class QuizService {
             DateFormat fn = new SimpleDateFormat("MM-dd-yy")
             NumberFormat nf = new DecimalFormat("#0.00")
 
+            def (min, max) = quizList.size() > 0 ?
+                    [fn.format(quizList.first().startDate), fn.format(quizList.last().startDate)] : ["", ""]
+
             Set<User> students = course.students
-            response.setHeader("Content-disposition",
-                    "filename=grades-${course.name}_${fn.format(quizList.first().startDate)}" +
-                            "___${fn.format(quizList.last().endDate)}.csv")
+            response.setHeader("Content-disposition", "filename=grades-${course.name}_${min}___${max}.csv")
             response.contentType = "text/csv"
             response.characterEncoding = "UTF-8"
 

@@ -1,6 +1,5 @@
 package edu.oswego.cs.lakerpolling.services
 
-import com.sun.javaws.exceptions.InvalidArgumentException
 import edu.oswego.cs.lakerpolling.domains.AuthToken
 import edu.oswego.cs.lakerpolling.domains.Course
 import edu.oswego.cs.lakerpolling.domains.Role
@@ -81,10 +80,7 @@ class PreconditionServiceSpec extends Specification {
         QueryResult result = preconditionService.notNull(nullMap,nullParameters)
 
         then:
-        thrown InvalidArgumentException
-
-
-
+        thrown IllegalArgumentException
 
     }
 
