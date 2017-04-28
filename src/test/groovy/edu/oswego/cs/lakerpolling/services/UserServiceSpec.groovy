@@ -36,28 +36,15 @@ class UserServiceSpec extends Specification {
     def prepareData() {
         /* TEST INSTRUCTOR */
         validInstructor = new User(email: "test.email@oswego.edu")
-        validInstructor.setRole(new Role(type: RoleType.INSTRUCTOR))
+        validInstructor.setRole(new Role(type: RoleType.INSTRUCTOR, master: RoleType.INSTRUCTOR))
         validInstructor.setAuthToken(new AuthToken(accessToken: "inst-1000", subject: "inst-1000-subj"))
         validInstructor.save()
 
         /* TEST STUDENTS - IN A COURSE */
         notInstructor = new User(firstName: "Jason", lastName: "Parker", email: "a@oswego.edu", imageUrl: "Some image")
-        notInstructor.setRole(new Role(type: RoleType.STUDENT))
+        notInstructor.setRole(new Role(type: RoleType.STUDENT, master: RoleType.STUDENT))
         notInstructor.setAuthToken(new AuthToken(subject: 'sub-a-1000', accessToken: 'aa-1000'))
         notInstructor.save()
-    }
-
-    void "test checkIfInstructor(): Null Instructor"() {
-        when:
-        prepareData()
-        then:
-
-        def instructor = service.checkIfInstructor(null)
-
-        if (instructor) {
-            print("User is null, no user should be found")
-            assert false
-        }
     }
 
     void "test checkIfInstructor(): Not Instructor"() {
@@ -96,18 +83,6 @@ class UserServiceSpec extends Specification {
         }
     }
 
-    void "test getUser(): Null Token"() {
-        when:
-        prepareData()
-        then:
-        def user = service.getUser(null)
-
-        if (user.message != UserService.UserErrors.INVALID_ACCESS_TOKEN) {
-            print("User should show it has a invalid access token")
-            assert false
-        }
-    }
-
     void "test getUser(): Valid Token"() {
         when:
         prepareData()
@@ -132,18 +107,6 @@ class UserServiceSpec extends Specification {
         }
     }
 
-    void "test getOrMakeByEmail(): Null email"() {
-        when:
-        prepareData()
-        then:
-        def user = service.getOrMakeByEmail(null)
-
-        if (user != null) {
-            print("User should not be created or retrieved with null email")
-            assert false
-        }
-    }
-
     void "test getOrMakeByEmail(): Valid email"() {
         when:
         prepareData()
@@ -164,19 +127,6 @@ class UserServiceSpec extends Specification {
 
         if (invalidUserAuthPair != null) {
             print("User and Auth token pair should not be created with invalid user data passed in")
-            assert false
-        }
-    }
-
-    void "test getMakeOrUpdate(): All Null EQ Classes"() {
-        when:
-        prepareData()
-        then:
-
-        def nullUserAuthPair = service.getMakeOrUpdate(null, null, null, null, null)
-
-        if (nullUserAuthPair != null) {
-            print("User and Auth token pair should not be created with null user data passed in")
             assert false
         }
     }
