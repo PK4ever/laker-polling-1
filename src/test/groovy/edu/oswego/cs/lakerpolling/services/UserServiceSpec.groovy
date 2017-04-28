@@ -37,14 +37,18 @@ class UserServiceSpec extends Specification {
         /* TEST INSTRUCTOR */
         validInstructor = new User(email: "test.email@oswego.edu")
         validInstructor.setRole(new Role(type: RoleType.INSTRUCTOR, master: RoleType.INSTRUCTOR))
-        validInstructor.setAuthToken(new AuthToken(accessToken: "inst-1000", subject: "inst-1000-subj"))
         validInstructor.save()
+
+        AuthToken token1 = new AuthToken(accessToken: "inst-1000", subject: "inst-1000-subj", user: validInstructor)
+        token1.save(flush: true)
 
         /* TEST STUDENTS - IN A COURSE */
         notInstructor = new User(firstName: "Jason", lastName: "Parker", email: "a@oswego.edu", imageUrl: "Some image")
         notInstructor.setRole(new Role(type: RoleType.STUDENT, master: RoleType.STUDENT))
-        notInstructor.setAuthToken(new AuthToken(subject: 'sub-a-1000', accessToken: 'aa-1000'))
         notInstructor.save()
+
+        AuthToken token2 = new AuthToken(accessToken: "inst-199199", subject: "inst-1000333233-subj", user: notInstructor)
+        token2.save(flush: true)
     }
 
     void "test checkIfInstructor(): Not Instructor"() {
