@@ -48,7 +48,7 @@
 </h1> <!-- Class name here -->
 <section>
     <a href="/dashboard" style="margin-left: 60px;" class="btn btn-default btn-md">
-              <span class="glyphicon glyphicon-arrow-left"></span> Back
+              <span class="glyphicon glyphicon-arrow-left"></span> Return to Dashboard
     </a>
     <h1 id="coursePageTitle" style="text-align: center;">
 
