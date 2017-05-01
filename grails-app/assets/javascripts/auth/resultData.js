@@ -1,7 +1,9 @@
-var answers = [3,4,5,7,2]
+//var answers = [3,4,5,7,2]
+var answers
 var token
 var course_Id
 var question_Id
+var correct
 
 $(document).ready(function(){
     $.ajax({
@@ -15,9 +17,9 @@ $(document).ready(function(){
             type: 'GET',
             async: false,
             success: function(stuff) {
-                console.log(stuff)
-                answers = stuff.answers;
 
+                    answers = stuff.answers,
+                    correct = stuff.correct
 
                 var chart = AmCharts.makeChart("chartdiv",
                     {
@@ -39,6 +41,7 @@ $(document).ready(function(){
                         "creditsPosition": "bottom-right",
                         "fontSize": 13,
                         "theme": "black",
+                        "showLegend": true,
                         "categoryAxis": {
                             "gridPosition": "start",
                             //"axisColor": "#FF0000",
@@ -60,14 +63,20 @@ $(document).ready(function(){
                             "titleRotation": 0
                         },
                         "trendLines": [],
-
+                        "legend": {
+                             "color": "black",
+                            "accessibleLabel": "Correct Answer",
+                            "switchable": false,
+                        },
                         "graphs": [
                             {
                                 "colorField": "color",
                                 "showBalloon": false,
                                 "fillAlphas": 10,
-                                "fillColors": "#fed136" ,
+                                "fillColors": "#008000",
+                                "lineAlpha": 0,
                                 "gapPeriod": 0,
+                                "legendColor": "#008000",
                                 "id": "AmGraph-1",
                                 //"labelText": parseFloat("[[value]]") + "",
                                 "labelText": "[[percents]]%",
@@ -88,7 +97,7 @@ $(document).ready(function(){
 
                                 "labelPosition": "top",
                                 "color":"black",
-                                "title": "graph 1",
+                                "title": "Correct Answers",
                                 "type": "column",
                                 "valueField": "column-1",
                                 "showAllValueLabels": true
@@ -121,35 +130,76 @@ $(document).ready(function(){
                         ]
                     })//End amchart
 
+//Javascript to manipulate data
                  var chartData = chart.dataProvider = [];
                     for (var i = 0; i <= 4; i++) {
-
                         if(i == 0){
-                            chartData[i] = {
-                                "category":"A",
-                                "column-1": answers[i],
-                            };
+                            if(correct[i] == false){
+                                chartData[i] = {
+                                    "category":"A",
+                                    "column-1": answers[i],
+                                    "color": "#cc0000"
+                                };
+                            }else{
+                                chartData[i] = {
+                                    "category":"A",
+                                    "column-1": answers[i],
+                                };
+                            }
+
                         }else if(i == 1){
-                            chartData[i] = {
-                                "category":"B",
-                                "column-1": answers[i],
-                            };
+                            if(correct[i] == false){
+                                chartData[i] = {
+                                    "category":"B",
+                                    "column-1": answers[i],
+                                    "color": "#cc0000"
+                                };
+                            }else{
+                                chartData[i] = {
+                                    "category":"B",
+                                    "column-1": answers[i],
+                                };
+                            }
                         }else if(i == 2){
-                            chartData[i] = {
-                                "category":"C",
-                                "column-1": answers[i],
-                            };
+                            if(correct[i] == false){
+                                chartData[i] = {
+                                    "category":"C",
+                                    "column-1": answers[i],
+                                    "color": "#cc0000"
+                                };
+                            }else{
+                                chartData[i] = {
+                                    "category":"C",
+                                    "column-1": answers[i],
+                                };
+                            }
                         }else if(i == 3){
-                            chartData[i] = {
-                                "category":"D",
-                                "column-1": answers[i],
-                            };
+                            if(correct[i] == false){
+                                chartData[i] = {
+                                    "category":"D",
+                                    "column-1": answers[i],
+                                    "color": "#cc0000"
+                                };
+                            }else{
+                                chartData[i] = {
+                                    "category":"D",
+                                    "column-1": answers[i],
+                                };
+                            }
                         }
                         else if(i == 4){
-                            chartData[i] = {
-                                "category":"E",
-                                "column-1": answers[i],
-                            };
+                            if(correct[i] == false){
+                                chartData[i] = {
+                                    "category":"E",
+                                    "column-1": answers[i],
+                                    "color": "#cc0000"
+                                };
+                            }else{
+                                chartData[i] = {
+                                    "category":"E",
+                                    "column-1": answers[i],
+                                };
+                            }
                         }
 
                     }
