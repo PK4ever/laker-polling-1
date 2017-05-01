@@ -1,4 +1,5 @@
-var answers = [3,4,5,7,2]
+//var answers = [3,4,5,7,2]
+var answers
 var token
 var course_Id
 var question_Id
@@ -17,7 +18,7 @@ $(document).ready(function(){
             async: false,
             success: function(stuff) {
 
-                //answers = stuff.answers,
+                    answers = stuff.answers,
                     correct = stuff.correct
 
                 var chart = AmCharts.makeChart("chartdiv",
