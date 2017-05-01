@@ -35,7 +35,7 @@ class QuestionController {
     }
 
     /**
-     * gets a collection of integers that represents the number of people who answered each question
+     * gets a collection of integers that represents the number of students who answered each question
      * @param access_token - the access_token of the user
      * @param question_id - the id of the question
      * @return - returns a json view
@@ -47,7 +47,8 @@ class QuestionController {
         if(require.success) {
             def result = questionService.getAnswers(token, question_id)
             if(result.success) {
-                render(view: 'getAnswer', model: [answers: result.data, questionId: question_id.toLong(), token: token])
+                def question = Question.findById(question_id.toLong())
+                render(view: 'getAnswer', model: [answers: result.data, question: question, token: token])
             } else {
                 render(view: '../failure', model: [errorCode: result.errorCode, message: result.message])
             }
