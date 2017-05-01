@@ -11,6 +11,7 @@ class QuizControllerSpec extends BootStrapSpec {
     GrailsApplication grailsApplication
 
     void "Test postQuiz(): 1 - Instructor"() {
+        given: "The Following Parameters"
         Map<String, Object> params = new HashMap<>()
         params.put("name","Quiz1")
         params.put("start_timestamp", "1508544000")
@@ -19,13 +20,11 @@ class QuizControllerSpec extends BootStrapSpec {
         params.put("course_id", VALID_COURSE.id.toString())
         params.put("access_token", VALID_INSTRUCTOR.authToken.accessToken)
 
-        given:
+        when: "PostQuiz Is Queried"
         RestResponse response = post("/api/quiz", params)
 
-        when: "PostQuiz Is Ran"
-
         then: "The Output Should Be The Following"
-        println response.json
-        "a".equalsIgnoreCase("b")
+        response.json.status == "success"
     }
+
 }
