@@ -52,7 +52,7 @@ class PreconditionService {
             return results
         }
         if(accessTokenString == null)
-            throw IllegalArgumentException
+            throw new IllegalArgumentException()
         AuthToken token = AuthToken.findByAccessToken(accessTokenString)
 
         if (token != null) {
