@@ -41,24 +41,24 @@ class CourseControllerSpec extends Specification {
 
         /* TEST INSTRUCTOR */
         inst1 = new User(email: "inst.email@oswego.edu")
-        inst1.setRole(new Role(type: RoleType.INSTRUCTOR))
+        inst1.setRole(new Role(type: RoleType.INSTRUCTOR, master: RoleType.INSTRUCTOR))
         inst1.setAuthToken(new AuthToken(accessToken: "inst-1000", subject: "inst-1000-subj"))
         inst1.save(flush: true, failOnError: true)
 
         /* TEST ADMIN */
         admin = new User(email: "admin.email@oswego.edu")
-        admin.setRole(new Role(type: RoleType.ADMIN))
+        admin.setRole(new Role(type: RoleType.ADMIN, master: RoleType.ADMIN))
         admin.setAuthToken(new AuthToken(accessToken: "admin-1000", subject: "admin-1000-subj"))
         admin.save(flush: true, failOnError: true)
 
         /* TEST STUDENTS */
         a = new User(firstName: "Jason", lastName: "Parker", email: "a@oswego.edu", imageUrl: "Some image")
-        a.setRole(new Role(type: RoleType.STUDENT))
+        a.setRole(new Role(type: RoleType.STUDENT, master: RoleType.STUDENT))
         a.setAuthToken(new AuthToken(subject: 'sub-a-1000', accessToken: 'aa-1000'))
         a.save(flush: true, failOnError: true)
 
         b = new User(firstName: "Peter", lastName: "Swanson", email: "b@oswego.edu", imageUrl: "coolest")
-        b.setRole(new Role(type: RoleType.STUDENT))
+        b.setRole(new Role(type: RoleType.STUDENT, master: RoleType.STUDENT))
         b.setAuthToken(new AuthToken(subject: 'sub-b-1000', accessToken: 'bb-1000'))
         b.save(flush: true, failOnError: true)
 
