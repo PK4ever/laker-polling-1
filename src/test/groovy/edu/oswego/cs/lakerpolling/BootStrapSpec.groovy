@@ -10,7 +10,6 @@ import grails.converters.JSON
 import grails.plugins.rest.client.RestBuilder
 import grails.test.mixin.integration.Integration
 import grails.transaction.Rollback
-import grails.web.servlet.mvc.GrailsParameterMap
 import org.apache.http.client.utils.URIBuilder
 import org.grails.orm.hibernate.HibernateDatastore
 import org.junit.Rule
@@ -144,7 +143,7 @@ class BootStrapSpec extends GebSpec {
     private static void testWithoutHeading(Object... obj) {
         List<User> users = obj.findAll { o -> o instanceof User} as List<User>
         List<Course> courses = obj.findAll { o -> o instanceof Course} as List<Course>
-        GrailsParameterMap params = obj.find { o -> o instanceof GrailsParameterMap} as GrailsParameterMap
+        Map<String, Object> params = obj.find { o -> o instanceof Map<String, Object>} as Map<String, Object>
 
         if(!users.isEmpty()) {
             println "Users:"
@@ -177,6 +176,7 @@ class BootStrapSpec extends GebSpec {
     private static void printCourse(Course course) {
         println "\tName: $course.name"
         println "\tCRN: $course.crn"
+        println "\tID: ${course.id.toString()}"
         println "\tInstructor: ${course.instructor?.email}"
         println "\t---"
     }
