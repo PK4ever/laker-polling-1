@@ -37,8 +37,9 @@ class QuizController {
     }
 
     /**
-     * Endpoint to get a list of all of the question IDs for a quiz.
+     * Endpoint to get data about quizzes for the course with the given ID
      * @param access_token - The access token of the requesting user
+     * @param course_id - The id of the course
      * @param quiz_id - the id of the quiz
      */
     def getQuizzes(String access_token, String course_id, String quiz_id) {
