@@ -5,17 +5,23 @@ import edu.oswego.cs.lakerpolling.domains.Course
 import edu.oswego.cs.lakerpolling.domains.Role
 import edu.oswego.cs.lakerpolling.domains.User
 import edu.oswego.cs.lakerpolling.util.RoleType
+import geb.spock.GebSpec
+import grails.converters.JSON
+import grails.plugins.rest.client.RestBuilder
 import grails.test.mixin.integration.Integration
 import grails.transaction.Rollback
+import grails.web.servlet.mvc.GrailsParameterMap
+import org.apache.http.client.utils.URIBuilder
 import org.grails.orm.hibernate.HibernateDatastore
 import org.junit.Rule
 import org.junit.rules.TestName
 import spock.lang.Shared
-import spock.lang.Specification
 
-@Integration
 @Rollback
-class BootStrapSpec extends Specification {
+@Integration
+class BootStrapSpec extends GebSpec {
+    @Shared RestBuilder rest
+
     @Rule TestName name = new TestName()
 
     @Shared User VALID_ADMIN, INVALID_ADMIN, VALID_INSTRUCTOR, INVALID_INSTRUCTOR, VALID_STUDENT, INVALID_STUDENT
@@ -23,6 +29,7 @@ class BootStrapSpec extends Specification {
     @Shared Course VALID_COURSE, INVALID_COURSE
 
     def setupSpec() {
+        rest = new RestBuilder()
         transactionManager = new HibernateDatastore().getTransactionManager();
         init()
         println "----------Test Environment----------"
@@ -37,6 +44,35 @@ class BootStrapSpec extends Specification {
 
     def cleanup() {
         println "----------END: ${name.getMethodName()}------------"
+    }
+
+    def get(String endpoint, Map<String, Object> params) {
+        rest.get(toUrl(endpoint, params)) { accept JSON }
+    }
+
+    def put(String endpoint, Map<String, Object> params) {
+        rest.put(toUrl(endpoint, params)) { accept JSON }
+    }
+
+    def post(String endpoint, Map<String, Object> params) {
+        rest.post(toUrl(endpoint, params)) { accept JSON }
+    }
+
+    def delete(String endpoint, Map<String, Object> params) {
+        rest.delete(toUrl(endpoint, params)) { accept JSON }
+    }
+
+    def private toUrl(String endpoint, Map<String, Object> params) {
+        URIBuilder builder =  new URIBuilder()
+                .setScheme("http")
+                .setHost("localhost")
+                .setPort(Integer.parseInt("$serverPort"))
+                .setPath(endpoint)
+
+
+        params.each {k ,v -> builder.setParameter(k, String.valueOf(v))}
+
+        builder.build().toURL().toString()
     }
 
     private void init() {
@@ -106,8 +142,9 @@ class BootStrapSpec extends Specification {
     }
 
     private static void testWithoutHeading(Object... obj) {
-        List<User> users = Arrays.stream(obj).filter {o -> o instanceof User}.collect()
-        List<Course> courses = Arrays.stream(obj).filter {o -> o instanceof Course}.collect()
+        List<User> users = obj.findAll { o -> o instanceof User} as List<User>
+        List<Course> courses = obj.findAll { o -> o instanceof Course} as List<Course>
+        GrailsParameterMap params = obj.find { o -> o instanceof GrailsParameterMap} as GrailsParameterMap
 
         if(!users.isEmpty()) {
             println "Users:"
@@ -116,6 +153,10 @@ class BootStrapSpec extends Specification {
         if(!courses.isEmpty()) {
             println "Courses:"
             courses.forEach { c -> printCourse(c)}
+        }
+        if(params != null) {
+            println "Params:"
+            params.each {k, v -> println "\tKey: $k Value: $v"}
         }
     }
 
