@@ -79,10 +79,7 @@ class PreconditionServiceSpec extends Specification {
         QueryResult result = preconditionService.notNull(nullMap,nullParameters)
 
         then:
-        thrown InvalidArgumentException
-
-
-
+        thrown IllegalArgumentException
 
     }
 

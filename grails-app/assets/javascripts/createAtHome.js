@@ -44,6 +44,24 @@ $("#create-question-btn").click(function(){
     });
 });
 
+$("#activate-quiz-btn").click(function() {
+    quiz_id = $(this).data('quiz-id');
+    debugger
+    $.ajax({
+        url: '/api/quiz/question?access_token=' + token + '&quiz_id=' + quiz_id,
+        type: 'GET',
+        success: function(data) {
+            debugger
+            list_size = data.data.questionIds.length;
+            if (list_size <= 0) {
+                alert("You have not saved any questions for this quiz! (Make sure you click Add Question after filling the form!)");
+            } else {
+                window.location.href = "/course/quizList?courseId=" + courseId;
+            }
+        }
+    });
+});
+
 function setQuizId(id){
     quiz_id = id
 }
