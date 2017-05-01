@@ -86,7 +86,7 @@ dependencies {
     testCompile "org.grails.plugins:geb"
     testCompile "org.grails:grails-plugin-testing"
     testCompile "org.grails:grails-datastore-rest-client"
-    testCompile "org.spockframework:spock-core:1.1-groovy-2.4-rc-3"
+    testCompile "org.spockframework:spock-core:1.0-groovy-2.4"
 }
 
 bootRun {
