@@ -1,11 +1,5 @@
 package edu.oswego.cs.lakerpolling.controllers
 
-import edu.oswego.cs.lakerpolling.domains.Attendance
-import edu.oswego.cs.lakerpolling.domains.Attendee
-import edu.oswego.cs.lakerpolling.domains.AuthToken
-import edu.oswego.cs.lakerpolling.domains.Course
-import edu.oswego.cs.lakerpolling.domains.Grade
-import edu.oswego.cs.lakerpolling.domains.Quiz
 import edu.oswego.cs.lakerpolling.domains.Role
 import edu.oswego.cs.lakerpolling.domains.User
 import edu.oswego.cs.lakerpolling.util.RoleType
@@ -52,9 +46,9 @@ class BootStrap {
 //        mike2.setRole(new Role(type: RoleType.STUDENT, master: RoleType.INSTRUCTOR))
 //        mike2.save(flush: true)
 //
-//        User paul = new User(firstName: "Paul", lastName: "Kwoyelo", email: "pkwoyelo@oswego.edu", imageUrl: "http://media.salon.com/2015/01/chrissy_teigen.jpg")
-//        paul.setRole(new Role(type: RoleType.INSTRUCTOR, master: RoleType.INSTRUCTOR))
-//        paul.save(flush: true)
+        User paul = new User(firstName: "Paul", lastName: "Kwoyelo", email: "pkwoyelo@oswego.edu", imageUrl: "http://media.salon.com/2015/01/chrissy_teigen.jpg")
+        paul.setRole(new Role(type: RoleType.INSTRUCTOR, master: RoleType.INSTRUCTOR))
+        paul.save(flush: true)
 //
 //        User brad = new User(firstName: "Brandon", lastName: "Lanthrip", email: "blanthri@oswego.edu", imageUrl: "http://media.salon.com/2015/01/chrissy_teigen.jpg")
 //        brad.setRole(new Role(type: RoleType.INSTRUCTOR, master: RoleType.INSTRUCTOR))
