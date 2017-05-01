@@ -3,13 +3,14 @@ import edu.oswego.cs.lakerpolling.domains.Question
 
 model {
     Collection<Integer> answers = []
-    Long questionId
+    Question question
     AuthToken token
 }
 
 json {
     status "success"
     accessToken token.accessToken
-    id questionId
+    id question.id
+    correct question.answers
     answers answers
 }

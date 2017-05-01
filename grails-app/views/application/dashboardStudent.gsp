@@ -23,7 +23,7 @@
                 <asset:image src="logo2.png" class="logo"/>
                 %{--<img src="logo.png" style="height: 60px !important; width: 120px !important; position: absolute; top: 0%">--}%
             </a>
-            %{--<a id="pageName" class="navbar-brand" style="position: relative; text-align: center; font-size: x-large; font-family: monospace;">Student</a>--}%
+            %{--<a id="pageName" class="navbar-brand" style="position: relative; text-align: center; font-size: x-large;">Student</a>--}%
         %{--<a id="pageName" class="page-scroll navbar-brand" style="position: absolute; left: 40%; font-size: xx-large">Student Dashboard</a>--}%
 
         <!--<a class="navbar-brand page-scroll" href="#page-top">LOGO HERE</a>-->

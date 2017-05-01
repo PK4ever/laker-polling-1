@@ -448,10 +448,11 @@ class QuizService {
             DateFormat fn = new SimpleDateFormat("MM-dd-yy")
             NumberFormat nf = new DecimalFormat("#0.00")
 
+            def (min, max) = quizList.size() > 0 ?
+                    [fn.format(quizList.first().startDate), fn.format(quizList.last().startDate)] : ["", ""]
+
             Set<User> students = course.students
-            response.setHeader("Content-disposition",
-                    "filename=grades-${course.name}_${fn.format(quizList.first().startDate)}" +
-                            "___${fn.format(quizList.last().endDate)}.csv")
+            response.setHeader("Content-disposition", "filename=grades-${course.name}_${min}___${max}.csv")
             response.contentType = "text/csv"
             response.characterEncoding = "UTF-8"
 
@@ -465,18 +466,21 @@ class QuizService {
             outputStream.flush()
 
             students.eachWithIndex { User student, int i ->
-                outputStream << "${student.firstName} ${student.lastName}"
+                outputStream << (student.firstName ? "${student.firstName} ${student.lastName}" : "Not Specified")
                 outputStream << ",${student.email}"
 
                 def total = 0
 
                 quizList.each { Quiz quiz ->
                     Grade grade = Grade.findByStudentAndQuiz(student, quiz)
-                    outputStream << ",${nf.format(grade.grade)}"
-                    total += grade.grade
+                    if (grade) {
+                        outputStream << ",${nf.format(grade.grade)}"
+                        total += grade.grade
+                    } else
+                        outputStream << ",N/A"
                 }
 
-                outputStream << ",${nf.format(total / quizList.size())}"
+                outputStream << (quizList.size() != 0 ? ",${nf.format(total / quizList.size())}" : "N/A")
 
                 if (i < students.size() - 1) {
                     outputStream << "\n"

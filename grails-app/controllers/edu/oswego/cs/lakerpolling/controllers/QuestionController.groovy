@@ -20,7 +20,7 @@ class QuestionController {
     def createQuestion(String access_token, String course_id, String question, String answers) {
 
         def result = preconditionService.notNull(params, ["access_token", "answers" , "course_id"])
-        def token = preconditionService.accessToken(access_token).data
+        def token = preconditionService.accessToken(access_token, result).data
 
         if(result.success) {
             def newQuestion = questionService.createQuestion(token, question, course_id, answers)
@@ -35,19 +35,20 @@ class QuestionController {
     }
 
     /**
-     * gets a collection of integers that represents the number of people who answered each question
+     * gets a collection of integers that represents the number of students who answered each question
      * @param access_token - the access_token of the user
      * @param question_id - the id of the question
      * @return - returns a json view
      */
     def getAnswers(String access_token, String question_id) {
         def require = preconditionService.notNull(params, ["access_token",  "question_id"])
-        def token = preconditionService.accessToken(access_token).data
+        def token = preconditionService.accessToken(access_token, require).data
 
         if(require.success) {
             def result = questionService.getAnswers(token, question_id)
             if(result.success) {
-                render(view: 'getAnswer', model: [answers: result.data, questionId: question_id.toLong(), token: token])
+                def question = Question.findById(question_id.toLong())
+                render(view: 'getAnswer', model: [answers: result.data, question: question, token: token])
             } else {
                 render(view: '../failure', model: [errorCode: result.errorCode, message: result.message])
             }
@@ -65,7 +66,7 @@ class QuestionController {
      */
     def answerQuestion(String access_token, String question_id, String answer) {
         def result = preconditionService.notNull(params, ["access_token", "question_id", "answer"])
-        def token = preconditionService.accessToken(access_token).data
+        def token = preconditionService.accessToken(access_token, result).data
         if(result.success) {
             if(questionService.answerQuestion(token, question_id, answer)) {
                 render(view: 'answerQuestion', model: [token: token])
@@ -86,7 +87,7 @@ class QuestionController {
      */
     def changeQuestionStatus(String access_token, String question_id, boolean flip) {
         def result = preconditionService.notNull(params, ["access_token", "question_id"])
-        def token = preconditionService.accessToken(access_token).data
+        def token = preconditionService.accessToken(access_token, result).data
 
         if(result.success) {
             if(questionService.flipQuestion(token, question_id, flip)) {
@@ -105,7 +106,7 @@ class QuestionController {
      */
     def getQuestion(String access_token, String course_id) {
         def result = preconditionService.notNull(params, ["access_token", "course_id"])
-        def token = preconditionService.accessToken(access_token).data
+        def token = preconditionService.accessToken(access_token, result).data
 
         if(result.success) {
             def question = questionService.getQuestion(token, course_id)
@@ -124,7 +125,7 @@ class QuestionController {
      */
     def getActiveQuestion(String access_token, String course_id) {
         def result = preconditionService.notNull(params, ["access_token", "course_id"])
-        def token = preconditionService.accessToken(access_token).data
+        def token = preconditionService.accessToken(access_token, result).data
 
         if(result.success) {
             def question = questionService.getActiveQuestion(token, course_id)
@@ -137,7 +138,7 @@ class QuestionController {
 
     def getQuestionResults(String access_token, String date, String course_id) {
         def require = preconditionService.notNull(params, ["access_token", "date", "course_id"])
-        def token = preconditionService.accessToken(access_token).data
+        def token = preconditionService.accessToken(access_token, require).data
 
         if(require.success) {
             def result = questionService.getResults(token, formatDateString(date), course_id)
