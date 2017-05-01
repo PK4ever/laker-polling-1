@@ -51,7 +51,7 @@
 <section>
     <div class="row">
         <button style="margin-left: 60px;class=" btn btn-default btn-md" id="backButton">
-        <span class="glyphicon glyphicon-arrow-left"></span> Back
+        <span class="glyphicon glyphicon-arrow-left"></span> Return to Quizzes
     </button>
     </div>
 

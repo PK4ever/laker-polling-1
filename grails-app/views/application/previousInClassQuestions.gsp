@@ -54,7 +54,7 @@
 <div class="container-fluid">
      <div class="col-md-2">
          <a href="/course?courseId=${session.courseId}" style="margin-left: 60px;" href="/course?courseId=${session.courseId}" class="btn btn-default btn-md">
-             <span class="glyphicon glyphicon-arrow-left"></span> Back
+             <span class="glyphicon glyphicon-arrow-left"></span> Return to Course
          </a>
      </div>
      <div class="row">

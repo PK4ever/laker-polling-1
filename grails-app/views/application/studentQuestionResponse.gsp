@@ -52,10 +52,11 @@
     <!-- /.container-fluid -->
 </nav>
 
-<a href="/dashboard" style="margin-left: 60px; href="/dashboard" class="btn btn-default btn-md">
-          <span class="glyphicon glyphicon-arrow-left"></span> Back
-</a>
+
 <section>
+    <a href="/dashboard" style="margin-left: 60px; href="/dashboard" class="btn btn-default btn-md">
+    <span class="glyphicon glyphicon-arrow-left"></span> Return to Course
+</a>
 <div class="form-group" style="text-align: center;">
     <form id="answer-form" method="post">
         <div class="btn-group" data-toggle="buttons" >
@@ -76,6 +77,7 @@
         </div>
     </form>
 </div>
+    </section>
 <!--<div class="form-group" style="text-align: center;">
     <a href="/course/viewresults?courseId=${session.courseId}" class="btn btn-info" role="button">View Results</a>
 </div>-->

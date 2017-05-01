@@ -25,7 +25,7 @@
             <a class="navbar-brand page-scroll" href="#page-top">
                 <asset:image src="logo2.png" class="logo"/>
             </a>
-            <a id="pageName" class="navbar-brand" style="position: absolute; left: 45%; font-size: x-large; font-family: monospace;">Instructor</a>
+            <a id="pageName" class="navbar-brand" style="position: absolute; left: 45%; font-size: x-large;">Instructor</a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
