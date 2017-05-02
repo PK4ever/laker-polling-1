@@ -21,7 +21,7 @@ class QuizController {
      */
     def postQuiz(String access_token, String course_id, String name, String start_timestamp, String end_timestamp) {
         def require = preconditionService.notNull(params, ["access_token", "course_id", "start_timestamp", "end_timestamp"])
-        def token = preconditionService.accessToken(access_token).data
+        def token = preconditionService.accessToken(access_token, require).data
 
         if (require.success) {
             def result = quizService.createQuiz(token, course_id, name, start_timestamp, end_timestamp)
@@ -37,13 +37,14 @@ class QuizController {
     }
 
     /**
-     * Endpoint to get a list of all of the question IDs for a quiz.
+     * Endpoint to get data about quizzes for the course with the given ID
      * @param access_token - The access token of the requesting user
+     * @param course_id - The id of the course
      * @param quiz_id - the id of the quiz
      */
     def getQuizzes(String access_token, String course_id, String quiz_id) {
         def require = preconditionService.notNull(params, ["access_token"])
-        def token = preconditionService.accessToken(access_token).data
+        def token = preconditionService.accessToken(access_token, require).data
 
         if (require.success) {
             if (quiz_id) {
@@ -76,7 +77,7 @@ class QuizController {
      */
     def deleteQuiz(String access_token, String quiz_id) {
         def require = preconditionService.notNull(params, ["access_token", "quiz_id"])
-        def token = preconditionService.accessToken(access_token).data
+        def token = preconditionService.accessToken(access_token, require).data
 
         if (require.success) {
             def result = quizService.deleteQuiz(token, quiz_id)
@@ -97,7 +98,7 @@ class QuizController {
      */
     def submitQuiz(String access_token, String quiz_id) {
         def require = preconditionService.notNull(params, ["access_token", "quiz_id"])
-        def token = preconditionService.accessToken(access_token).data
+        def token = preconditionService.accessToken(access_token, require).data
 
         if (require.success) {
             def result = quizService.submitQuiz(token, quiz_id)
@@ -118,7 +119,7 @@ class QuizController {
      */
     def getQuizSubmission(String access_token, String quiz_id) {
         def require = preconditionService.notNull(params, ["access_token", "quiz_id"])
-        def token = preconditionService.accessToken(access_token).data
+        def token = preconditionService.accessToken(access_token, require).data
 
         if (require.success) {
             def result = quizService.getQuizSubmission(token, quiz_id)
@@ -139,7 +140,7 @@ class QuizController {
      */
     def getQuizQuestions(String access_token, String quiz_id, String question_id) {
         def require = preconditionService.notNull(params, ["access_token", "quiz_id"])
-        def token = preconditionService.accessToken(access_token).data
+        def token = preconditionService.accessToken(access_token, require).data
 
         if (require.success) {
             if (question_id) {
@@ -172,7 +173,7 @@ class QuizController {
      */
     def postQuestionToQuiz(String access_token, String quiz_id, String text, String choices, String answers) {
         def require = preconditionService.notNull(params, ["access_token", "quiz_id", "text", "choices", "answers"])
-        def token = preconditionService.accessToken(access_token).data
+        def token = preconditionService.accessToken(access_token, require).data
 
         if (require.success) {
             def result = quizService.postQuestionToQuiz(token, quiz_id, text, choices, answers)
@@ -195,7 +196,7 @@ class QuizController {
      */
     def deleteQuestion(String access_token, String quiz_id, String question_id) {
         def require = preconditionService.notNull(params, ["access_token", "question_id"])
-        def token = preconditionService.accessToken(access_token).data
+        def token = preconditionService.accessToken(access_token, require).data
 
         if (require.success) {
             def result = quizService.deleteQuestion(token, quiz_id, question_id)
@@ -215,7 +216,7 @@ class QuizController {
      */
     def answerQuestion(String access_token, String quiz_id, String question_id, String answer) {
         def require = preconditionService.notNull(params, ["access_token", "quiz_id", "question_id", "answer"])
-        def token = preconditionService.accessToken(access_token).data
+        def token = preconditionService.accessToken(access_token, require).data
 
         if (require.success) {
             def result = quizService.answerQuestion(token, quiz_id, question_id, answer)
@@ -231,7 +232,7 @@ class QuizController {
 
     def getGrades(String access_token, String quiz_id, String user_id) {
         def require = preconditionService.notNull(params, ["access_token", "quiz_id"])
-        def token = preconditionService.accessToken(access_token).data
+        def token = preconditionService.accessToken(access_token, require).data
         def result
         if (require.success) {
             if (user_id != null) result = quizService.getUserGrades(token, quiz_id, user_id)

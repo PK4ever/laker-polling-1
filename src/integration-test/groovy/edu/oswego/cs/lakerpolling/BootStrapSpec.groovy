@@ -10,7 +10,6 @@ import grails.converters.JSON
 import grails.plugins.rest.client.RestBuilder
 import grails.test.mixin.integration.Integration
 import grails.transaction.Rollback
-import grails.web.servlet.mvc.GrailsParameterMap
 import org.apache.http.client.utils.URIBuilder
 import org.grails.orm.hibernate.HibernateDatastore
 import org.junit.Rule
@@ -20,8 +19,6 @@ import spock.lang.Shared
 @Rollback
 @Integration
 class BootStrapSpec extends GebSpec {
-    @Shared RestBuilder rest
-
     @Rule TestName name = new TestName()
 
     @Shared User VALID_ADMIN, INVALID_ADMIN, VALID_INSTRUCTOR, INVALID_INSTRUCTOR, VALID_STUDENT, INVALID_STUDENT
@@ -29,7 +26,6 @@ class BootStrapSpec extends GebSpec {
     @Shared Course VALID_COURSE, INVALID_COURSE
 
     def setupSpec() {
-        rest = new RestBuilder()
         transactionManager = new HibernateDatastore().getTransactionManager();
         init()
         println "----------Test Environment----------"
@@ -47,22 +43,22 @@ class BootStrapSpec extends GebSpec {
     }
 
     def get(String endpoint, Map<String, Object> params) {
-        rest.get(toUrl(endpoint, params)) { accept JSON }
+        new RestBuilder().get(toUrl(endpoint, params)) { accept JSON }
     }
 
     def put(String endpoint, Map<String, Object> params) {
-        rest.put(toUrl(endpoint, params)) { accept JSON }
+        new RestBuilder().put(toUrl(endpoint, params)) { accept JSON }
     }
 
     def post(String endpoint, Map<String, Object> params) {
-        rest.post(toUrl(endpoint, params)) { accept JSON }
+        new RestBuilder().post(toUrl(endpoint, params)) { accept JSON }
     }
 
     def delete(String endpoint, Map<String, Object> params) {
-        rest.delete(toUrl(endpoint, params)) { accept JSON }
+        new RestBuilder().delete(toUrl(endpoint, params)) { accept JSON }
     }
 
-    def private toUrl(String endpoint, Map<String, Object> params) {
+    def toUrl(String endpoint, Map<String, Object> params) {
         URIBuilder builder =  new URIBuilder()
                 .setScheme("http")
                 .setHost("localhost")
@@ -144,7 +140,7 @@ class BootStrapSpec extends GebSpec {
     private static void testWithoutHeading(Object... obj) {
         List<User> users = obj.findAll { o -> o instanceof User} as List<User>
         List<Course> courses = obj.findAll { o -> o instanceof Course} as List<Course>
-        GrailsParameterMap params = obj.find { o -> o instanceof GrailsParameterMap} as GrailsParameterMap
+        Map<String, Object> params = obj.find { o -> o instanceof Map<String, Object>} as Map<String, Object>
 
         if(!users.isEmpty()) {
             println "Users:"
@@ -177,6 +173,7 @@ class BootStrapSpec extends GebSpec {
     private static void printCourse(Course course) {
         println "\tName: $course.name"
         println "\tCRN: $course.crn"
+        println "\tID: ${course.id.toString()}"
         println "\tInstructor: ${course.instructor?.email}"
         println "\t---"
     }

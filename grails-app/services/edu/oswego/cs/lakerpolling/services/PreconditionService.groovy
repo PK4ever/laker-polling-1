@@ -19,6 +19,11 @@ class PreconditionService {
      */
     QueryResult notNull(GrailsParameterMap paramsMap, List<String> parameters, QueryResult results = new QueryResult(success: true)) {
 
+        if (!results || !paramsMap || !parameters) {
+            results = new QueryResult(success: false)
+            results.message = "Null precondition parameters"
+        }
+
         if (!results.success) {
             return results
         }
@@ -48,11 +53,16 @@ class PreconditionService {
      */
     QueryResult<AuthToken> accessToken(String accessTokenString, QueryResult<AuthToken> results = new QueryResult<>(success: true)) {
 
+        if (!results || !accessTokenString) {
+            results = new QueryResult(success: false)
+            results.message = "Null precondition parameters"
+        }
+
         if (!results.success) {
             return results
         }
-        if(accessTokenString == null)
-            throw IllegalArgumentException
+        if (accessTokenString == null)
+            throw new IllegalArgumentException()
         AuthToken token = AuthToken.findByAccessToken(accessTokenString)
 
         if (token != null) {
@@ -65,6 +75,11 @@ class PreconditionService {
     }
 
     QueryResult<Long> convertToLong(String rawValue, String paramName, QueryResult<Long> results = new QueryResult<>(success: true)) {
+        if (!results || !rawValue || !paramName) {
+            results = new QueryResult(success: false)
+            results.message = "Null precondition parameters"
+        }
+
         if (!results.success) {
             return results
         }

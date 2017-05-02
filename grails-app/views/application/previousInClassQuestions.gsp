@@ -54,18 +54,17 @@
 <div class="container-fluid">
      <div class="col-md-2">
          <a href="/course?courseId=${session.courseId}" style="margin-left: 60px;" href="/course?courseId=${session.courseId}" class="btn btn-default btn-md">
-             <span class="glyphicon glyphicon-arrow-left"></span> Back
+             <span class="glyphicon glyphicon-arrow-left"></span> Return to Course
          </a>
      </div>
      <div class="row">
          <div class="col-md-2 col-sm-4 col-xs-12">
-              <form>
+              <form> 
                   <div class="form-group"> <!-- Date input -->
                       <label class="control-label" for="date">Date</label>
-                      <input class="form-control" id="date" name="date" placeholder="YYYY-MM-DD" type="text" />
+                      <input class="form-control" id="date" name="date" placeholder="YYYY-MM-DD" type="text" readonly="readonly"/>
                   </div>
               </form>
-
          </div>
      </div>
 </div>
@@ -103,7 +102,8 @@
         format: 'yyyy-mm-dd',
         todayHighlight: true,
         autoclose: true,
-        clearBtn: true
+        clearBtn: true,
+        orientation: 'auto top'
       };
       // date_input.datepicker(options);
       date_input.datepicker(options).on('changeDate', function(event) {

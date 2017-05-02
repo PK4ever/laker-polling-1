@@ -1,7 +1,9 @@
-var answers = [3,4,5,7,2]
+//var answers = [3,4,5,7,2]
+var answers
 var token
 var course_Id
 var question_Id
+var correct
 
 $(document).ready(function(){
     $.ajax({
@@ -15,12 +17,13 @@ $(document).ready(function(){
             type: 'GET',
             async: false,
             success: function(stuff) {
-                console.log(stuff)
-                answers = stuff.answers
 
+                    answers = stuff.answers,
+                    correct = stuff.correct
 
-                AmCharts.makeChart("chartdiv",
+                var chart = AmCharts.makeChart("chartdiv",
                     {
+
                         "type": "serial",
                         "categoryField": "category",
                         "columnSpacing3D": 9,
@@ -29,7 +32,7 @@ $(document).ready(function(){
                         "marginRight": 60,
                         "marginTop": 60,
                         "plotAreaFillColors": "#000000",
-                        "startDuration": 1,
+                        "startDuration": 1.5,
                         "startEffect": "easeOutSine",
                         "backgroundColor": "transparent",
                         "borderColor": "#D4D4D4",
@@ -38,6 +41,7 @@ $(document).ready(function(){
                         "creditsPosition": "bottom-right",
                         "fontSize": 13,
                         "theme": "black",
+                        "showLegend": true,
                         "categoryAxis": {
                             "gridPosition": "start",
                             //"axisColor": "#FF0000",
@@ -59,20 +63,41 @@ $(document).ready(function(){
                             "titleRotation": 0
                         },
                         "trendLines": [],
-
+                        "legend": {
+                             "color": "black",
+                            "accessibleLabel": "Correct Answer",
+                            "switchable": false,
+                        },
                         "graphs": [
                             {
-                                "balloonText": "[[category]]:<br>[[percents]]%",
+                                "colorField": "color",
+                                "showBalloon": false,
                                 "fillAlphas": 10,
-                                "fillColors": "#fed136" ,
+                                "fillColors": "#008000",
+                                "lineAlpha": 0,
                                 "gapPeriod": 0,
+                                "legendColor": "#008000",
                                 "id": "AmGraph-1",
                                 //"labelText": parseFloat("[[value]]") + "",
                                 "labelText": "[[percents]]%",
+                                "labelFunction": function(item) {
+
+                                    var total = 0;
+                                    for (var i = 0; i < chart.dataProvider.length; i++) {
+                                        total += chart.dataProvider[i][item.graph.valueField];
+                                    }
+
+                                    var percent = Math.round(( item.values.value / total ) * 1000) / 10;
+                                    if(percent == 0 || isNaN(percent)){
+                                        return "";
+                                    }else {
+                                        return percent + "%";
+                                    }
+                                },
 
                                 "labelPosition": "top",
                                 "color":"black",
-                                "title": "graph 1",
+                                "title": "Correct Answers",
                                 "type": "column",
                                 "valueField": "column-1",
                                 "showAllValueLabels": true
@@ -101,28 +126,86 @@ $(document).ready(function(){
                             }
                         ],
                         "dataProvider": [
-                            {
-                                "category": "A",
-                                "column-1": answers[0]
-                            },
-                            {
-                                "category": "B",
-                                "column-1": answers[1]
-                            },
-                            {
-                                "category": "C",
-                                "column-1": answers[2]
-                            },
-                            {
-                                "category": "D",
-                                "column-1": answers[3]
-                            },
-                            {
-                                "category": "E",
-                                "column-1": answers[4]
-                            }
+
                         ]
                     })//End amchart
+
+//Javascript to manipulate data
+                 var chartData = chart.dataProvider = [];
+                    for (var i = 0; i <= 4; i++) {
+                        if(i == 0){
+                            if(correct[i] == false){
+                                chartData[i] = {
+                                    "category":"A",
+                                    "column-1": answers[i],
+                                    "color": "#cc0000"
+                                };
+                            }else{
+                                chartData[i] = {
+                                    "category":"A",
+                                    "column-1": answers[i],
+                                };
+                            }
+
+                        }else if(i == 1){
+                            if(correct[i] == false){
+                                chartData[i] = {
+                                    "category":"B",
+                                    "column-1": answers[i],
+                                    "color": "#cc0000"
+                                };
+                            }else{
+                                chartData[i] = {
+                                    "category":"B",
+                                    "column-1": answers[i],
+                                };
+                            }
+                        }else if(i == 2){
+                            if(correct[i] == false){
+                                chartData[i] = {
+                                    "category":"C",
+                                    "column-1": answers[i],
+                                    "color": "#cc0000"
+                                };
+                            }else{
+                                chartData[i] = {
+                                    "category":"C",
+                                    "column-1": answers[i],
+                                };
+                            }
+                        }else if(i == 3){
+                            if(correct[i] == false){
+                                chartData[i] = {
+                                    "category":"D",
+                                    "column-1": answers[i],
+                                    "color": "#cc0000"
+                                };
+                            }else{
+                                chartData[i] = {
+                                    "category":"D",
+                                    "column-1": answers[i],
+                                };
+                            }
+                        }
+                        else if(i == 4){
+                            if(correct[i] == false){
+                                chartData[i] = {
+                                    "category":"E",
+                                    "column-1": answers[i],
+                                    "color": "#cc0000"
+                                };
+                            }else{
+                                chartData[i] = {
+                                    "category":"E",
+                                    "column-1": answers[i],
+                                };
+                            }
+                        }
+
+                    }
+                    chart.validateData();
+
+
             }
         })//end answers
     }
