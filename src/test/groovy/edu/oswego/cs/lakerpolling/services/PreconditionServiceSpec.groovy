@@ -118,14 +118,9 @@ class PreconditionServiceSpec extends BootStrapSpec {
         def  result = service.notNull(nullMap,nullParameters)
 
         then:
-<<<<<<< HEAD
-        thrown Exception
+        result.message.equals("Null precondition parameters")
 
 
-
-=======
-        thrown IllegalArgumentException
->>>>>>> 3eaa7c6a4be1e422b4594ea4e8eb439bd17e3183
 
     }
 
@@ -183,7 +178,7 @@ class PreconditionServiceSpec extends BootStrapSpec {
         QueryResult result = service.accessToken(accessToeknString)
 
         then:
-        thrown Exception
+        result.message.equals("Null precondition parameters")
 
     }
 
