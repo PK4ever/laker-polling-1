@@ -1,6 +1,5 @@
 package edu.oswego.cs.lakerpolling.services
 
-import edu.oswego.cs.lakerpolling.BootStrapSpec
 import edu.oswego.cs.lakerpolling.domains.AuthToken
 import edu.oswego.cs.lakerpolling.domains.Course
 import edu.oswego.cs.lakerpolling.domains.Role
@@ -11,14 +10,14 @@ import grails.test.mixin.TestFor
 import grails.test.mixin.integration.Integration
 import grails.transaction.Rollback
 import grails.web.servlet.mvc.GrailsParameterMap
-
+import spock.lang.Specification
 
 import javax.servlet.http.HttpServletRequest
 
 @Rollback
 @Integration
 @TestFor(PreconditionService)
-class PreconditionServiceSpec extends BootStrapSpec {
+class PreconditionServiceSpec extends Specification {
 
     AuthToken bad_auth
     User admn, badmn, inst1, inst2, binst, a, b, c, d, bad
@@ -165,7 +164,6 @@ class PreconditionServiceSpec extends BootStrapSpec {
 
         then:
         result!=null
-
 
 
     }
