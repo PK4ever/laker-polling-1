@@ -8,54 +8,84 @@ import edu.oswego.cs.lakerpolling.util.RoleType
 import geb.spock.GebSpec
 import grails.converters.JSON
 import grails.plugins.rest.client.RestBuilder
+import grails.plugins.rest.client.RestResponse
 import grails.test.mixin.integration.Integration
-import grails.transaction.Rollback
 import org.apache.http.client.utils.URIBuilder
 import org.grails.orm.hibernate.HibernateDatastore
 import org.junit.Rule
 import org.junit.rules.TestName
+import org.springframework.beans.factory.annotation.Autowired
 import spock.lang.Shared
 
-@Rollback
 @Integration
 class BootStrapSpec extends GebSpec {
-    @Rule TestName name = new TestName()
+    @Autowired
+    HibernateDatastore hibernateDatastore
 
-    @Shared User VALID_ADMIN, INVALID_ADMIN, VALID_INSTRUCTOR, INVALID_INSTRUCTOR, VALID_STUDENT, INVALID_STUDENT
+    @Rule
+    TestName name = new TestName()
 
-    @Shared Course VALID_COURSE, INVALID_COURSE
+    @Shared
+    User VALID_ADMIN, INVALID_ADMIN, VALID_INSTRUCTOR, INVALID_INSTRUCTOR, VALID_STUDENT, INVALID_STUDENT
+
+    @Shared
+    Course VALID_COURSE, INVALID_COURSE
 
     def setupSpec() {
-        transactionManager = new HibernateDatastore().getTransactionManager();
         init()
         println "----------Test Environment----------"
-        testWithoutHeading(VALID_ADMIN, INVALID_ADMIN, VALID_INSTRUCTOR, INVALID_INSTRUCTOR, VALID_STUDENT, INVALID_STUDENT, VALID_COURSE, INVALID_COURSE)
+        testWithoutHeading(VALID_ADMIN,
+                INVALID_ADMIN,
+                VALID_INSTRUCTOR,
+                INVALID_INSTRUCTOR,
+                VALID_STUDENT,
+                INVALID_STUDENT,
+                VALID_COURSE,
+                INVALID_COURSE)
         println "------------------------------------"
         println "\n\n"
     }
 
     def setup() {
+        init()
         println "\n----------START: ${name.getMethodName()}----------"
     }
 
+    /**
+     * Delete all created GORM objects before the next method.
+     */
     def cleanup() {
         println "----------END: ${name.getMethodName()}------------"
+        hibernateDatastore.withNewSession {
+            VALID_COURSE.delete(flush: true, failOnError: true)
+            VALID_ADMIN.delete(flush: true, failOnError: true)
+            VALID_INSTRUCTOR.delete(flush: true, failOnError: true)
+            VALID_STUDENT.delete(flush: true, failOnError: true)
+        }
     }
 
     def get(String endpoint, Map<String, Object> params) {
-        new RestBuilder().get(toUrl(endpoint, params)) { accept JSON }
+        RestResponse res = new RestBuilder().get(toUrl(endpoint, params)) { accept JSON }
+        printRestResponse(res)
+        res
     }
 
     def put(String endpoint, Map<String, Object> params) {
-        new RestBuilder().put(toUrl(endpoint, params)) { accept JSON }
+        RestResponse res = new RestBuilder().put(toUrl(endpoint, params)) { accept JSON }
+        printRestResponse(res)
+        res
     }
 
     def post(String endpoint, Map<String, Object> params) {
-        new RestBuilder().post(toUrl(endpoint, params)) { accept JSON }
+        RestResponse res = new RestBuilder().post(toUrl(endpoint, params)) { accept JSON }
+        printRestResponse(res)
+        res
     }
 
     def delete(String endpoint, Map<String, Object> params) {
-        new RestBuilder().delete(toUrl(endpoint, params)) { accept JSON }
+        RestResponse res = new RestBuilder().delete(toUrl(endpoint, params)) { accept JSON }
+        printRestResponse(res)
+        res
     }
 
     def toUrl(String endpoint, Map<String, Object> params) {
@@ -68,9 +98,14 @@ class BootStrapSpec extends GebSpec {
 
         params.each {k ,v -> builder.setParameter(k, String.valueOf(v))}
 
-        builder.build().toURL().toString()
+        def url = builder.build().toURL().toString()
+        println "Request URL: $url"
+        url
     }
 
+    /**
+     * Set up GORM objects.
+     */
     private void init() {
         // Create Valid Admin
         Role role = new Role(type: RoleType.ADMIN, master: RoleType.ADMIN)
@@ -122,14 +157,21 @@ class BootStrapSpec extends GebSpec {
         INVALID_COURSE = new Course(name: "HIS101", crn: "10953")
     }
 
+    /**
+     * Save all created GORM objects.
+     */
     private void postInit() {
-        init()
-        VALID_ADMIN.save(flush: true, failOnError: true)
-        VALID_INSTRUCTOR.save(flush: true, failOnError: true)
-        VALID_STUDENT.save(flush: true, failOnError: true)
-        VALID_COURSE.save(flush: true, failOnError: true)
+        hibernateDatastore.withNewSession {
+            VALID_INSTRUCTOR.save(flush: true, failOnError: true)
+            VALID_ADMIN.save(flush: true, failOnError: true)
+            VALID_STUDENT.save(flush: true, failOnError: true)
+            VALID_COURSE.save(flush: true, failOnError: true)
+        }
     }
 
+    /**
+     * Method that has to be ran with every method.
+     */
     def testWith(Object... obj) {
         postInit()
         println "##########Test Specific Environment##########"
@@ -137,6 +179,9 @@ class BootStrapSpec extends GebSpec {
         println "#############################################\n"
     }
 
+    /**
+     * Print definitions for GORM objects.
+     */
     private static void testWithoutHeading(Object... obj) {
         List<User> users = obj.findAll { o -> o instanceof User} as List<User>
         List<Course> courses = obj.findAll { o -> o instanceof Course} as List<Course>
@@ -156,6 +201,13 @@ class BootStrapSpec extends GebSpec {
         }
     }
 
+    private static void printRestResponse(RestResponse res) {
+        println "Response: " + res.json
+    }
+
+    /**
+     * Print for User object.
+     */
     private static void printUser(User user) {
         println "\tFirstName: $user.firstName"
         println "\tLastName: $user.lastName"
@@ -170,6 +222,9 @@ class BootStrapSpec extends GebSpec {
         println "\t---"
     }
 
+    /**
+     * Print for Course object.
+     */
     private static void printCourse(Course course) {
         println "\tName: $course.name"
         println "\tCRN: $course.crn"
