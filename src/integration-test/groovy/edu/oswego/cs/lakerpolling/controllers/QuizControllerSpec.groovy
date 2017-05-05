@@ -524,7 +524,7 @@ class QuizControllerSpec extends BootStrapSpec {
         def response = post("/api/quiz/submission", params)
 
         then: "The Output Should Be The Following"
-        response.status == 400
+        response.status == 401
         response.json.status == "failure"
     }
 
@@ -561,11 +561,13 @@ class QuizControllerSpec extends BootStrapSpec {
     void "Test getQuizSubmission(): 3 - Valid Student"() {
         given: "The Following Parameters"
         testWith(VALID_STUDENT, VALID_QUIZ)
+
         Map<String, Object> params = new HashMap<>()
         params.put("quiz_id", VALID_QUIZ.id)
         params.put("access_token", VALID_STUDENT.authToken.accessToken)
 
         when: "GetQuizSubmission Queried"
+        post("/api/quiz/submission", params) // Submit a quiz before checking for quiz submissions
         def response = get("/api/quiz/submission", params)
 
         then: "The Output Should Be The Following"
@@ -584,7 +586,7 @@ class QuizControllerSpec extends BootStrapSpec {
         def response = get("/api/quiz/submission", params)
 
         then: "The Output Should Be The Following"
-        response.status == 400
+        response.status == 401
         response.json.status == "failure"
     }
 
