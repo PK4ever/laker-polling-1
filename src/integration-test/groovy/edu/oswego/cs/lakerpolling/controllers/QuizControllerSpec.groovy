@@ -77,7 +77,7 @@ class QuizControllerSpec extends BootStrapSpec {
 
         then: "The Output Should Be The Following"
         response.status == 401
-        // response.json.status == "failure"
+        response.json.status == "failure"
     }
 
     void "Test postQuiz(): 5 - Invalid Course"() {
@@ -269,6 +269,7 @@ class QuizControllerSpec extends BootStrapSpec {
 
         when: "GetQuiz Is Queried"
         def response = get("/api/quiz", params)
+        println response.json
         def quiz = response.json.data.quiz
 
         then: "The Output Should Be The Following"
