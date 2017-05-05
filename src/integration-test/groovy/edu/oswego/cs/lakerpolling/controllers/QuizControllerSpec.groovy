@@ -482,4 +482,64 @@ class QuizControllerSpec extends BootStrapSpec {
         response.status == 400
         response.json.status == "failure"
     }
+
+    void "Test submitQuiz(): 1 - Valid Instructor"() {
+        given: "The Following Parameters"
+        testWith(VALID_INSTRUCTOR, VALID_QUIZ)
+        Map<String, Object> params = new HashMap<>()
+        params.put("quiz_id", VALID_QUIZ.id)
+        params.put("access_token", VALID_INSTRUCTOR.authToken.accessToken)
+
+        when: "SubmitQuiz Queried"
+        def response = post("/api/quiz/submission", params)
+
+        then: "The Output Should Be The Following"
+        response.status == 200
+        response.json.status == "success"
+    }
+
+    void "Test submitQuiz(): 3 - Valid Student"() {
+        given: "The Following Parameters"
+        testWith(VALID_STUDENT, VALID_QUIZ)
+        Map<String, Object> params = new HashMap<>()
+        params.put("quiz_id", VALID_QUIZ.id)
+        params.put("access_token", VALID_STUDENT.authToken.accessToken)
+
+        when: "SubmitQuiz Queried"
+        def response = post("/api/quiz/submission", params)
+
+        then: "The Output Should Be The Following"
+        response.status == 200
+        response.json.status == "success"
+    }
+
+    void "Test submitQuiz(): 4 - Invalid Instructor"() {
+        given: "The Following Parameters"
+        testWith(INVALID_INSTRUCTOR, VALID_QUIZ)
+        Map<String, Object> params = new HashMap<>()
+        params.put("quiz_id", VALID_QUIZ.id)
+        params.put("access_token", INVALID_INSTRUCTOR.authToken.accessToken)
+
+        when: "SubmitQuiz Queried"
+        def response = post("/api/quiz/submission", params)
+
+        then: "The Output Should Be The Following"
+        response.status == 400
+        response.json.status == "failure"
+    }
+
+    void "Test submitQuiz(): 5 - Valid Instructor with Invalid Quiz"() {
+        given: "The Following Parameters"
+        testWith(VALID_INSTRUCTOR, INVALID_QUIZ)
+        Map<String, Object> params = new HashMap<>()
+        params.put("quiz_id", INVALID_QUIZ.id)
+        params.put("access_token", VALID_INSTRUCTOR.authToken.accessToken)
+
+        when: "SubmitQuiz Queried"
+        def response = post("/api/quiz/submission", params)
+
+        then: "The Output Should Be The Following"
+        response.status == 400
+        response.json.status == "failure"
+    }
 }
