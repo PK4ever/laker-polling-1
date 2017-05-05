@@ -1,8 +1,6 @@
 package edu.oswego.cs.lakerpolling.controllers
 
 import edu.oswego.cs.lakerpolling.BootStrapSpec
-import grails.plugins.rest.client.RestBuilder
-import grails.plugins.rest.client.RestResponse
 
 class QuizControllerSpec extends BootStrapSpec {
 
@@ -17,9 +15,10 @@ class QuizControllerSpec extends BootStrapSpec {
         params.put("access_token", VALID_INSTRUCTOR.authToken.accessToken)
 
         when: "PostQuiz Is Queried"
-        RestResponse response = post("/api/quiz", params)
+        def response = post("/api/quiz", params)
 
         then: "The Output Should Be The Following"
+        response.status == 200
         response.json.status == "success"
     }
 
@@ -34,10 +33,10 @@ class QuizControllerSpec extends BootStrapSpec {
         params.put("access_token", VALID_ADMIN.authToken.accessToken)
 
         when: "PostQuiz Is Queried"
-        RestResponse response = post("/api/quiz", params)
-        println response.json
+        def response = post("/api/quiz", params)
 
         then: "The Output Should Be The Following"
+        response.status == 200
         response.json.status == "success"
     }
 
@@ -52,10 +51,10 @@ class QuizControllerSpec extends BootStrapSpec {
         params.put("access_token", VALID_STUDENT.authToken.accessToken)
 
         when: "PostQuiz Is Queried"
-        RestResponse response = post("/api/quiz", params)
-        println response.json
+        def response = post("/api/quiz", params)
 
         then: "The Output Should Be The Following"
+        response.status == 403
         response.json.status == "failure"
     }
 
@@ -70,10 +69,10 @@ class QuizControllerSpec extends BootStrapSpec {
         params.put("access_token", INVALID_INSTRUCTOR.authToken.accessToken)
 
         when: "PostQuiz Is Queried"
-        RestResponse response = post("/api/quiz", params)
-        println response.json
+        def response = post("/api/quiz", params)
 
         then: "The Output Should Be The Following"
+        response.status == 401
         response.json.status == "failure"
     }
 
@@ -88,10 +87,10 @@ class QuizControllerSpec extends BootStrapSpec {
         params.put("access_token", VALID_INSTRUCTOR.authToken.accessToken)
 
         when: "PostQuiz Is Queried"
-        RestResponse response = post("/api/quiz", params)
-        println response.json
+        def response = post("/api/quiz", params)
 
         then: "The Output Should Be The Following"
+        response.status == 400
         response.json.status == "failure"
     }
 
@@ -106,10 +105,10 @@ class QuizControllerSpec extends BootStrapSpec {
         params.put("access_token", VALID_INSTRUCTOR.authToken.accessToken)
 
         when: "PostQuiz Is Queried"
-        RestResponse response = post("/api/quiz", params)
-        println response.json
+        def response = post("/api/quiz", params)
 
         then: "The Output Should Be The Following"
+        response.status == 400
         response.json.status == "failure"
     }
 }
