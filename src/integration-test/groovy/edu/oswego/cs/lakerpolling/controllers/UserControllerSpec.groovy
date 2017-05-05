@@ -21,7 +21,6 @@ class UserControllerSpec extends BootStrapSpec {
 
         then: "The Output Should Be The Following"
         response.status == 200
-        response.json.status == "success"
     }
 
     void "Test getUser(): 2 - Admin"() {
@@ -38,7 +37,6 @@ class UserControllerSpec extends BootStrapSpec {
 
         then: "The Output Should Be The Following"
         response.status == 200
-        response.json.status == "success"
     }
 
     void "Test getUser(): 3 - Student"() {
@@ -55,7 +53,6 @@ class UserControllerSpec extends BootStrapSpec {
 
         then: "The Output Should Be The Following"
         response.status == 200
-        response.json.status == "success"
     }
 
     void "Test getUser(): 4 - All invalid eq classes"() {
@@ -72,7 +69,6 @@ class UserControllerSpec extends BootStrapSpec {
 
         then: "The Output Should Be The Following"
         response.status == 400
-        response.json.status == "failure"
     }
 
     void "Test postUser(): 1 - Instructor"() {
@@ -88,7 +84,6 @@ class UserControllerSpec extends BootStrapSpec {
 
         then: "The Output Should Be The Following"
         response.status == 200
-        response.json.status == "success"
     }
 
     void "Test postUser(): 2 - Admin"() {
@@ -104,7 +99,6 @@ class UserControllerSpec extends BootStrapSpec {
 
         then: "The Output Should Be The Following"
         response.status == 200
-        response.json.status == "success"
     }
 
     void "Test postUser(): 3 - Student"() {
@@ -120,7 +114,6 @@ class UserControllerSpec extends BootStrapSpec {
 
         then: "The Output Should Be The Following"
         response.status == 200
-        response.json.status == "success"
     }
 
     void "Test postUser(): 4 - All invalid eq classes"() {
@@ -136,7 +129,6 @@ class UserControllerSpec extends BootStrapSpec {
 
         then: "The Output Should Be The Following"
         response.status == 401
-        response.json.status == "failure"
     }
 
     void "Test getUserRole(): 1 - Instructor"() {
@@ -151,7 +143,6 @@ class UserControllerSpec extends BootStrapSpec {
 
         then: "The Output Should Be The Following"
         response.status == 200
-        response.json.status == "success"
     }
 
     void "Test getUserRole(): 2 - Admin"() {
@@ -166,7 +157,6 @@ class UserControllerSpec extends BootStrapSpec {
 
         then: "The Output Should Be The Following"
         response.status == 200
-        response.json.status == "success"
     }
 
     void "Test getUserRole(): 3 - Student"() {
@@ -181,7 +171,6 @@ class UserControllerSpec extends BootStrapSpec {
 
         then: "The Output Should Be The Following"
         response.status == 200
-        response.json.status == "success"
     }
 
     void "Test getUserRole(): 4 - All invalid eq classes"() {
@@ -197,7 +186,6 @@ class UserControllerSpec extends BootStrapSpec {
 
         then: "The Output Should Be The Following"
         response.status == 401
-        response.json.status == "failure"
     }
 
     void "Test putUserRole(): 1 - Instructor"() {
@@ -214,7 +202,6 @@ class UserControllerSpec extends BootStrapSpec {
 
         then: "The Output Should Be The Following"
         response.status == 200
-        response.json.status == "success"
     }
 
     void "Test putUserRole(): 2 - Admin"() {
@@ -231,7 +218,6 @@ class UserControllerSpec extends BootStrapSpec {
 
         then: "The Output Should Be The Following"
         response.status == 200
-        response.json.status == "success"
     }
 
     void "Test putUserRole(): 3 - Student"() {
@@ -248,7 +234,6 @@ class UserControllerSpec extends BootStrapSpec {
 
         then: "The Output Should Be The Following"
         response.status == 200
-        response.json.status == "success"
     }
 
     void "Test putUserRole(): 4 - All invalid eq classes"() {
@@ -265,7 +250,6 @@ class UserControllerSpec extends BootStrapSpec {
 
         then: "The Output Should Be The Following"
         response.status == 401
-        response.json.status == "failure"
     }
 
 }
