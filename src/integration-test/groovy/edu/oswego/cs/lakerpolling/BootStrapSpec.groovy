@@ -259,6 +259,7 @@ class BootStrapSpec extends GebSpec {
         println "\tCRN: $course.crn"
         println "\tID: ${course.id.toString()}"
         println "\tInstructor: ${course.instructor?.email}"
+        println "\tStudents: ${course.students.each {it.id}}"
         println "\t---"
     }
 
