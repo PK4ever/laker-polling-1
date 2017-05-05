@@ -2,6 +2,7 @@ package edu.oswego.cs.lakerpolling
 
 import edu.oswego.cs.lakerpolling.domains.AuthToken
 import edu.oswego.cs.lakerpolling.domains.Course
+import edu.oswego.cs.lakerpolling.domains.Quiz
 import edu.oswego.cs.lakerpolling.domains.Role
 import edu.oswego.cs.lakerpolling.domains.User
 import edu.oswego.cs.lakerpolling.util.RoleType
@@ -31,6 +32,9 @@ class BootStrapSpec extends GebSpec {
     @Shared
     Course VALID_COURSE, INVALID_COURSE
 
+    @Shared
+    Quiz VALID_QUIZ, VALID_QUIZ2, INVALID_QUIZ
+
     def setupSpec() {
         init()
         println "----------Test Environment----------"
@@ -41,7 +45,10 @@ class BootStrapSpec extends GebSpec {
                 VALID_STUDENT,
                 INVALID_STUDENT,
                 VALID_COURSE,
-                INVALID_COURSE)
+                INVALID_COURSE,
+                VALID_QUIZ,
+                VALID_QUIZ2,
+                INVALID_QUIZ)
         println "------------------------------------"
         println "\n\n"
     }
@@ -55,12 +62,11 @@ class BootStrapSpec extends GebSpec {
      * Delete all created GORM objects before the next method.
      */
     def cleanup() {
-        println "----------END: ${name.getMethodName()}------------"
+        println "------------END: ${name.getMethodName()}----------"
         hibernateDatastore.withNewSession {
-            VALID_COURSE.delete(flush: true, failOnError: true)
-            VALID_ADMIN.delete(flush: true, failOnError: true)
-            VALID_INSTRUCTOR.delete(flush: true, failOnError: true)
-            VALID_STUDENT.delete(flush: true, failOnError: true)
+            Quiz.list().each {it.delete(flush: true, failOnError: true)}
+            Course.list().each {it.delete(flush: true, failOnError: true)}
+            User.list().each {it.delete(flush: true, failOnError: true)}
         }
     }
 
@@ -120,6 +126,7 @@ class BootStrapSpec extends GebSpec {
         INVALID_ADMIN = new User(firstName: "Milda", lastName: "Han", email: "mhan@oswego.edu", imageUrl: "#")
         INVALID_ADMIN.setRole(role)
         INVALID_ADMIN.setAuthToken(authToken)
+        INVALID_ADMIN.id = Integer.MAX_VALUE
 
         // Create Valid Instructor
         role = new Role(type: RoleType.INSTRUCTOR, master: RoleType.INSTRUCTOR)
@@ -134,6 +141,7 @@ class BootStrapSpec extends GebSpec {
         INVALID_INSTRUCTOR = new User(firstName: "Fausto", lastName: "Ottinger", email: "fottinger@oswego.edu", imageUrl: "#")
         INVALID_INSTRUCTOR.setRole(role)
         INVALID_INSTRUCTOR.setAuthToken(authToken)
+        INVALID_INSTRUCTOR.id = Integer.MAX_VALUE - 1
 
         // Create Valid Student
         role = new Role(type: RoleType.STUDENT, master: RoleType.STUDENT)
@@ -148,6 +156,7 @@ class BootStrapSpec extends GebSpec {
         INVALID_STUDENT = new User(firstName: "Elmer", lastName: "Bice", email: "ebice@oswego.edu", imageUrl: "#")
         INVALID_STUDENT.setRole(role)
         INVALID_STUDENT.setAuthToken(authToken)
+        INVALID_STUDENT.id = Integer.MAX_VALUE - 2
 
         // Create Valid Course
         VALID_COURSE = new Course(name: "CSC480", crn: "11098")
@@ -155,6 +164,19 @@ class BootStrapSpec extends GebSpec {
 
         // Create Invalid Course
         INVALID_COURSE = new Course(name: "HIS101", crn: "10953")
+        INVALID_COURSE.id = Integer.MAX_VALUE
+
+        // Create Valid Quiz
+        VALID_QUIZ = new Quiz(name: "Valid_Quiz", startDate: new Date(1489550400000), endDate: new Date(1492920000000))
+        VALID_QUIZ.setCourse(VALID_COURSE)
+
+        VALID_QUIZ2 = new Quiz(name: "Valid_Quiz2", startDate: new Date(1489550400000), endDate: new Date(1492920000000))
+        VALID_QUIZ2.setCourse(VALID_COURSE)
+
+        // Create Invalid Quiz
+        INVALID_QUIZ = new Quiz(name: "Invalid_Quiz", startDate: new Date(1492920000000), endDate: new Date(1489550400000))
+        INVALID_QUIZ.setCourse(INVALID_COURSE)
+        INVALID_QUIZ.id = Integer.MAX_VALUE
     }
 
     /**
@@ -166,6 +188,8 @@ class BootStrapSpec extends GebSpec {
             VALID_ADMIN.save(flush: true, failOnError: true)
             VALID_STUDENT.save(flush: true, failOnError: true)
             VALID_COURSE.save(flush: true, failOnError: true)
+            VALID_QUIZ.save(flush: true, failOnError: true)
+            VALID_QUIZ2.save(flush: true, failOnError: true)
         }
     }
 
@@ -184,16 +208,21 @@ class BootStrapSpec extends GebSpec {
      */
     private static void testWithoutHeading(Object... obj) {
         List<User> users = obj.findAll { o -> o instanceof User} as List<User>
+        List<Quiz> quizzes = obj.findAll { o -> o instanceof Quiz} as List<Quiz>
         List<Course> courses = obj.findAll { o -> o instanceof Course} as List<Course>
         Map<String, Object> params = obj.find { o -> o instanceof Map<String, Object>} as Map<String, Object>
 
         if(!users.isEmpty()) {
             println "Users:"
-            users.forEach { u -> printUser(u)}
+            users.each { printUser(it) }
         }
         if(!courses.isEmpty()) {
             println "Courses:"
-            courses.forEach { c -> printCourse(c)}
+            courses.each { printCourse(it) }
+        }
+        if(!quizzes.isEmpty()) {
+            println "Quizzes:"
+            quizzes.each { printQuiz(it) }
         }
         if(params != null) {
             println "Params:"
@@ -230,6 +259,15 @@ class BootStrapSpec extends GebSpec {
         println "\tCRN: $course.crn"
         println "\tID: ${course.id.toString()}"
         println "\tInstructor: ${course.instructor?.email}"
+        println "\t---"
+    }
+
+    private static void printQuiz(Quiz quiz) {
+        println "\tName: $quiz.name"
+        println "\tID: $quiz.id"
+        println "\tStart: $quiz.startDate"
+        println "\tEnd: $quiz.endDate"
+        println "\tCourse ID: $quiz.course.id"
         println "\t---"
     }
 }
