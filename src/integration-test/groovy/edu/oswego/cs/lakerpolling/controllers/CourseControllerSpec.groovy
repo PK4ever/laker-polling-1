@@ -1,10 +1,6 @@
 package edu.oswego.cs.lakerpolling.controllers
 
 import edu.oswego.cs.lakerpolling.BootStrapSpec
-import edu.oswego.cs.lakerpolling.domains.Quiz
-import edu.oswego.cs.lakerpolling.domains.User
-
-import java.text.SimpleDateFormat
 
 class CourseControllerSpec extends BootStrapSpec {
 
