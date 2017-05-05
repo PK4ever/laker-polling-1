@@ -1,6 +1,7 @@
 package edu.oswego.cs.lakerpolling.controllers
 
 import edu.oswego.cs.lakerpolling.BootStrapSpec
+import edu.oswego.cs.lakerpolling.domains.Quiz
 import edu.oswego.cs.lakerpolling.domains.User
 
 import java.text.SimpleDateFormat
@@ -385,5 +386,100 @@ class QuizControllerSpec extends BootStrapSpec {
         response.json.status == "failure"
     }
 
+    void "Test deleteQuiz(): 1 - Valid Instructor"() {
+        given: "The Following Parameters"
+        testWith(VALID_INSTRUCTOR, VALID_QUIZ, VALID_COURSE)
+        Map<String, Object> params = new HashMap<>()
+        params.put("quiz_id",  VALID_QUIZ.id)
+        params.put("access_token", VALID_INSTRUCTOR.authToken.accessToken)
 
+        when: "GetQuiz Is Queried"
+        def response = delete("/api/quiz", params)
+
+        then: "The Output Should Be The Following"
+        response.status == 200
+        response.json.status == "success"
+        Quiz.withTransaction { Quiz.get(VALID_QUIZ.id) } == null
+    }
+
+    void "Test deleteQuiz(): 2 - Valid Admin"() {
+        given: "The Following Parameters"
+        testWith(VALID_ADMIN, VALID_QUIZ, VALID_COURSE)
+        Map<String, Object> params = new HashMap<>()
+        params.put("quiz_id",  VALID_QUIZ.id)
+        params.put("access_token", VALID_ADMIN.authToken.accessToken)
+
+        when: "GetQuiz Is Queried"
+        def response = delete("/api/quiz", params)
+
+        then: "The Output Should Be The Following"
+        response.status == 200
+        response.json.status == "success"
+        Quiz.withTransaction { Quiz.get(VALID_QUIZ.id) } == null
+    }
+
+    void "Test deleteQuiz(): 3 - Valid Student"() {
+        given: "The Following Parameters"
+        testWith(VALID_STUDENT, VALID_QUIZ, VALID_COURSE)
+        Map<String, Object> params = new HashMap<>()
+        params.put("quiz_id",  VALID_QUIZ.id)
+        params.put("access_token", VALID_STUDENT.authToken.accessToken)
+
+        when: "GetQuiz Is Queried"
+        def response = delete("/api/quiz", params)
+
+        then: "The Output Should Be The Following"
+        response.status == 403
+        response.json.status == "failure"
+    }
+
+    void "Test deleteQuiz(): 4 - Invalid Instructor"() {
+        given: "The Following Parameters"
+        testWith(INVALID_INSTRUCTOR, VALID_QUIZ, VALID_COURSE)
+        Map<String, Object> params = new HashMap<>()
+        params.put("quiz_id",  VALID_QUIZ.id)
+        params.put("access_token", INVALID_INSTRUCTOR.authToken.accessToken)
+
+        when: "GetQuiz Is Queried"
+        def response = delete("/api/quiz", params)
+
+        then: "The Output Should Be The Following"
+        response.status == 401
+        response.json.status == "failure"
+    }
+
+    void "Test deleteQuiz(): 5 - Valid Instructor Not In Course"() {
+        given: "The Following Parameters"
+        User.withTransaction {
+            INVALID_INSTRUCTOR.id = null
+            INVALID_INSTRUCTOR.save(flush: true, failOnError: true)
+            VALID_COURSE.setInstructor(INVALID_INSTRUCTOR)
+        }
+        testWith(VALID_INSTRUCTOR, VALID_QUIZ, VALID_COURSE)
+        Map<String, Object> params = new HashMap<>()
+        params.put("quiz_id",  VALID_QUIZ.id)
+        params.put("access_token", VALID_INSTRUCTOR.authToken.accessToken)
+
+        when: "GetQuiz Is Queried"
+        def response = delete("/api/quiz", params)
+
+        then: "The Output Should Be The Following"
+        response.status == 403
+        response.json.status == "failure"
+    }
+
+    void "Test deleteQuiz(): 3 - Invalid Quiz"() {
+        given: "The Following Parameters"
+        testWith(VALID_INSTRUCTOR, INVALID_QUIZ)
+        Map<String, Object> params = new HashMap<>()
+        params.put("quiz_id",  INVALID_QUIZ.id)
+        params.put("access_token", VALID_INSTRUCTOR.authToken.accessToken)
+
+        when: "GetQuiz Is Queried"
+        def response = delete("/api/quiz", params)
+
+        then: "The Output Should Be The Following"
+        response.status == 400
+        response.json.status == "failure"
+    }
 }
