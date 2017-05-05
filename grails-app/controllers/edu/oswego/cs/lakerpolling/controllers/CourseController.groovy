@@ -26,7 +26,7 @@ class CourseController {
      */
     def courseGet(String access_token, String course_id) {
         def require = preconditionService.notNull(params, ["access_token"])
-        def token = preconditionService.accessToken(access_token, require).data
+        def token = preconditionService.accessToken(access_token).data
 
         if (require.success) {
             QueryResult<List<Course>> result = course_id == null ?
@@ -80,7 +80,7 @@ class CourseController {
      */
     def deleteCourse(String access_token, String course_id) {
         def require = preconditionService.notNull(params, ["access_token", "course_id"])
-        def token = preconditionService.accessToken(access_token, require).data
+        def token = preconditionService.accessToken(access_token).data
 
         if (require.success) {
             def result = courseService.deleteCourse(token, course_id)
@@ -102,7 +102,7 @@ class CourseController {
 
     def getCourseStudent(String access_token, String course_id) {
         def require = preconditionService.notNull(params, ["access_token", "course_id"])
-        def token = preconditionService.accessToken(access_token, require).data
+        def token = preconditionService.accessToken(access_token).data
 
         if (require.success) {
             def results = courseService.getAllStudents(token, course_id)
@@ -127,7 +127,7 @@ class CourseController {
      */
     def postCourseStudent(String access_token, String course_id, String email) {
         def require = preconditionService.notNull(params, ["access_token", "course_id"])
-        def token = preconditionService.accessToken(access_token, require).data
+        def token = preconditionService.accessToken(access_token).data
 
         if (require.success) {
             List<String> emails = new ArrayList<>()
@@ -162,7 +162,7 @@ class CourseController {
 
     def deleteCourseStudent(String access_token, String course_id, String user_id) {
         def require = preconditionService.notNull(params, ["access_token", "course_id", "user_id"])
-        def token = preconditionService.accessToken(access_token, require).data
+        def token = preconditionService.accessToken(access_token).data
 
         if (require.success) {
             if (course_id.isLong()) {
@@ -195,7 +195,7 @@ class CourseController {
      */
     def getAttendance(String access_token, String course_id, String student_id, String date, String start_date, String end_date) {
         def require = preconditionService.notNull(params, ["access_token", "course_id"])
-        def token = preconditionService.accessToken(access_token, require).data
+        def token = preconditionService.accessToken(access_token).data
 
         if (require.success) {
             // dateRange spans either from start_date to end_date or just includes date

@@ -940,7 +940,6 @@ class CourseControllerSpec extends Specification {
 
     	when:
     	prepareData()
-    	params.access_token = "inst-1000"
     	params.course_id = Long.toString(course1.id)
     	params.date =  "04-06-17"
     	controller.getAttendance("inst-1000", Long.toString(course1.id), Long.toString(a.id)
