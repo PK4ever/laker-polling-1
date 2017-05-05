@@ -167,14 +167,14 @@ class BootStrapSpec extends GebSpec {
         INVALID_COURSE.id = Integer.MAX_VALUE
 
         // Create Valid Quiz
-        VALID_QUIZ = new Quiz(name: "Valid_Quiz", startDate: new Date(1489550400000), endDate: new Date(1492920000000))
+        VALID_QUIZ = new Quiz(name: "Valid_Quiz", startDate: new Date(1489550400000), endDate: new Date(1577854800000))
         VALID_QUIZ.setCourse(VALID_COURSE)
 
-        VALID_QUIZ2 = new Quiz(name: "Valid_Quiz2", startDate: new Date(1489550400000), endDate: new Date(1492920000000))
+        VALID_QUIZ2 = new Quiz(name: "Valid_Quiz2", startDate: new Date(1489550400000), endDate: new Date(1577854800000))
         VALID_QUIZ2.setCourse(VALID_COURSE)
 
         // Create Invalid Quiz
-        INVALID_QUIZ = new Quiz(name: "Invalid_Quiz", startDate: new Date(1492920000000), endDate: new Date(1489550400000))
+        INVALID_QUIZ = new Quiz(name: "Invalid_Quiz", startDate: new Date(1577854800000), endDate: new Date(1489550400000))
         INVALID_QUIZ.setCourse(INVALID_COURSE)
         INVALID_QUIZ.id = Integer.MAX_VALUE
     }
