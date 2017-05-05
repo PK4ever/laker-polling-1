@@ -130,7 +130,7 @@ PreconditionService service
         testWith([validLong:validLong,validParam: validParam])
 
         when:
-        QueryResult result = AuthToken.withTransaction {service.convertToLong(validLong,validParam)}
+        QueryResult result = service.convertToLong(validLong,validParam)
 
         then:
         result.success
@@ -146,7 +146,7 @@ PreconditionService service
         testWith([invalidLong:invalidLong,invalidParam:invalidParam])
 
         when:
-        QueryResult result = AuthToken.withTransaction {service.convertToLong(invalidLong,invalidParam)}
+        QueryResult result = service.convertToLong(invalidLong,invalidParam)
 
         then:
         !result.success
@@ -160,7 +160,7 @@ PreconditionService service
         testWith([invalidLong:invalidLong,validParam:validParam])
 
         when:
-        QueryResult result = AuthToken.withTransaction {service.convertToLong(invalidLong,validParam)}
+        QueryResult result = service.convertToLong(invalidLong,validParam)
 
         then:
         !result.success
@@ -174,7 +174,7 @@ PreconditionService service
         testWith([invalidLong:invalidLong,validParam:validParam])
 
         when:
-        QueryResult result = AuthToken.withTransaction {service.convertToLong(invalidLong,validParam)}
+        QueryResult result = service.convertToLong(invalidLong,validParam)
 
         then:
         !result.success
@@ -188,7 +188,7 @@ PreconditionService service
         testWith([validLong:validLong,invalidParam:invalidParam])
 
         when:
-        QueryResult result = AuthToken.withTransaction {service.convertToLong(validLong,invalidParam)}
+        QueryResult result = service.convertToLong(validLong,invalidParam)
 
         then:
         !result.success
