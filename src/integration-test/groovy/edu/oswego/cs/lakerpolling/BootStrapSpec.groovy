@@ -3,6 +3,7 @@ package edu.oswego.cs.lakerpolling
 import edu.oswego.cs.lakerpolling.domains.AuthToken
 import edu.oswego.cs.lakerpolling.domains.Course
 import edu.oswego.cs.lakerpolling.domains.Quiz
+import edu.oswego.cs.lakerpolling.domains.QuizSubmission
 import edu.oswego.cs.lakerpolling.domains.Role
 import edu.oswego.cs.lakerpolling.domains.User
 import edu.oswego.cs.lakerpolling.util.RoleType
@@ -64,6 +65,7 @@ class BootStrapSpec extends GebSpec {
     def cleanup() {
         println "------------END: ${name.getMethodName()}----------"
         hibernateDatastore.withNewSession {
+            QuizSubmission.list().each {it.delete(flush: true, failOnError: true)}
             Quiz.list().each {it.delete(flush: true, failOnError: true)}
             Course.list().each {it.delete(flush: true, failOnError: true)}
             User.list().each {it.delete(flush: true, failOnError: true)}
@@ -161,6 +163,7 @@ class BootStrapSpec extends GebSpec {
         // Create Valid Course
         VALID_COURSE = new Course(name: "CSC480", crn: "11098")
         VALID_COURSE.setInstructor(VALID_INSTRUCTOR)
+//        VALID_COURSE.addToStudents(VALID_STUDENT)
 
         // Create Invalid Course
         INVALID_COURSE = new Course(name: "HIS101", crn: "10953")
@@ -187,6 +190,7 @@ class BootStrapSpec extends GebSpec {
             VALID_INSTRUCTOR.save(flush: true, failOnError: true)
             VALID_ADMIN.save(flush: true, failOnError: true)
             VALID_STUDENT.save(flush: true, failOnError: true)
+            VALID_COURSE.addToStudents(VALID_STUDENT)
             VALID_COURSE.save(flush: true, failOnError: true)
             VALID_QUIZ.save(flush: true, failOnError: true)
             VALID_QUIZ2.save(flush: true, failOnError: true)

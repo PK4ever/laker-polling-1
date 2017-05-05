@@ -525,7 +525,7 @@ class QuizControllerSpec extends BootStrapSpec {
         def response = post("/api/quiz/submission", params)
 
         then: "The Output Should Be The Following"
-        response.status == 400
+        response.status == 401
         response.json.status == "failure"
     }
 
@@ -538,6 +538,68 @@ class QuizControllerSpec extends BootStrapSpec {
 
         when: "SubmitQuiz Queried"
         def response = post("/api/quiz/submission", params)
+
+        then: "The Output Should Be The Following"
+        response.status == 400
+        response.json.status == "failure"
+    }
+
+    void "Test getQuizSubmission(): 1 - Valid Instructor"() {
+        given: "The Following Parameters"
+        testWith(VALID_INSTRUCTOR, VALID_QUIZ)
+        Map<String, Object> params = new HashMap<>()
+        params.put("quiz_id", VALID_QUIZ.id)
+        params.put("access_token", VALID_INSTRUCTOR.authToken.accessToken)
+
+        when: "GetQuizSubmission Queried"
+        def response = get("/api/quiz/submission", params)
+
+        then: "The Output Should Be The Following"
+        response.status == 200
+        response.json.status == "success"
+    }
+
+    void "Test getQuizSubmission(): 3 - Valid Student"() {
+        given: "The Following Parameters"
+        testWith(VALID_STUDENT, VALID_QUIZ)
+
+        Map<String, Object> params = new HashMap<>()
+        params.put("quiz_id", VALID_QUIZ.id)
+        params.put("access_token", VALID_STUDENT.authToken.accessToken)
+
+        when: "GetQuizSubmission Queried"
+        post("/api/quiz/submission", params) // Submit a quiz before checking for quiz submissions
+        def response = get("/api/quiz/submission", params)
+
+        then: "The Output Should Be The Following"
+        response.status == 200
+        response.json.status == "success"
+    }
+
+    void "Test getQuizSubmission(): 4 - Invalid Instructor"() {
+        given: "The Following Parameters"
+        testWith(INVALID_INSTRUCTOR, VALID_QUIZ)
+        Map<String, Object> params = new HashMap<>()
+        params.put("quiz_id", VALID_QUIZ.id)
+        params.put("access_token", INVALID_INSTRUCTOR.authToken.accessToken)
+
+        when: "GetQuizSubmission Queried"
+        def response = get("/api/quiz/submission", params)
+
+        then: "The Output Should Be The Following"
+        response.status == 401
+        response.json.status == "failure"
+    }
+
+    void "Test getQuizSubmission(): 5 - Valid Instructor with Invalid Quiz"() {
+        given: "The Following Parameters"
+        testWith(VALID_INSTRUCTOR, INVALID_QUIZ)
+        Map<String, Object> params = new HashMap<>()
+        params.put("quiz_id", INVALID_QUIZ.id)
+        params.put("access_token", VALID_INSTRUCTOR.authToken.accessToken)
+
+        when: "GetQuizSubmission Queried"
+        def response = get("/api/quiz/submission", params)
 
         then: "The Output Should Be The Following"
         response.status == 400
