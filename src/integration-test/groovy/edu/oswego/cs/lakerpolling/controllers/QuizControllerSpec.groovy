@@ -6,12 +6,12 @@ class QuizControllerSpec extends BootStrapSpec {
 
     void "Test postQuiz(): 1 - Valid Instructor"() {
         given: "The Following Parameters"
+        testWith(VALID_INSTRUCTOR, VALID_COURSE, VALID_QUIZ)
         Map<String, Object> params = new HashMap<>()
-        params.put("name","Quiz1")
-        params.put("start_timestamp", "1508544000")
-        params.put("end_timestamp", "1508630400")
-        testWith(VALID_INSTRUCTOR, VALID_COURSE, params)
-        params.put("course_id", VALID_COURSE.id.toString())
+        params.put("name",VALID_QUIZ.name)
+        params.put("start_timestamp", VALID_QUIZ.startDate.time)
+        params.put("end_timestamp", VALID_QUIZ.endDate.time)
+        params.put("course_id", VALID_COURSE.id)
         params.put("access_token", VALID_INSTRUCTOR.authToken.accessToken)
 
         when: "PostQuiz Is Queried"
@@ -24,12 +24,12 @@ class QuizControllerSpec extends BootStrapSpec {
 
     void "Test postQuiz(): 2 - Valid Admin"() {
         given: "The Following Parameters"
+        testWith(VALID_ADMIN, VALID_COURSE, VALID_QUIZ)
         Map<String, Object> params = new HashMap<>()
-        params.put("name","Quiz1")
-        params.put("start_timestamp", "1508544000")
-        params.put("end_timestamp", "1508630400")
-        testWith(VALID_ADMIN, VALID_COURSE, params)
-        params.put("course_id", VALID_COURSE.id.toString())
+        params.put("name",VALID_QUIZ.name)
+        params.put("start_timestamp", VALID_QUIZ.startDate.time)
+        params.put("end_timestamp", VALID_QUIZ.endDate.time)
+        params.put("course_id", VALID_COURSE.id)
         params.put("access_token", VALID_ADMIN.authToken.accessToken)
 
         when: "PostQuiz Is Queried"
@@ -42,12 +42,12 @@ class QuizControllerSpec extends BootStrapSpec {
 
     void "Test postQuiz(): 3 - Valid Student"() {
         given: "The Following Parameters"
+        testWith(VALID_STUDENT, VALID_COURSE, VALID_QUIZ)
         Map<String, Object> params = new HashMap<>()
-        params.put("name","Quiz1")
-        params.put("start_timestamp", "1508544000")
-        params.put("end_timestamp", "1508630400")
-        testWith(VALID_STUDENT, VALID_COURSE, params)
-        params.put("course_id", VALID_COURSE.id.toString())
+        params.put("name",VALID_QUIZ.name)
+        params.put("start_timestamp", VALID_QUIZ.startDate.time)
+        params.put("end_timestamp", VALID_QUIZ.endDate.time)
+        params.put("course_id", VALID_COURSE.id)
         params.put("access_token", VALID_STUDENT.authToken.accessToken)
 
         when: "PostQuiz Is Queried"
@@ -60,12 +60,12 @@ class QuizControllerSpec extends BootStrapSpec {
 
     void "Test postQuiz(): 4 - Invalid Instructor"() {
         given: "The Following Parameters"
+        testWith(INVALID_INSTRUCTOR, VALID_COURSE, VALID_QUIZ)
         Map<String, Object> params = new HashMap<>()
-        params.put("name","Quiz1")
-        params.put("start_timestamp", "1508544000")
-        params.put("end_timestamp", "1508630400")
-        testWith(INVALID_INSTRUCTOR, VALID_COURSE, params)
-        params.put("course_id", VALID_COURSE.id.toString())
+        params.put("name",VALID_QUIZ.name)
+        params.put("start_timestamp", VALID_QUIZ.startDate.time)
+        params.put("end_timestamp", VALID_QUIZ.endDate.time)
+        params.put("course_id", VALID_COURSE.id)
         params.put("access_token", INVALID_INSTRUCTOR.authToken.accessToken)
 
         when: "PostQuiz Is Queried"
@@ -78,12 +78,12 @@ class QuizControllerSpec extends BootStrapSpec {
 
     void "Test postQuiz(): 5 - Invalid Course"() {
         given: "The Following Parameters"
+        testWith(VALID_INSTRUCTOR, INVALID_COURSE, VALID_QUIZ)
         Map<String, Object> params = new HashMap<>()
-        params.put("name","Quiz1")
-        params.put("start_timestamp", "1508544000")
-        params.put("end_timestamp", "1508630400")
-        testWith(VALID_INSTRUCTOR, INVALID_COURSE, params)
-        params.put("course_id", "45")
+        params.put("name",VALID_QUIZ.name)
+        params.put("start_timestamp", VALID_QUIZ.startDate.time)
+        params.put("end_timestamp", VALID_QUIZ.endDate.time)
+        params.put("course_id", INVALID_COURSE.id)
         params.put("access_token", VALID_INSTRUCTOR.authToken.accessToken)
 
         when: "PostQuiz Is Queried"
@@ -96,12 +96,30 @@ class QuizControllerSpec extends BootStrapSpec {
 
     void "Test postQuiz(): 6 - Invalid Start End Time"() {
         given: "The Following Parameters"
+        testWith(VALID_INSTRUCTOR, VALID_COURSE, INVALID_QUIZ)
         Map<String, Object> params = new HashMap<>()
-        params.put("name","Quiz1")
-        params.put("end_timestamp", "1508544000")
-        params.put("start_timestamp", "1508630400")
-        testWith(VALID_INSTRUCTOR, VALID_COURSE, params)
-        params.put("course_id", VALID_COURSE.id.toString())
+        params.put("name",INVALID_QUIZ.name)
+        params.put("start_timestamp", INVALID_QUIZ.startDate.time)
+        params.put("end_timestamp", INVALID_QUIZ.endDate.time)
+        params.put("course_id", VALID_COURSE.id)
+        params.put("access_token", VALID_INSTRUCTOR.authToken.accessToken)
+
+        when: "PostQuiz Is Queried"
+        def response = post("/api/quiz", params)
+
+        then: "The Output Should Be The Following"
+        response.status == 400
+        response.json.status == "failure"
+    }
+
+    void "Test getQuizzes(): 6 - Invalid Start End Time"() {
+        given: "The Following Parameters"
+        testWith(VALID_INSTRUCTOR, VALID_COURSE, INVALID_QUIZ)
+        Map<String, Object> params = new HashMap<>()
+        params.put("name",INVALID_QUIZ.name)
+        params.put("start_timestamp", INVALID_QUIZ.startDate.time)
+        params.put("end_timestamp", INVALID_QUIZ.endDate.time)
+        params.put("course_id", VALID_COURSE.id)
         params.put("access_token", VALID_INSTRUCTOR.authToken.accessToken)
 
         when: "PostQuiz Is Queried"
