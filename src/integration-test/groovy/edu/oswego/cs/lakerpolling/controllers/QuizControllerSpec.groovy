@@ -4,7 +4,7 @@ import edu.oswego.cs.lakerpolling.BootStrapSpec
 
 class QuizControllerSpec extends BootStrapSpec {
 
-    void "Test postQuiz(): 1 - Instructor"() {
+    void "Test postQuiz(): 1 - Valid Instructor"() {
         given: "The Following Parameters"
         Map<String, Object> params = new HashMap<>()
         params.put("name","Quiz1")
@@ -22,7 +22,7 @@ class QuizControllerSpec extends BootStrapSpec {
         response.json.status == "success"
     }
 
-    void "Test postQuiz(): 2 - Admin"() {
+    void "Test postQuiz(): 2 - Valid Admin"() {
         given: "The Following Parameters"
         Map<String, Object> params = new HashMap<>()
         params.put("name","Quiz1")
@@ -40,7 +40,7 @@ class QuizControllerSpec extends BootStrapSpec {
         response.json.status == "success"
     }
 
-    void "Test postQuiz(): 3 - Student"() {
+    void "Test postQuiz(): 3 - Valid Student"() {
         given: "The Following Parameters"
         Map<String, Object> params = new HashMap<>()
         params.put("name","Quiz1")
