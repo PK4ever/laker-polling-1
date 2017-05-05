@@ -550,10 +550,10 @@ class QuizControllerSpec extends BootStrapSpec {
         params.put("quiz_id", VALID_QUIZ.id)
         params.put("access_token", VALID_INSTRUCTOR.authToken.accessToken)
 
-        when: "SubmitQuiz Queried"
+        when: "GetQuizSubmission Queried"
         def response = get("/api/quiz/submission", params)
 
-        when: "GetQuizSubmission Queried"
+        then: "The Output Should Be The Following"
         response.status == 200
         response.json.status == "success"
     }
