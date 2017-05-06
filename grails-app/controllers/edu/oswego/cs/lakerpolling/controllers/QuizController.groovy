@@ -33,7 +33,6 @@ class QuizController {
         } else {
             render(view: '../failure', model: [errorCode: require.errorCode, message: require.message])
         }
-
     }
 
     /**
