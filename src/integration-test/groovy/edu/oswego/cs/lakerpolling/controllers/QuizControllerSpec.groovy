@@ -59,7 +59,7 @@ class QuizControllerSpec extends BootStrapSpec {
         def response = post("/api/quiz", params)
 
         then: "The Output Should Be The Following"
-        response.status == 403
+        response.status == 401
         response.json.status == "failure"
     }
 
@@ -384,7 +384,7 @@ class QuizControllerSpec extends BootStrapSpec {
         def response = get("/api/quiz", params)
 
         then: "The Output Should Be The Following"
-        response.status == 403
+        response.status == 401
         response.json.status == "failure"
     }
 
