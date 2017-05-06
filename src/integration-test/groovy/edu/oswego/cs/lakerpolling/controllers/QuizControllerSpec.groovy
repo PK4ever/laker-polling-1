@@ -1,6 +1,7 @@
 package edu.oswego.cs.lakerpolling.controllers
 
 import edu.oswego.cs.lakerpolling.BootStrapSpec
+import edu.oswego.cs.lakerpolling.domains.Course
 import edu.oswego.cs.lakerpolling.domains.Quiz
 import edu.oswego.cs.lakerpolling.domains.User
 
@@ -501,6 +502,9 @@ class QuizControllerSpec extends BootStrapSpec {
 
     void "Test submitQuiz(): 3 - Valid Student"() {
         given: "The Following Parameters"
+        Course.withTransaction {
+            VALID_COURSE.addToStudents(VALID_STUDENT)
+        }
         testWith(VALID_STUDENT, VALID_QUIZ)
         Map<String, Object> params = new HashMap<>()
         params.put("quiz_id", VALID_QUIZ.id)
@@ -561,6 +565,9 @@ class QuizControllerSpec extends BootStrapSpec {
 
     void "Test getQuizSubmission(): 3 - Valid Student"() {
         given: "The Following Parameters"
+        Course.withTransaction {
+            VALID_COURSE.addToStudents(VALID_STUDENT)
+        }
         testWith(VALID_STUDENT, VALID_QUIZ)
 
         Map<String, Object> params = new HashMap<>()
