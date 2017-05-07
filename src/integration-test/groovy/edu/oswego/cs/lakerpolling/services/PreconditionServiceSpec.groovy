@@ -19,7 +19,7 @@ class PreconditionServiceSpec extends BootStrapSpec {
 PreconditionService service
 
 
-    void "test notNull(): null objects"(){
+    void "Test notNull(): 1 - null objects"(){
 
         given:
         GrailsParameterMap nullMap = null
@@ -36,7 +36,7 @@ PreconditionService service
 
     }
 
-    void "test notNull(): invalid objects"(){
+    void "Test notNull(): - 2 invalid objects"(){
         given:
         Map<String, String> invalidMap = new HashMap<String,String>()
         invalidMap.put("a","stuff")
@@ -60,7 +60,7 @@ PreconditionService service
 
 
     }
-    void "test notNull(): valid objects"(){
+    void "Test notNull(): 3 - valid objects"(){
         given:
         Map<String, String> validMap = new HashMap<String,String>()
         validMap.put("adult","adult user")
@@ -81,19 +81,19 @@ PreconditionService service
 
     }
 
-    void "test accessToken() : null objects"(){
+    void "Test accessToken() : 1 - null objects"(){
         given:
-        String accessToeknString = null
+        String accessTokenString = null
 
         when:
-        QueryResult result = service.accessToken(accessToeknString)
+        QueryResult result = service.accessToken(accessTokenString)
 
         then:
         result.message.equals("Null precondition parameters")
 
     }
 
-    void "test accessToken() : invalid objects"(){
+    void "Test accessToken() : 2 - invalid objects"(){
         given:
         testWith(INVALID_STUDENT)
         String accessToeknString = INVALID_STUDENT.authToken.accessToken
@@ -106,7 +106,7 @@ PreconditionService service
 
     }
 
-    void "test accessToken() : valid objects"(){
+    void "Test accessToken() : 3 - valid objects"(){
         given:
         testWith(VALID_STUDENT)
         String accessTokenString = VALID_STUDENT.authToken.accessToken
@@ -138,7 +138,7 @@ PreconditionService service
     }
 
 
-    void "Test ConverToLong(): 2 - invalid long"(){
+    void "Test ConvertToLong(): 2 - invalid long"(){
         given:
         String invalidLong = "abcdef"
         String invalidParam = "Butts"
@@ -152,7 +152,7 @@ PreconditionService service
         !result.success
     }
 
-    void "Test ConverToLong(): 3 - invalid.b long"(){
+    void "Test ConvertToLong(): 3 - invalid.b long"(){
         given:
         String invalidLong = "123.22"
         String validParam = "Butts"
@@ -166,7 +166,7 @@ PreconditionService service
         !result.success
     }
 
-    void "Test ConverToLong(): 4 - null long"(){
+    void "Test ConvertToLong(): 4 - null long"(){
         given:
         String invalidLong = null
         String validParam = "Butts"
@@ -180,7 +180,7 @@ PreconditionService service
         !result.success
     }
 
-    void "Test ConverToLong(): 5 - null Butts"(){
+    void "Test ConvertToLong(): 5 - null Param"(){
         given:
         String validLong = "12345678"
         String invalidParam = null
