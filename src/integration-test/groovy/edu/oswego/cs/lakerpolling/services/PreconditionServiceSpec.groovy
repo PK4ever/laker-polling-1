@@ -2,17 +2,11 @@ package edu.oswego.cs.lakerpolling.services
 
 import edu.oswego.cs.lakerpolling.BootStrapSpec
 import edu.oswego.cs.lakerpolling.domains.AuthToken
-import edu.oswego.cs.lakerpolling.domains.Course
-import edu.oswego.cs.lakerpolling.domains.Role
-import edu.oswego.cs.lakerpolling.domains.User
 import edu.oswego.cs.lakerpolling.util.QueryResult
-import edu.oswego.cs.lakerpolling.util.RoleType
 import grails.web.servlet.mvc.GrailsParameterMap
 import org.springframework.beans.factory.annotation.Autowired
 
 import javax.servlet.http.HttpServletRequest
-import javax.validation.Valid
-
 
 class PreconditionServiceSpec extends BootStrapSpec {
 @Autowired
