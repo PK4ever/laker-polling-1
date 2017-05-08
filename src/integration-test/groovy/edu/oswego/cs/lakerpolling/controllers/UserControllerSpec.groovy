@@ -1,6 +1,7 @@
 package edu.oswego.cs.lakerpolling.controllers
 
 import edu.oswego.cs.lakerpolling.BootStrapSpec
+import edu.oswego.cs.lakerpolling.util.RoleType
 
 /**
  * Created by keithmartin on 5/5/17.
@@ -46,7 +47,7 @@ class UserControllerSpec extends BootStrapSpec {
         params.put("last_name", VALID_STUDENT.lastName)
         params.put("email", VALID_STUDENT.email)
         testWith(VALID_STUDENT, params)
-        params.put("access_token", VALID_STUDENT.authToken.accessToken)
+        params.put("access_token", VALID_INSTRUCTOR.authToken.accessToken)
 
         when: "GetUser Is Queried"
         def response = get("/api/user", params)
@@ -68,14 +69,14 @@ class UserControllerSpec extends BootStrapSpec {
         def response = get("/api/user", params)
 
         then: "The Output Should Be The Following"
-        response.status == 400
+        response.status == 401
     }
 
     void "Test postUser(): 1 - Instructor"() {
         given: "The Following Parameters"
         Map<String, Object> params = new HashMap<>()
         params.put("email", VALID_INSTRUCTOR.email)
-        params.put("role", VALID_INSTRUCTOR.role)
+        params.put("role", RoleType.STUDENT)
         testWith(VALID_INSTRUCTOR, params)
         params.put("access_token", VALID_INSTRUCTOR.authToken.accessToken)
 
@@ -105,7 +106,7 @@ class UserControllerSpec extends BootStrapSpec {
         given: "The Following Parameters"
         Map<String, Object> params = new HashMap<>()
         params.put("email", VALID_STUDENT.email)
-        params.put("role", VALID_STUDENT.role)
+        params.put("role", RoleType.STUDENT)
         testWith(VALID_STUDENT, params)
         params.put("access_token", VALID_STUDENT.authToken.accessToken)
 
@@ -113,7 +114,7 @@ class UserControllerSpec extends BootStrapSpec {
         def response = post("/api/user", params)
 
         then: "The Output Should Be The Following"
-        response.status == 200
+        response.status == 401
     }
 
     void "Test postUser(): 4 - All invalid eq classes"() {

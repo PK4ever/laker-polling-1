@@ -36,6 +36,9 @@ class BootStrapSpec extends GebSpec {
     @Shared
     Quiz VALID_QUIZ, VALID_QUIZ2, INVALID_QUIZ
 
+    @Shared
+    String VALID_DATE
+
     def setupSpec() {
         init()
         println "----------Test Environment----------"
@@ -178,6 +181,8 @@ class BootStrapSpec extends GebSpec {
         INVALID_QUIZ = new Quiz(name: "Invalid_Quiz", startDate: new Date(1577854800000), endDate: new Date(1489550400000))
         INVALID_QUIZ.setCourse(INVALID_COURSE)
         INVALID_QUIZ.id = Integer.MAX_VALUE
+
+        VALID_DATE = "2017-01-01"
     }
 
     /**

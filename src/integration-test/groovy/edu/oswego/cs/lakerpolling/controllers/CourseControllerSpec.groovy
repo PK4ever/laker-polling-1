@@ -13,7 +13,7 @@ class CourseControllerSpec extends BootStrapSpec {
 
     void "test courseGet(): Valid parameters" () {
 
-    	given: "The Following Parameters"
+        given: "The Following Parameters"
         testWith(VALID_INSTRUCTOR, VALID_COURSE)
         Map<String, Object> params = new HashMap<>()
         params.put("course_id", VALID_COURSE.id)
@@ -34,7 +34,7 @@ class CourseControllerSpec extends BootStrapSpec {
 
     void "test courseGet: Invalid eq classes " () {
 
-    	given: "The Following Parameters"
+        given: "The Following Parameters"
         testWith(INVALID_INSTRUCTOR, INVALID_COURSE)
         Map<String, Object> params = new HashMap<>()
         params.put("course_id", INVALID_COURSE.id)
@@ -44,7 +44,7 @@ class CourseControllerSpec extends BootStrapSpec {
         def response = get("/api/course", params)
 
         then: "The Output Should Be The Following"
-        response.status == 400
+        response.status == 401
         
 
     }
@@ -64,13 +64,11 @@ class CourseControllerSpec extends BootStrapSpec {
      // As instructor
     void "test postCourse(): Valid parameters instructor" () {
 
-    	given: "The Following Parameters"
+        given: "The Following Parameters"
         testWith(VALID_INSTRUCTOR, VALID_COURSE)
         Map<String, Object> params = new HashMap<>()
-        params.put("course_id", VALID_COURSE.id)
         params.put("crn", VALID_COURSE.crn)
         params.put("name", VALID_COURSE.name)
-        params.put("user_id", VALID_INSTRUCTOR.id)
         params.put("access_token", VALID_INSTRUCTOR.authToken.accessToken)
 
         when: "Course get is posted"
@@ -87,7 +85,6 @@ class CourseControllerSpec extends BootStrapSpec {
         given: "The Following Parameters"
         testWith(VALID_ADMIN, VALID_COURSE)
         Map<String, Object> params = new HashMap<>()
-        params.put("course_id", VALID_COURSE.id)
         params.put("crn", VALID_COURSE.crn)
         params.put("name", VALID_COURSE.name)
         params.put("user_id", VALID_ADMIN.id)
@@ -108,13 +105,11 @@ class CourseControllerSpec extends BootStrapSpec {
     void "test postCourse(): invalid eq classes " () {
 
         given: "The Following Parameters"
-        testWith(INVALID_ADMIN, INVALID_COURSE)
+        testWith(INVALID_INSTRUCTOR, INVALID_COURSE)
         Map<String, Object> params = new HashMap<>()
-        params.put("course_id", INVALID_COURSE.id)
         params.put("crn", INVALID_COURSE.crn)
         params.put("name", INVALID_COURSE.name)
-        params.put("user_id", INVALID_ADMIN.id)
-        params.put("access_token", INVALID_ADMIN.authToken.accessToken)
+        params.put("access_token", INVALID_INSTRUCTOR.authToken.accessToken)
 
         when: "Course get is posted"
         def response = post("/api/course", params)
@@ -130,16 +125,16 @@ class CourseControllerSpec extends BootStrapSpec {
 //      * Endpoint to perform delete operation active courses.
 //      * @param access_token - The access token of the requesting user.
 //      * @param course_id - The id of the course.
-// 		* ["access_token", "course_id"]
+//      * ["access_token", "course_id"]
 //      */
 
     void "test deleteCourse(): Valid parameters ADMIN" () {
 
-    	given: "The Following Parameters"
-        testWith(VALID_ADMIN, VALID_COURSE)
+        given: "The Following Parameters"
+        testWith(VALID_INSTRUCTOR, VALID_COURSE)
         Map<String, Object> params = new HashMap<>()
         params.put("course_id", VALID_COURSE.id)
-        params.put("access_token", VALID_ADMIN.authToken.accessToken)
+        params.put("access_token", VALID_INSTRUCTOR.authToken.accessToken)
 
         when: "Course get is deleted"
         def response = delete("/api/course", params)
@@ -169,7 +164,7 @@ class CourseControllerSpec extends BootStrapSpec {
 
     void "test deleteCourse(): Invalid eq classes " () {
 
-    	given: "The Following Parameters"
+        given: "The Following Parameters"
         testWith(INVALID_INSTRUCTOR, INVALID_COURSE)
         Map<String, Object> params = new HashMap<>()
         params.put("course_id", INVALID_COURSE.id)
@@ -193,11 +188,11 @@ class CourseControllerSpec extends BootStrapSpec {
 
      void "test getCourseStudent(): Valid parameters " () {
 
-    	given: "The Following Parameters"
-        testWith(VALID_ADMIN, VALID_COURSE)
+        given: "The Following Parameters"
+        testWith(VALID_INSTRUCTOR, VALID_COURSE)
         Map<String, Object> params = new HashMap<>()
         params.put("course_id", VALID_COURSE.id)
-        params.put("access_token", VALID_ADMIN.authToken.accessToken)
+        params.put("access_token", VALID_INSTRUCTOR.authToken.accessToken)
 
         when: "Course list get is retrieved"
         def response = get("/api/course/student", params)
@@ -211,11 +206,11 @@ class CourseControllerSpec extends BootStrapSpec {
 
     void "test getCourseStudent(): Invalid eq classes " () {
 
-    	given: "The Following Parameters"
-        testWith(INVALID_ADMIN, INVALID_COURSE)
+        given: "The Following Parameters"
+        testWith(INVALID_INSTRUCTOR, INVALID_COURSE)
         Map<String, Object> params = new HashMap<>()
         params.put("course_id", INVALID_COURSE.id)
-        params.put("access_token", INVALID_ADMIN.authToken.accessToken)
+        params.put("access_token", INVALID_INSTRUCTOR.authToken.accessToken)
 
         when: "Course list get is retrieved"
         def response = get("/api/course/student", params)
@@ -236,14 +231,14 @@ class CourseControllerSpec extends BootStrapSpec {
      * ["access_token", "course_id"]
     */
      
-	void "test postCourseStudent(): Valid parameters " () {
+    void "test postCourseStudent(): Valid parameters " () {
 
-    	given: "The Following Parameters"
-        testWith(VALID_ADMIN, VALID_COURSE, VALID_STUDENT)
+        given: "The Following Parameters"
+        testWith(VALID_INSTRUCTOR, VALID_COURSE, VALID_STUDENT)
         Map<String, Object> params = new HashMap<>()
         params.put("course_id", VALID_COURSE.id)
         params.put("email", VALID_STUDENT.email)
-        params.put("access_token", VALID_ADMIN.authToken.accessToken)
+        params.put("access_token", VALID_INSTRUCTOR.authToken.accessToken)
 
         when: "Course get is posted"
         def response = post("/api/course/student", params)
@@ -258,12 +253,12 @@ class CourseControllerSpec extends BootStrapSpec {
 
     void "test postCourseStudent(): Invalid eq classes " () {
 
-    	given: "The Following Parameters"
-        testWith(INVALID_ADMIN, INVALID_COURSE, INVALID_STUDENT)
+        given: "The Following Parameters"
+        testWith(INVALID_INSTRUCTOR, INVALID_COURSE, INVALID_STUDENT)
         Map<String, Object> params = new HashMap<>()
         params.put("course_id", INVALID_COURSE.id)
         params.put("email", INVALID_STUDENT.email)
-        params.put("access_token", INVALID_ADMIN.authToken.accessToken)
+        params.put("access_token", INVALID_INSTRUCTOR.authToken.accessToken)
 
         when: "Course get is posted"
         def response = post("/api/course/student", params)
@@ -283,15 +278,15 @@ class CourseControllerSpec extends BootStrapSpec {
 
      void "test deleteCourseStudent(): Valid parameters " () {
 
-    	given: "The Following Parameters"
-        testWith(INVALID_ADMIN, INVALID_COURSE, INVALID_STUDENT)
+        given: "The Following Parameters"
+        testWith(VALID_INSTRUCTOR, VALID_COURSE, VALID_STUDENT)
         Map<String, Object> params = new HashMap<>()
-        params.put("course_id", INVALID_COURSE.id)
-        params.put("email", INVALID_STUDENT.id)
-        params.put("access_token", INVALID_ADMIN.authToken.accessToken)
+        params.put("course_id", VALID_COURSE.id)
+        params.put("user_id", VALID_STUDENT.id)
+        params.put("access_token", VALID_INSTRUCTOR.authToken.accessToken)
 
         when: "Course get is posted"
-        def response = post("/api/course/student", params)
+        def response = delete("/api/course/student", params)
 
         then: "The Output Should Be The Following"
         response.status == 200
@@ -302,15 +297,15 @@ class CourseControllerSpec extends BootStrapSpec {
 
     void "test deleteCourseStudent(): Invalid eq classes " () {
 
-    	given: "The Following Parameters"
-        testWith(INVALID_ADMIN, INVALID_COURSE, INVALID_STUDENT)
+        given: "The Following Parameters"
+        testWith(INVALID_INSTRUCTOR, INVALID_COURSE, INVALID_STUDENT)
         Map<String, Object> params = new HashMap<>()
         params.put("course_id", INVALID_COURSE.id)
-        params.put("email", INVALID_STUDENT.id)
-        params.put("access_token", INVALID_ADMIN.authToken.accessToken)
+        params.put("user_id", INVALID_STUDENT.id)
+        params.put("access_token", INVALID_INSTRUCTOR.authToken.accessToken)
 
         when: "Course get is posted"
-        def response = post("/api/course/student", params)
+        def response = delete("/api/course/student", params)
 
         then: "The Output Should Be The Following"
         response.status == 401
@@ -334,19 +329,16 @@ class CourseControllerSpec extends BootStrapSpec {
         testWith(VALID_INSTRUCTOR, VALID_COURSE)
         Map<String, Object> params = new HashMap<>()
         params.put("course_id", VALID_COURSE.id)
-        params.put("date", VALID_COURSE.crn)
-        params.put("start_date", VALID_COURSE.name)
-        params.put("end_date", VALID_COURSE.name)
-        params.put("student_id", VALID_INSTRUCTOR.id)
+        params.put("date", "2017-01-01")
         params.put("access_token", VALID_INSTRUCTOR.authToken.accessToken)
 
         when: "Course get is posted"
-        def response = post("/api/course/attendance", params)
+        def response = get("/api/course/attendance", params)
 
         then: "The Output Should Be The Following"
         response.status == 200
         response.json.status == "success"
-    	
+        
     }
 
     void "test getAttendance(): invalid eq classes " () {
@@ -354,17 +346,14 @@ class CourseControllerSpec extends BootStrapSpec {
         testWith(INVALID_INSTRUCTOR, INVALID_COURSE)
         Map<String, Object> params = new HashMap<>()
         params.put("course_id", INVALID_COURSE.id)
-        params.put("date", INVALID_COURSE.crn)
-        params.put("start_date", INVALID_COURSE.name)
-        params.put("end_date", INVALID_COURSE.name)
-        params.put("student_id", INVALID_INSTRUCTOR.id)
+        params.put("date", VALID_DATE)
         params.put("access_token", INVALID_INSTRUCTOR.authToken.accessToken)
 
         when: "Course get is posted"
-        def response = post("/api/course/attendance", params)
+        def response = get("/api/course/attendance", params)
 
         then: "The Output Should Be The Following"
-        response.status == 404
+        response.status == 401
         
     }
 
