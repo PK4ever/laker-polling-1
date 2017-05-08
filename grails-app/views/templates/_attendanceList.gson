@@ -1,0 +1,7 @@
+import edu.oswego.cs.lakerpolling.domains.Attendance
+
+model {
+    Collection<Attendance> attendanceList = []
+}
+
+json tmpl.'/templates/attendance'(attendanceList)

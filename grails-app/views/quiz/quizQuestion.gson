@@ -1,0 +1,16 @@
+import edu.oswego.cs.lakerpolling.domains.AuthToken
+
+model {
+    AuthToken token
+    Question question
+}
+
+json {
+    status "success"
+    data {
+        accessToken token.accessToken
+        id question.id
+        text question.question
+        choices question.choices
+    }
+}

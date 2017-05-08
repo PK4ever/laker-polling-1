@@ -5,11 +5,10 @@ class Course {
     String name
     String crn
 
-    static hasMany = [students: User]
+    static hasMany = [students: User, questions: Question]
     static belongsTo = [instructor: User]
 
     static mapping = {
-//        id column: 'crn'
     }
 
     static constraints = {

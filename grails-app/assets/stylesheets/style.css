@@ -1,0 +1,101 @@
+body{
+    background: url("/assets/LakerPoling_Background.svg") no-repeat center;
+}
+
+.logo {
+    height: 80px;
+    width: 120px;
+    position: absolute;
+    top: 10%;
+}
+
+@media (max-width: 767px) {
+    .logo{
+        height: 40px;
+        width: 70px;
+        position: absolute;
+        top: 10%;
+    }
+    .navbar{
+        background-color: gray;
+    }
+}
+.fixed-table-body{
+height: 60% !important;
+}
+#sign-in-btn {
+    padding: 20px;
+}
+/*removes the line under page name*/
+#pageName{
+    text-decoration: none !important;
+}
+#answers{
+    width: 400px !important;
+    padding: 15px !important;
+}
+#answers:hover {
+    background: #45db39;
+}
+#submit-question-btn{
+    width: 200px !important;
+}
+#show-results-btn{
+    width: 200px !important;
+    text-align: center !important;
+    display: none;
+}
+#submitAnswer{
+    width: 200px !important;
+}
+
+@media (max-width: 414px) {
+    .navbar-brand{
+        left: 30% !important;
+        font-size: 100% !important;
+    }
+    .section-heading{
+        font-size: 200% !important;
+    }
+    .img-circle{
+        width: 12% !important;
+    }
+    .text-muted{
+        font-size: 90% !important;
+    }
+    .portfolio-item{
+        padding: 2% !important;
+    }
+}
+
+.logout {
+    cursor: pointer;
+}
+
+.btn-success {
+    background:
+    border: 1px solid #1a481d;
+}
+
+[role="button"] {
+    cursor: pointer;
+    min-width: 150px;
+}
+
+.navbar-collapse > ul.navbar-nav > li {
+    border: 1.5px solid #fed136 ;
+}
+
+#roster {
+    min-width: 450px;
+    max-height: 400px;
+    overflow: scroll;
+}
+
+/*.navbar-header.page-scroll {
+    background: linear-gradient(green, gray);
+}
+
+.navbar-header.page-scroll > image {
+    height: 
+}*/

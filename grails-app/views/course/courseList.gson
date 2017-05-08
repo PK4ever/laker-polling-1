@@ -11,6 +11,6 @@ json {
     status "success"
     data {
         token token.accessToken
-        courses g.render(template: "../templates/courses", model: [courses:courses])
+        courses g.render(template: "/templates/courses", model: [courses:courses])
     }
 }

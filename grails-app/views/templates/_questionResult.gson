@@ -1,0 +1,11 @@
+import edu.oswego.cs.lakerpolling.domains.QuestionResult
+
+model {
+    QuestionResult result
+}
+
+json {
+    answers result.answers
+    correct result.correct
+    percentCorrect result.percentCorrect
+}

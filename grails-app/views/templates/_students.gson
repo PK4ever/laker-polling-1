@@ -1,7 +1,0 @@
-import edu.oswego.cs.lakerpolling.domains.User
-
-model {
-    Collection<User> students = []
-}
-
-json tmpl.'../templates/student'(students)

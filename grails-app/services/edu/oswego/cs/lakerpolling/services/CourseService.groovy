@@ -1,7 +1,11 @@
 package edu.oswego.cs.lakerpolling.services
 
+import edu.oswego.cs.lakerpolling.domains.Attendance
+import edu.oswego.cs.lakerpolling.domains.Attendee
 import edu.oswego.cs.lakerpolling.domains.AuthToken
 import edu.oswego.cs.lakerpolling.domains.Course
+import edu.oswego.cs.lakerpolling.domains.Quiz
+import edu.oswego.cs.lakerpolling.domains.QuizSubmission
 import edu.oswego.cs.lakerpolling.domains.Role
 import edu.oswego.cs.lakerpolling.domains.User
 import edu.oswego.cs.lakerpolling.util.QueryResult
@@ -15,7 +19,6 @@ import org.springframework.http.HttpStatus
 @Transactional
 class CourseService {
     UserService userService
-    CourseListParserService courseListParserService
 
     /**
      * Lists students in a specified course
@@ -108,10 +111,18 @@ class CourseService {
             if (course != null) {
                 if (hasInstructorAccess(requestingUser, course)) {
                     List<User> users = new ArrayList<>()
+
                     for (email in emails) {
-                        User user = userService.getOrMakeByEmail(email)
-                        course.addToStudents(user)
-                        users.add(user)
+                        if(email.indexOf("oswego.edu") == -1) {
+                            QueryResult.fromHttpStatus(HttpStatus.BAD_REQUEST, result)
+                        }
+                    }
+
+                    for (email in emails) {
+                            User user = userService.getOrMakeByEmail(email)
+                            course.addToStudents(user)
+                            users.add(user)
+
                     }
                     result.data = users
                 } else {
@@ -161,6 +172,7 @@ class CourseService {
 
         res
     }
+
     /**
      * Creates a course for an instructor
      * @param token - The AuthToken of the instructor
@@ -171,7 +183,7 @@ class CourseService {
      */
     QueryResult<Course> instructorCreateCourse(AuthToken token, String crn, String name, QueryResult<Course> result = new QueryResult<>(success: true)) {
         User instructor = token?.user
-        if (isInstructorOrAdmin(instructor.role) && !courseExists(crn)) {
+        if (isInstructorOrAdmin(instructor.role)) {
             result = createCourse(instructor, name, crn, result)
         } else {
             QueryResult.fromHttpStatus(HttpStatus.BAD_REQUEST, result)
@@ -191,7 +203,7 @@ class CourseService {
     QueryResult<Course> adminCreateCourse(AuthToken token, String crn, String name, String instructor, QueryResult<Course> result = new QueryResult<>(success: true)) {
         User admin = token?.user
         User inst = User.findById(Long.parseLong(instructor))
-        if (admin.role.type == RoleType.ADMIN && inst.role.type == RoleType.INSTRUCTOR && !courseExists(crn)) {
+        if (admin && inst && admin.role.type == RoleType.ADMIN && inst.role.type == RoleType.INSTRUCTOR) {
             result = createCourse(inst, name, crn, result)
         } else {
             QueryResult.fromHttpStatus(HttpStatus.BAD_REQUEST, result)
@@ -222,6 +234,20 @@ class CourseService {
      */
     private QueryResult<Course> doDelete(Course course, QueryResult<Course> result = new QueryResult<>(success: true)) {
         try {
+            def quizzes = Quiz.findAllByCourse(course)
+            for ( quiz in quizzes ) {
+                def submissions = QuizSubmission.findAllByQuiz(quiz)
+                for ( submission in submissions ) {
+                    submission.delete(flush: true, failOnError: true)
+                }
+                quiz.delete(flush: true, failOnError: true)
+            }
+
+            def attendanceList = Attendance.findAllByCourse(course)
+            for ( attendance in attendanceList ) {
+                attendance.delete(flush: true, failOnError: true)
+            }
+
             course.delete(flush: true, failOnError: true)
         } catch (Exception e) {
             e.printStackTrace()
@@ -238,8 +264,6 @@ class CourseService {
     private boolean isInstructorOrAdmin(Role role) {
         role.type == RoleType.ADMIN || role.type == RoleType.INSTRUCTOR
     }
-
-    private boolean courseExists(String course_id) { Course.findByCrn(course_id) != null }
 
     /**
      * Removes a student from a course. Catching errors and returning results.
@@ -272,11 +296,21 @@ class CourseService {
      * @param course - the course to check
      * @return True if the user has instructor accss to the course
      */
-    private boolean hasInstructorAccess(User user, Course course) {
+    public boolean hasInstructorAccess(User user, Course course) {
         if (user.role.type == RoleType.ADMIN) {
             return true
         }
         return user.role.type == RoleType.INSTRUCTOR && isInstructorOf(user, course)
+    }
+
+    /**
+     * Checks if the user has student access for the given course
+     * @param user - the user to check for student access
+     * @param course - the course to check
+     * @return True if the user has student access to the course
+     */
+    public boolean hasStudentAccess(User user, Course course) {
+        hasInstructorAccess(user, course) || isStudentOf(user, course)
     }
 
     /**
@@ -287,6 +321,16 @@ class CourseService {
      */
     boolean isInstructorOf(User user, Course course) {
         user != null && course != null && course.instructorId == user.id
+    }
+
+    /**
+     * Checks if the user is a student of the course
+     * @param user - the user to check
+     * @param course - the course to check
+     * @return true if the user is a student of the course
+     */
+    boolean isStudentOf(User user, Course course) {
+        course.students != null && course.students.find{x -> x.id == user.id}
     }
 
     /**
@@ -343,4 +387,61 @@ class CourseService {
         }
         return res
     }
+
+    /**
+     * Attempts to find the Course associated with the given ID String
+     * @param courseIdString - A String representing a Course ID
+     * @return A QueryResult containing the associated Course
+     */
+    QueryResult<Course> findCourse(String courseIdString) {
+        QueryResult<Course> result = new QueryResult<>()
+        if (!courseIdString.isLong()) {
+            return QueryResult.fromHttpStatus(HttpStatus.BAD_REQUEST)
+        }
+        Course course = Course.findById(courseIdString.toLong())
+        if (!course) {
+            return QueryResult.fromHttpStatus(HttpStatus.BAD_REQUEST)
+        }
+        result.data = course
+        result
+    }
+
+    /**
+     * Returns a successfull Query Result if the user represented in token has student access to the given coursse
+     * @param token - the Authtoken
+     * @param course- the course
+     * @return a QueryResult representing the result of the check
+     */
+    QueryResult verifyStudentAccess(AuthToken token, Course course) {
+        def userResult = userService.findUser(token)
+        if (!userResult.success) {
+            return QueryResult.fromHttpStatus(HttpStatus.BAD_REQUEST)
+        }
+
+        def user = userResult.data
+        if (!hasStudentAccess(user, course)) {
+            return QueryResult.fromHttpStatus(HttpStatus.UNAUTHORIZED)
+        }
+        new QueryResult(success:true)
+    }
+
+    /**
+     * Returns a successful Query Result if the user represented in token has instructor access to the given course
+     * @param token - the Authtoken
+     * @param course - the course
+     * @return a QueryResult representing the result of the check
+     */
+    QueryResult verifyInstructorAccess(AuthToken token, Course course) {
+        def userResult = userService.findUser(token)
+        if (!userResult.success) {
+            return QueryResult.fromHttpStatus(HttpStatus.BAD_REQUEST)
+        }
+
+        def user = userResult.data
+        if (!hasInstructorAccess(user, course)) {
+            return QueryResult.fromHttpStatus(HttpStatus.UNAUTHORIZED)
+        }
+        new QueryResult(success:true)
+    }
+
 }

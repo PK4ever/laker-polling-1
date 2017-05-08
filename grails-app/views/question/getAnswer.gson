@@ -1,0 +1,16 @@
+import edu.oswego.cs.lakerpolling.domains.AuthToken
+import edu.oswego.cs.lakerpolling.domains.Question
+
+model {
+    Collection<Integer> answers = []
+    Question question
+    AuthToken token
+}
+
+json {
+    status "success"
+    accessToken token.accessToken
+    id question.id
+    correct question.answers
+    answers answers
+}

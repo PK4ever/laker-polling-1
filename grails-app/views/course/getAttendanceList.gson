@@ -1,0 +1,17 @@
+import edu.oswego.cs.lakerpolling.domains.Attendee
+import edu.oswego.cs.lakerpolling.domains.AuthToken
+
+model {
+    AuthToken token
+    Long courseID
+    Collection<Attendance> attendanceList = []
+}
+
+json {
+    status "success"
+    data {
+        accessToken token.accessToken
+        courseID courseID
+        attendance g.render(template: "/templates/attendanceList", model: [attendanceList: attendanceList])
+    }
+}

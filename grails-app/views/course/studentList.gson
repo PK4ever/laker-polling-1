@@ -1,4 +1,5 @@
 import edu.oswego.cs.lakerpolling.domains.AuthToken
+import edu.oswego.cs.lakerpolling.domains.User
 
 response.status OK.value()
 model {
@@ -11,7 +12,7 @@ json {
     status "success"
     data {
         accessToken token.accessToken
-        course_id courseID
-        students g.render(template: "../templates/students", model: [students:students])
+        courseId courseID
+        students g.render(template: "/templates/users", model: [users:students])
     }
 }

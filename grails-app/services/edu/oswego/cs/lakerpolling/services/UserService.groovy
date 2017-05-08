@@ -38,7 +38,8 @@ class UserService {
             queryResult.errorCode = HttpStatus.BAD_REQUEST.value()
             return queryResult
         }
-        User user = User.findByAuthToken(authToken)
+
+        User user = authToken.user
 
         if (user == null) {
             queryResult.message = UserErrors.USER_NOT_FOUND
@@ -62,7 +63,7 @@ class UserService {
 
         if (user == null) {
             user = new User(email: email)
-            user.setRole(new Role(type: RoleType.STUDENT))
+            user.setRole(new Role(type: RoleType.STUDENT, master: RoleType.STUDENT))
             user.save(flush: true, failOnError: true)
         }
 
@@ -74,60 +75,122 @@ class UserService {
      * @param payload - The payload to grab data from.
      * @return A pair containing a User and their associated AuthToken should all operations go successfully.
      */
-    Optional<Pair<User, AuthToken>> getMakeOrUpdate(String subj, String first, String last, String imageUrl,
-                                                    String accessTokenHash, String email) {
+    Optional<Pair<User, AuthToken>> getMakeOrUpdate(String subj, String first, String last,
+                                                    String imageUrl, String email) {
         User user
         AuthToken token
 
         token = AuthToken.findBySubject(subj)
 
-        // We have a token for this user.
+        // we have found an auth object. Therefore we have this user and they've signed in before.
         if (token != null) {
-
             user = token.user
             if (user.email != email) {
                 user.email = email
             }
-
-            if (token.accessToken != accessTokenHash) {
-                token.accessToken = accessTokenHash
-            }
-
-            user.save(flush: true, failOnError: true)
+            token.accessToken = UUID.randomUUID()
             token.save(flush: true, failOnError: true)
-
         } else {
-            // this may be a pre-loaded account or this is a new user.
+            // two possible situations here. This is a new user or it's a pre-loaded user
+            //signing in for the first time.
 
-            //attempt to find them in the db by email
             user = User.findByEmail(email)
-
-            if (user == null) {// didn't find it, so this is a new user.
+            if (user == null) { //it's a new user
                 user = new User(firstName: first, lastName: last, imageUrl: imageUrl, email: email)
-            } else {//found the user by email, this must be a pre-loaded account
-                if (user.imageUrl == null) {
-                    user.imageUrl = imageUrl
-                }
-
-                if (user.firstName == null) {
-                    user.firstName = first
-                }
-
-                if (user.lastName == null) {
-                    user.lastName = last
-                }
-
-                user.save(flush: true, failOnError: true)
+                user.setRole(new Role(type: RoleType.STUDENT, master: RoleType.STUDENT))
+            } else {
+                //we've found the pre-loaded user, set their values to the ones active the g profile
+                user.firstName = first
+                user.lastName = last
+                user.imageUrl = imageUrl
             }
-
-            user.setAuthToken(new AuthToken(subject: subj, accessToken: accessTokenHash))
-            user.save(flush: true, failOnError: true)
-            token = user.authToken
         }
+
+        user = user.save(flush: true, failOnError: true)
+        if (user.authToken == null) {
+            user.setAuthToken(new AuthToken(subject: subj, accessToken: UUID.randomUUID()))
+            user = user.save(flush: true, failOnError: true)
+        }
+
+        token = user.authToken
 
         user != null ? Optional.of(new Pair<User, AuthToken>(user, token))
                 : Optional.empty()
 
+    }
+
+    QueryResult<List<User>> findUsersBy(AuthToken token, String first, String last, String email) {
+        QueryResult<List<User>> result
+
+        if (checkIfInstructor(token.user)) {
+            def users = User.createCriteria().list {
+                if (first) {
+                    like('firstName', first.concat("%"))
+                }
+
+                if (last) {
+                    like('lastName', last.concat("%"))
+                }
+
+                if (email) {
+                    eq('email', email.concat("%"))
+                }
+            } as List<User>
+
+            result = new QueryResult<>(success: true, data: users)
+        } else {
+            result = QueryResult.fromHttpStatus(HttpStatus.UNAUTHORIZED)
+        }
+
+        result
+    }
+
+    QueryResult<User> createUser(AuthToken token, String email, String role) {
+        QueryResult<User> result
+        if (checkIfInstructor(token.user)) {
+            if (User.findByEmail(email) == null) {
+                if (email.contains("oswego.edu")) {
+                    RoleType roleType
+
+                    if (role != null) {
+                        try {
+                            roleType = role as RoleType
+                        } catch (IllegalArgumentException e) {
+                            return new QueryResult<>(success: false, errorCode: HttpStatus.BAD_REQUEST.value(), message: "Unexpected role:" + role)
+                        }
+                    } else {
+                        roleType = RoleType.STUDENT
+                    }
+
+                    User temp = new User(email: email)
+                    temp.setRole(new Role(type: roleType, master: roleType))
+                    temp.save(flush: true)
+                    result = new QueryResult<>(success: true, data: temp)
+                } else {
+                    result = new QueryResult<>(success: false, errorCode: HttpStatus.BAD_REQUEST.value(), message: "Non oswego.edu email.")
+                }
+            } else {
+                result = new QueryResult<>(success: false, errorCode: HttpStatus.BAD_REQUEST.value(), message: "Email already exists")
+            }
+        } else {
+            result = QueryResult.fromHttpStatus(HttpStatus.UNAUTHORIZED)
+        }
+        result
+    }
+
+    /**
+     * Attempts to find the user associated with the given AuthToken
+     * @param token - the AuthToken
+     * @return A QueryResult containing the associated user
+     */
+   QueryResult<User> findUser(AuthToken token) {
+        QueryResult<User> result = new QueryResult<>()
+        User user = token?.user
+        if (!user) {
+            return QueryResult.fromHttpStatus(HttpStatus.BAD_REQUEST)
+        }
+        result.data = user
+        result
     }
 
 }
